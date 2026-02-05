@@ -1,0 +1,40 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+.token-comment {
+  color: #5c6370;
+  font-style: italic;
+}
+
+.token-keyword {
+  color: #c678dd;
+}
+
+.token-function {
+  color: #61afef;
+}
+
+.token-string {
+  color: #98c379;
+}
+
+.token-number {
+  color: #d19a66;
+}
+
+/* Blinking cursor */
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.2em;
+  background-color: #ef4444;
+  margin-left: 2px;
+  vertical-align: bottom;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
