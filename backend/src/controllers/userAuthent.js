@@ -5,6 +5,13 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const Submission = require("../models/submission")
 
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: true,        // REQUIRED on https (Vercel)
+  sameSite: "none",    // REQUIRED for cross-site cookies
+  maxAge: 60 * 60 * 1000
+};
+
 
 const register = async (req,res)=>{
     
@@ -27,7 +34,8 @@ const register = async (req,res)=>{
         role:user.role,
     }
     
-     res.cookie('token',token,{maxAge: 60*60*1000});
+     res.cookie("token", token, COOKIE_OPTIONS);
+
      res.status(201).json({
         user:reply,
         message:"Loggin Successfully"
@@ -39,65 +47,66 @@ const register = async (req,res)=>{
 }
 
 
-const login = async (req,res)=>{
+const login = async (req, res) => {
+  try {
+    const { emailId, password } = req.body;
+    if (!emailId || !password) throw new Error("Invalid Credentials");
 
-    try{
-        const {emailId, password} = req.body;
+    const user = await User.findOne({ emailId });
+    if (!user) throw new Error("Invalid Credentials");
 
-        if(!emailId)
-            throw new Error("Invalid Credentials");
-        if(!password)
-            throw new Error("Invalid Credentials");
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) throw new Error("Invalid Credentials");
 
-        const user = await User.findOne({emailId});
+    const token = jwt.sign(
+      { _id: user._id, emailId, role: user.role },
+      process.env.JWT_KEY,
+      { expiresIn: "1h" }
+    );
 
-        const match = await bcrypt.compare(password,user.password);
+    res.cookie("token", token, COOKIE_OPTIONS);
 
-        if(!match)
-            throw new Error("Invalid Credentials");
+    res.status(201).json({
+      user: {
+        firstName: user.firstName,
+        emailId: user.emailId,
+        _id: user._id,
+        role: user.role
+      },
+      message: "Login Successfully"
+    });
+  } catch (err) {
+    res.status(401).json({ error: err.message });
+  }
+};
 
-        const reply = {
-            firstName: user.firstName,
-            emailId: user.emailId,
-            _id: user._id,
-            role:user.role,
-        }
-
-        const token =  jwt.sign({_id:user._id , emailId:emailId, role:user.role},process.env.JWT_KEY,{expiresIn: 60*60});
-        res.cookie('token',token,{maxAge: 60*60*1000});
-        res.status(201).json({
-            user:reply,
-            message:"Loggin Successfully"
-        })
-    }
-    catch(err){
-        res.status(401).send("Error: "+err);
-    }
-}
 
 
 // logOut feature
 
-const logout = async(req,res)=>{
+const logout = async (req, res) => {
+  try {
+    const { token } = req.cookies;
+    if (!token) return res.send("Already logged out");
 
-    try{
-        const {token} = req.cookies;
-        const payload = jwt.decode(token);
+    const payload = jwt.decode(token);
 
-
-        await redisClient.set(`token:${token}`,'Blocked');
-        await redisClient.expireAt(`token:${token}`,payload.exp);
-    //    Token add kar dung Redis ke blockList
-    //    Cookies ko clear kar dena.....
-
-    res.cookie("token",null,{expires: new Date(Date.now())});
-    res.send("Logged Out Succesfully");
-
+    if (redisClient?.isOpen) {
+      await redisClient.set(`token:${token}`, "Blocked");
+      await redisClient.expireAt(`token:${token}`, payload.exp);
     }
-    catch(err){
-       res.status(503).send("Error: "+err);
-    }
-}
+
+    res.cookie("token", "", {
+      ...COOKIE_OPTIONS,
+      maxAge: 0
+    });
+
+    res.send("Logged out successfully");
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 
 
 const adminRegister = async(req,res)=>{
@@ -113,7 +122,8 @@ const adminRegister = async(req,res)=>{
     
      const user =  await User.create(req.body);
      const token =  jwt.sign({_id:user._id , emailId:emailId, role:user.role},process.env.JWT_KEY,{expiresIn: 60*60});
-     res.cookie('token',token,{maxAge: 60*60*1000});
+     res.cookie("token", token, COOKIE_OPTIONS);
+
      res.status(201).send("User Registered Successfully");
     }
     catch(err){

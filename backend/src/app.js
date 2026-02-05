@@ -13,7 +13,7 @@ const app = express();
 /* ================== CORS ================== */
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "*",
+    origin: "https://byte-code-frontend.vercel.app",
     credentials: true
   })
 );
