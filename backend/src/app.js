@@ -1,10 +1,6 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-require("dotenv").config();
-
-const main = require("./config/db");
-const redisClient = require("./config/redis");
 
 const authRouter = require("./routes/userAuth");
 const problemRouter = require("./routes/problemCreator");
@@ -17,7 +13,7 @@ const app = express();
 /* ================== CORS ================== */
 app.use(
   cors({
-    origin:true, // Allow all origins (for development; restrict in production)
+    origin: process.env.CLIENT_URL || "*",
     credentials: true
   })
 );
@@ -26,6 +22,11 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+/* ================== HEALTH ================== */
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 /* ================== ROUTES ================== */
 app.use("/user", authRouter);
 app.use("/problem", problemRouter);
@@ -33,30 +34,4 @@ app.use("/submission", submitRouter);
 app.use("/ai", aiRouter);
 app.use("/video", videoRouter);
 
-/* ================== DB + REDIS (SAFE) ================== */
-let isConnected = false;
-
-async function init() {
-  if (isConnected) return;
-
-  await main();
-//   if (!redisClient.isOpen) {
-//     await redisClient.connect();
-//   }
-
-  isConnected = true;
-  console.log("DB & Redis connected");
-}
-
-app.use(async (req, res, next) => {
-  try {
-    await init();
-    next();
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server init failed" });
-  }
-});
-
-/* ================== EXPORT ================== */
 module.exports = app;
