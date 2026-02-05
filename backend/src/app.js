@@ -19,7 +19,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      process.env.CLIENT_URL // frontend vercel url later
+      process.env.CLIENT_URL
     ],
     credentials: true
   })
@@ -29,26 +29,23 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-/* ================== HEALTH CHECK (VERY IMPORTANT) ================== */
+/* ================== HEALTH (NO DB, NO MIDDLEWARE) ================== */
 app.get("/health", (req, res) => {
-  res.json({ status: "ok" });
+  return res.status(200).json({ status: "ok" });
 });
 
-/* ================== DB INIT (SAFE FOR VERCEL) ================== */
+/* ================== DB INIT (LAZY & SAFE) ================== */
 let isConnected = false;
 
 async function initDB() {
   if (isConnected) return;
-  await main(); // MongoDB only
+  await main();
   isConnected = true;
   console.log("DB connected");
 }
 
-/* ================== DB INIT MIDDLEWARE ================== */
+/* ================== ROUTES WITH DB ================== */
 app.use(async (req, res, next) => {
-  // ❗ NEVER block health check
-  if (req.path === "/health") return next();
-
   try {
     await initDB();
     next();
@@ -58,7 +55,6 @@ app.use(async (req, res, next) => {
   }
 });
 
-/* ================== ROUTES ================== */
 app.use("/user", authRouter);
 app.use("/problem", problemRouter);
 app.use("/submission", submitRouter);
