@@ -4,8 +4,8 @@ const cors = require("cors");
 require("dotenv").config();
 
 const main = require("./config/db");
-const redisClient = require("./config/redis");
 
+// routes
 const authRouter = require("./routes/userAuth");
 const problemRouter = require("./routes/problemCreator");
 const submitRouter = require("./routes/submit");
@@ -17,7 +17,10 @@ const app = express();
 /* ================== CORS ================== */
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, 
+    origin: [
+      "http://localhost:5173",
+      process.env.CLIENT_URL // frontend vercel url later
+    ],
     credentials: true
   })
 );
@@ -26,42 +29,33 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-/* ================== DB + REDIS INIT ================== */
-let isConnected = false;
-
-async function init() {
-  if (isConnected) return;
-
-  // ✅ MongoDB (must succeed)
-  await main();
-
-  // ✅ Redis (NON-BLOCKING)
-  if (!redisClient.isOpen) {
-    redisClient
-      .connect()
-      .then(() => console.log("Redis connected"))
-      .catch(err =>
-        console.error("Redis failed:", err.message)
-      );
-  }
-
-  isConnected = true;
-  console.log("DB init done");
-}
-
-app.use(async (req, res, next) => {
-  try {
-    await init();
-    next();
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server init failed" });
-  }
-});
-
-/* ================== HEALTH ================== */
+/* ================== HEALTH CHECK (VERY IMPORTANT) ================== */
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
+});
+
+/* ================== DB INIT (SAFE FOR VERCEL) ================== */
+let isConnected = false;
+
+async function initDB() {
+  if (isConnected) return;
+  await main(); // MongoDB only
+  isConnected = true;
+  console.log("DB connected");
+}
+
+/* ================== DB INIT MIDDLEWARE ================== */
+app.use(async (req, res, next) => {
+  // ❗ NEVER block health check
+  if (req.path === "/health") return next();
+
+  try {
+    await initDB();
+    next();
+  } catch (err) {
+    console.error("DB INIT ERROR:", err);
+    res.status(500).json({ error: "Server init failed" });
+  }
 });
 
 /* ================== ROUTES ================== */
@@ -71,5 +65,4 @@ app.use("/submission", submitRouter);
 app.use("/ai", aiRouter);
 app.use("/video", videoRouter);
 
-/* ================== EXPORT ================== */
 module.exports = app;
