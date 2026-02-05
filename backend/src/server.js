@@ -1,26 +1,22 @@
 const app = require("./app");
-const main = require("./config/db");
+const connectDB = require("./config/db");
 const redisClient = require("./config/redis");
 
-let connected = false;
+let readyPromise;
 
-async function connectOnce() {
-  if (connected) return;
-
-  try {
-    await main();
+if (!readyPromise) {
+  readyPromise = (async () => {
+    await connectDB();
 
     if (!redisClient.isOpen) {
       await redisClient.connect();
     }
 
-    connected = true;
     console.log("DB & Redis connected");
-  } catch (err) {
-    console.error("Startup error:", err);
-  }
+  })();
 }
 
-connectOnce(); // ✅ run once per cold start
-
-module.exports = app;
+module.exports = async (req, res) => {
+  await readyPromise; // ⬅️ BLOCK until DB ready
+  return app(req, res);
+};
