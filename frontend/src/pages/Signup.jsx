@@ -28,9 +28,16 @@ export default function Signup() {
     formState: { errors },
   } = useForm({ resolver: zodResolver(signupSchema) });
 
+  // useEffect(() => {
+  //   if (isAuthenticated) navigate("/");
+  // }, [isAuthenticated, navigate]);
+
   useEffect(() => {
-    if (isAuthenticated) navigate("/");
-  }, [isAuthenticated, navigate]);
+  if (isAuthenticated) {
+    setTimeout(() => navigate("/"), 100);
+  }
+}, [isAuthenticated, navigate]);
+
 
   const onSubmit = (data) => dispatch(registerUser(data));
 

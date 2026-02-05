@@ -9,6 +9,7 @@ const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: true,        // REQUIRED on https (Vercel)
   sameSite: "none",    // REQUIRED for cross-site cookies
+  path: "/",   
   maxAge: 60 * 60 * 1000
 };
 
