@@ -6,6 +6,7 @@ import axiosClient from "../utils/axiosClient"
 import SubmissionHistory from "../components/SubmissionHistory"
 import ChatAi from '../components/ChatAi';
 import Editorial from '../components/Editorial';
+import Discussion from '../components/Discussion';
 
 const langMap = {
         cpp: 'C++',
@@ -178,11 +179,18 @@ const ProblemPage = () => {
             Submissions
           </button>
 
-          <button 
+          <button
             className={`tab ${activeLeftTab === 'chatAI' ? 'tab-active' : ''}`}
             onClick={() => setActiveLeftTab('chatAI')}
           >
             ChatAI
+          </button>
+
+          <button
+            className={`tab ${activeLeftTab === 'discuss' ? 'tab-active' : ''}`}
+            onClick={() => setActiveLeftTab('discuss')}
+          >
+            Discuss
           </button>
 
 
@@ -271,6 +279,10 @@ const ProblemPage = () => {
                     <ChatAi problem={problem}></ChatAi>
                   </div>
                 </div>
+              )}
+
+              {activeLeftTab === 'discuss' && (
+                <Discussion problemId={problemId} />
               )}
             </>
           )}
