@@ -242,9 +242,10 @@ const submittedProblem = async(req,res)=>{
     const problemId = req.params.pid;
 
    const ans = await Submission.find({userId,problemId});
-  
+
+  // Bug 2 fix: without `return` this sent a second response → ERR_HTTP_HEADERS_SENT
   if(ans.length==0)
-    res.status(200).send("No Submission is persent");
+    return res.status(200).send("No Submission is persent");
 
   res.status(200).send(ans);
 

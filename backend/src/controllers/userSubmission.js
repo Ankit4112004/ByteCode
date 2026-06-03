@@ -90,16 +90,15 @@ const submitCode = async (req,res)=>{
 
     await submittedResult.save();
     
-    // ProblemId ko insert karenge userSchema ke problemSolved mein if it is not persent there.
-    
-    // req.result == user Information
-
-    if(!req.result.problemSolved.includes(problemId)){
-      req.result.problemSolved.push(problemId);
-      await req.result.save();
-    }
-    
     const accepted = (status == 'accepted')
+
+    // Bug 4 fix: the old check-then-push could let two concurrent submissions both
+    // pass the .includes() check and push duplicates. $addToSet is atomic in MongoDB
+    // and only inserts if not already present. Only mark solved on an accepted verdict.
+    if(accepted){
+      await User.findByIdAndUpdate(userId, { $addToSet: { problemSolved: problemId } });
+    }
+
     res.status(201).json({
       accepted,
       totalTestCases: submittedResult.testCasesTotal,

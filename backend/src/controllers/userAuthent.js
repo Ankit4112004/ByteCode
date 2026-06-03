@@ -115,12 +115,14 @@ const adminRegister = async(req,res)=>{
         // validate the data;
     //   if(req.result.role!='admin')
     //     throw new Error("Invalid Credentials");  
-      validate(req.body); 
+      validate(req.body);
       const {firstName, emailId, password}  = req.body;
 
       req.body.password = await bcrypt.hash(password, 10);
-    //
-    
+      // Bug 5 fix: previously role was never set, so "admin register" created a
+      // normal user. Force admin role here (route is already admin-protected).
+      req.body.role = 'admin';
+
      const user =  await User.create(req.body);
      const token =  jwt.sign({_id:user._id , emailId:emailId, role:user.role},process.env.JWT_KEY,{expiresIn: 60*60});
      res.cookie("token", token, COOKIE_OPTIONS);
