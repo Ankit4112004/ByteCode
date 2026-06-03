@@ -6,13 +6,20 @@ let readyPromise;
 
 if (!readyPromise) {
   readyPromise = (async () => {
-    await connectDB();
+    await connectDB(); // MongoDB is required — fail loudly if it's down
 
+    // Redis is optional (only used for the logout blocklist). Don't let a
+    // Redis outage take the whole API down.
     if (!redisClient.isOpen) {
-      await redisClient.connect();
+      try {
+        await redisClient.connect();
+        console.log("Redis connected");
+      } catch (err) {
+        console.error("Redis connect failed (continuing without it):", err.message);
+      }
     }
 
-    console.log("DB & Redis connected");
+    console.log("DB ready");
   })();
 }
 

@@ -21,7 +21,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isAuthenticated, loading } = useSelector((s) => s.auth);
+  const { isAuthenticated, loading, error } = useSelector((s) => s.auth);
 
   const {
     register,
@@ -53,6 +53,13 @@ export default function Login() {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* SERVER / AUTH ERROR */}
+              {error && (
+                <div className="rounded-md border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-400">
+                  {error}
+                </div>
+              )}
+
               {/* EMAIL */}
               <div>
                 <input

@@ -31,7 +31,12 @@ app.use("/video",videoRouter);
 const InitalizeConnection = async ()=>{
     try{
 
-        await Promise.all([main(),redisClient.connect()]);
+        await main(); // MongoDB is required
+        try {
+            await redisClient.connect(); // Redis is optional (logout blocklist)
+        } catch (err) {
+            console.error("Redis connect failed (continuing without it):", err.message);
+        }
         console.log("DB Connected");
         
         app.listen(process.env.PORT, ()=>{

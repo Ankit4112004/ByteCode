@@ -1,6 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axiosClient from './utils/axiosClient'
 
+// Pull a human-readable, serializable message out of an axios error.
+// Backend sends either plain text ("Error: ...") or JSON ({ error/message }).
+const extractError = (error) => {
+  const data = error.response?.data;
+  if (typeof data === 'string' && data.trim()) return data;
+  if (data?.error) return data.error;
+  if (data?.message) return data.message;
+  if (error.response) return `Request failed (${error.response.status})`;
+  // No response at all => network / server unreachable (e.g. DB down, CORS, server asleep)
+  return 'Cannot reach server. Please try again later.';
+};
+
 export const registerUser = createAsyncThunk(
   'auth/register',
   async (userData, { rejectWithValue }) => {
@@ -8,7 +20,7 @@ export const registerUser = createAsyncThunk(
     const response =  await axiosClient.post('/user/register', userData);
     return response.data.user;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(extractError(error));
     }
   }
 );
@@ -21,7 +33,7 @@ export const loginUser = createAsyncThunk(
       const response = await axiosClient.post('/user/login', credentials);
       return response.data.user;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(extractError(error));
     }
   }
 );
@@ -77,7 +89,7 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || 'Something went wrong';
+        state.error = action.payload || 'Something went wrong';
         state.isAuthenticated = false;
         state.user = null;
       })
@@ -94,7 +106,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || 'Something went wrong';
+        state.error = action.payload || 'Something went wrong';
         state.isAuthenticated = false;
         state.user = null;
       })

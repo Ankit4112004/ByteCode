@@ -27,12 +27,17 @@ const adminMiddleware = async (req,res,next)=>{
             throw new Error("User Doesn't Exist");
         }
 
-        // Redis ke blockList mein persent toh nahi hai
-
-        const IsBlocked = await redisClient.exists(`token:${token}`);
-
-        if(IsBlocked)
-            throw new Error("Invalid Token");
+        // Redis ke blockList mein persent toh nahi hai.
+        // Fail-open: if Redis is unreachable, don't block valid users —
+        // the JWT signature + expiry already authenticated them.
+        try {
+            const IsBlocked = await redisClient.exists(`token:${token}`);
+            if(IsBlocked)
+                throw new Error("Invalid Token");
+        } catch (redisErr) {
+            if (redisErr.message === "Invalid Token") throw redisErr;
+            console.error("Redis unavailable, skipping blocklist check:", redisErr.message);
+        }
 
         req.result = result;
 

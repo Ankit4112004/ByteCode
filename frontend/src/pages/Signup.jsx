@@ -20,7 +20,7 @@ export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isAuthenticated, loading } = useSelector((s) => s.auth);
+  const { isAuthenticated, loading, error } = useSelector((s) => s.auth);
 
   const {
     register,
@@ -28,16 +28,9 @@ export default function Signup() {
     formState: { errors },
   } = useForm({ resolver: zodResolver(signupSchema) });
 
-  // useEffect(() => {
-  //   if (isAuthenticated) navigate("/");
-  // }, [isAuthenticated, navigate]);
-
   useEffect(() => {
-  if (isAuthenticated) {
-    setTimeout(() => navigate("/"), 100);
-  }
-}, [isAuthenticated, navigate]);
-
+    if (isAuthenticated) navigate("/");
+  }, [isAuthenticated, navigate]);
 
   const onSubmit = (data) => dispatch(registerUser(data));
 
@@ -59,6 +52,13 @@ export default function Signup() {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* SERVER / AUTH ERROR */}
+              {error && (
+                <div className="rounded-md border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-400">
+                  {error}
+                </div>
+              )}
+
               {/* FIRST NAME */}
               <div>
                 <input
