@@ -4,10 +4,15 @@ const authRouter =  express.Router();
 const {register, login,logout, adminRegister,deleteProfile} = require('../controllers/userAuthent')
 const userMiddleware = require("../middleware/userMiddleware");
 const adminMiddleware = require('../middleware/adminMiddleware');
+const createRateLimiter = require("../middleware/rateLimiter");
+
+// Per-IP limits on public auth routes to slow brute-force attempts.
+const loginLimiter = createRateLimiter({ windowMs: 60_000, max: 8, keyPrefix: "rl:login", by: "ip" });
+const registerLimiter = createRateLimiter({ windowMs: 60_000, max: 5, keyPrefix: "rl:register", by: "ip" });
 
 // Register
-authRouter.post('/register', register);
-authRouter.post('/login', login);
+authRouter.post('/register', registerLimiter, register);
+authRouter.post('/login', loginLimiter, login);
 authRouter.post('/logout', userMiddleware, logout);
 authRouter.post('/admin/register', adminMiddleware ,adminRegister);
 authRouter.delete('/deleteProfile',userMiddleware,deleteProfile);

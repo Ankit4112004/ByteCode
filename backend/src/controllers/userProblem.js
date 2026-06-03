@@ -3,6 +3,14 @@ const Problem = require("../models/problem");
 const User = require("../models/user");
 const Submission = require("../models/submission");
 const SolutionVideo = require("../models/solutionVideo")
+const { cacheGet, cacheSet, cacheDel } = require("../lib/cache");
+
+// Cache keys (cache-aside pattern)
+const ALL_PROBLEMS_KEY = "problems:all";
+const problemKey = (id) => `problem:${id}`;
+
+// Invalidate caches touched by a write (create / update / delete).
+const invalidateProblemCache = (id) => cacheDel(ALL_PROBLEMS_KEY, problemKey(id));
 
 const createProblem = async (req,res)=>{
    
@@ -62,6 +70,7 @@ const createProblem = async (req,res)=>{
         problemCreator: req.result._id
       });
 
+      await invalidateProblemCache(userProblem._id); // new problem → bust the list cache
       res.status(201).send("Problem Saved Successfully");
     }
     catch(err){
@@ -129,7 +138,8 @@ const updateProblem = async (req,res)=>{
 
 
   const newProblem = await Problem.findByIdAndUpdate(id , {...req.body}, {runValidators:true, new:true});
-   
+
+  await invalidateProblemCache(id); // updated → bust list + this problem
   res.status(200).send(newProblem);
   }
   catch(err){
@@ -150,7 +160,7 @@ const deleteProblem = async(req,res)=>{
    if(!deletedProblem)
     return res.status(404).send("Problem is Missing");
 
-
+   await invalidateProblemCache(id); // deleted → bust list + this problem
    res.status(200).send("Successfully Deleted");
   }
   catch(err){
@@ -164,12 +174,16 @@ const getProblemById = async(req,res)=>{
 
   const {id} = req.params;
   try{
-     
+
     if(!id)
       return res.status(400).send("ID is Missing");
 
+    // cache-aside: serve from Redis if present
+    const cached = await cacheGet(problemKey(id));
+    if (cached) return res.status(200).send(cached);
+
     const getProblem = await Problem.findById(id).select('_id title description difficulty tags visibleTestCases startCode referenceSolution ');
-   
+
     // video ka jo bhi url wagera le aao
 
    if(!getProblem)
@@ -177,18 +191,20 @@ const getProblemById = async(req,res)=>{
 
    const videos = await SolutionVideo.findOne({problemId:id});
 
-   if(videos){   
-    
+   if(videos){
+
    const responseData = {
     ...getProblem.toObject(),
     secureUrl:videos.secureUrl,
     thumbnailUrl : videos.thumbnailUrl,
     duration : videos.duration,
-   } 
-  
+   }
+
+   await cacheSet(problemKey(id), responseData);
    return res.status(200).send(responseData);
    }
-    
+
+   await cacheSet(problemKey(id), getProblem);
    res.status(200).send(getProblem);
 
   }
@@ -200,13 +216,17 @@ const getProblemById = async(req,res)=>{
 const getAllProblem = async(req,res)=>{
 
   try{
-     
+
+    // cache-aside: serve the problem list from Redis if present
+    const cached = await cacheGet(ALL_PROBLEMS_KEY);
+    if (cached) return res.status(200).send(cached);
+
     const getProblem = await Problem.find({}).select('_id title difficulty tags');
 
    if(getProblem.length==0)
     return res.status(404).send("Problem is Missing");
 
-
+   await cacheSet(ALL_PROBLEMS_KEY, getProblem);
    res.status(200).send(getProblem);
   }
   catch(err){

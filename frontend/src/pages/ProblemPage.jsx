@@ -108,6 +108,10 @@ const ProblemPage = () => {
         const response = await axiosClient.post(`/submission/submit/${problemId}`, {
         code:code,
         language: selectedLanguage
+      }, {
+        // Idempotency: a unique key per submit click so a double-click / retry
+        // doesn't create duplicate submissions or fire Judge0 twice.
+        headers: { "Idempotency-Key": crypto.randomUUID() }
       });
 
        setSubmitResult(response.data);
