@@ -1,214 +1,103 @@
 const Problem = require("../models/problem");
 const Submission = require("../models/submission");
-const User = require("../models/user");
-const {getLanguageById,submitBatch,submitToken} = require("../utils/problemUtility");
+const { evaluateTestcases } = require("../services/evaluation");
+const { enqueueSubmission } = require("../queues/submissionQueue");
 
-const submitCode = async (req,res)=>{
-   
-    // 
-    try{
-      
-       const userId = req.result._id;
-       const problemId = req.params.id;
+/**
+ * Async submission: create a pending record, enqueue the job, return 202 right
+ * away. The BullMQ worker evaluates it and the verdict is pushed back over
+ * Socket.io (see socket.js). Client can also poll GET /submission/status/:id.
+ */
+const submitCode = async (req, res) => {
+  try {
+    const userId = req.result._id;
+    const problemId = req.params.id;
+    let { code, language } = req.body;
 
-       let {code,language} = req.body;
+    if (!userId || !code || !problemId || !language)
+      return res.status(400).send("Some field missing");
 
-      if(!userId||!code||!problemId||!language)
-        return res.status(400).send("Some field missing");
-      
+    if (language === "cpp") language = "c++";
 
-      if(language==='cpp')
-        language='c++'
-      
-      console.log(language);
-      
-    //    Fetch the problem from database
-       const problem =  await Problem.findById(problemId);
-    //    testcases(Hidden)
-    
-    //   Kya apne submission store kar du pehle....
-    const submittedResult = await Submission.create({
-          userId,
-          problemId,
-          code,
-          language,
-          status:'pending',
-          testCasesTotal:problem.hiddenTestCases.length
-     })
+    const problem = await Problem.findById(problemId);
+    if (!problem) return res.status(404).send("Problem not found");
 
-    //    Judge0 code ko submit karna hai
-    
-    const languageId = getLanguageById(language);
-   
-    const submissions = problem.hiddenTestCases.map((testcase)=>({
-        source_code:code,
-        language_id: languageId,
-        stdin: testcase.input,
-        expected_output: testcase.output
-    }));
+    const submission = await Submission.create({
+      userId,
+      problemId,
+      code,
+      language,
+      status: "pending",
+      testCasesTotal: problem.hiddenTestCases.length,
+    });
 
-    
-    const submitResult = await submitBatch(submissions);
-    
-    const resultToken = submitResult.map((value)=> value.token);
+    await enqueueSubmission({
+      submissionId: submission._id.toString(),
+      userId: userId.toString(),
+    });
 
-    const testResult = await submitToken(resultToken);
-    
+    return res.status(202).json({
+      submissionId: submission._id,
+      status: "pending",
+      message: "Submission queued. Result will arrive shortly.",
+    });
+  } catch (err) {
+    res.status(500).send("Internal Server Error " + err);
+  }
+};
 
-    // submittedResult ko update karo
-    let testCasesPassed = 0;
-    let runtime = 0;
-    let memory = 0;
-    let status = 'accepted';
-    let errorMessage = null;
+/**
+ * Run against visible test cases — kept synchronous (fast, no persistence).
+ * Shares the same evaluate skeleton (Template Method) as the submit worker.
+ */
+const runCode = async (req, res) => {
+  try {
+    const problemId = req.params.id;
+    let { code, language } = req.body;
 
+    if (!code || !problemId || !language)
+      return res.status(400).send("Some field missing");
 
-    for(const test of testResult){
-        if(test.status_id==3){
-           testCasesPassed++;
-           runtime = runtime+parseFloat(test.time)
-           memory = Math.max(memory,test.memory);
-        }else{
-          if(test.status_id==4){
-            status = 'error'
-            errorMessage = test.stderr
-          }
-          else{
-            status = 'wrong'
-            errorMessage = test.stderr
-          }
-        }
-    }
+    if (language === "cpp") language = "c++";
 
+    const problem = await Problem.findById(problemId);
+    if (!problem) return res.status(404).send("Problem not found");
 
-    // Store the result in Database in Submission
-    submittedResult.status   = status;
-    submittedResult.testCasesPassed = testCasesPassed;
-    submittedResult.errorMessage = errorMessage;
-    submittedResult.runtime = runtime;
-    submittedResult.memory = memory;
-
-    await submittedResult.save();
-    
-    const accepted = (status == 'accepted')
-
-    // Bug 4 fix: the old check-then-push could let two concurrent submissions both
-    // pass the .includes() check and push duplicates. $addToSet is atomic in MongoDB
-    // and only inserts if not already present. Only mark solved on an accepted verdict.
-    if(accepted){
-      await User.findByIdAndUpdate(userId, { $addToSet: { problemSolved: problemId } });
-    }
+    const verdict = await evaluateTestcases(code, language, problem.visibleTestCases);
 
     res.status(201).json({
-      accepted,
-      totalTestCases: submittedResult.testCasesTotal,
-      passedTestCases: testCasesPassed,
-      runtime,
-      memory
+      success: verdict.status === "accepted",
+      testCases: verdict.results,
+      runtime: verdict.runtime,
+      memory: verdict.memory,
     });
-       
-    }
-    catch(err){
-      res.status(500).send("Internal Server Error "+ err);
-    }
-}
+  } catch (err) {
+    res.status(500).send("Internal Server Error " + err);
+  }
+};
 
+/** Poll a single submission's status (fallback if the websocket push is missed). */
+const getSubmissionStatus = async (req, res) => {
+  try {
+    const submission = await Submission.findOne({
+      _id: req.params.submissionId,
+      userId: req.result._id,
+    });
+    if (!submission) return res.status(404).json({ error: "Submission not found" });
 
-const runCode = async(req,res)=>{
-    
-     // 
-     try{
-      const userId = req.result._id;
-      const problemId = req.params.id;
+    res.status(200).json({
+      submissionId: submission._id,
+      status: submission.status,
+      accepted: submission.status === "accepted",
+      passedTestCases: submission.testCasesPassed,
+      totalTestCases: submission.testCasesTotal,
+      runtime: submission.runtime,
+      memory: submission.memory,
+      errorMessage: submission.errorMessage,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch submission" });
+  }
+};
 
-      let {code,language} = req.body;
-
-     if(!userId||!code||!problemId||!language)
-       return res.status(400).send("Some field missing");
-
-   //    Fetch the problem from database
-      const problem =  await Problem.findById(problemId);
-   //    testcases(Hidden)
-      if(language==='cpp')
-        language='c++'
-
-   //    Judge0 code ko submit karna hai
-
-   const languageId = getLanguageById(language);
-
-   const submissions = problem.visibleTestCases.map((testcase)=>({
-       source_code:code,
-       language_id: languageId,
-       stdin: testcase.input,
-       expected_output: testcase.output
-   }));
-
-
-   const submitResult = await submitBatch(submissions);
-   
-   const resultToken = submitResult.map((value)=> value.token);
-
-   const testResult = await submitToken(resultToken);
-
-    let testCasesPassed = 0;
-    let runtime = 0;
-    let memory = 0;
-    let status = true;
-    let errorMessage = null;
-
-    for(const test of testResult){
-        if(test.status_id==3){
-           testCasesPassed++;
-           runtime = runtime+parseFloat(test.time)
-           memory = Math.max(memory,test.memory);
-        }else{
-          if(test.status_id==4){
-            status = false
-            errorMessage = test.stderr
-          }
-          else{
-            status = false
-            errorMessage = test.stderr
-          }
-        }
-    }
-
-   
-  
-   res.status(201).json({
-    success:status,
-    testCases: testResult,
-    runtime,
-    memory
-   });
-      
-   }
-   catch(err){
-     res.status(500).send("Internal Server Error "+ err);
-   }
-}
-
-
-module.exports = {submitCode,runCode};
-
-
-
-//     language_id: 54,
-//     stdin: '2 3',
-//     expected_output: '5',
-//     stdout: '5',
-//     status_id: 3,
-//     created_at: '2025-05-12T16:47:37.239Z',
-//     finished_at: '2025-05-12T16:47:37.695Z',
-//     time: '0.002',
-//     memory: 904,
-//     stderr: null,
-//     token: '611405fa-4f31-44a6-99c8-6f407bc14e73',
-
-
-// User.findByIdUpdate({
-// })
-
-//const user =  User.findById(id)
-// user.firstName = "Mohit";
-// await user.save();
+module.exports = { submitCode, runCode, getSubmissionStatus };

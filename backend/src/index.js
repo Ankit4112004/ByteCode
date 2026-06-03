@@ -1,56 +1,37 @@
-const express = require('express')
-const app = express();
-require('dotenv').config();
-const main =  require('./config/db')
-const cookieParser =  require('cookie-parser');
-const authRouter = require("./routes/userAuth");
-const redisClient = require('./config/redis');
-const problemRouter = require("./routes/problemCreator");
-const submitRouter = require("./routes/submit")
-const aiRouter = require("./routes/aiChatting")
-const videoRouter = require("./routes/videoCreator");
-const discussionRouter = require("./routes/discussion");
-const cors = require('cors')
+/**
+ * Web server entry point for the persistent host (Railway/Render).
+ * Real HTTP server + Socket.io. Run the worker separately (npm run worker).
+ *
+ * (Vercel serverless still uses server.js, which has no websockets.)
+ */
+require("dotenv").config();
 
-// console.log("Hello")
+const http = require("http");
+const app = require("./app");
+const connectDB = require("./config/db");
+const redisClient = require("./config/redis");
+const { initSocket } = require("./socket");
 
-app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true 
-}))
+const server = http.createServer(app);
+initSocket(server);
 
-app.use(express.json());
-app.use(cookieParser());
+const PORT = process.env.PORT || 3000;
 
-app.use('/user',authRouter);
-app.use('/problem',problemRouter);
-app.use('/submission',submitRouter);
-app.use('/ai',aiRouter);
-app.use("/video",videoRouter);
-app.use("/discussion",discussionRouter);
+(async () => {
+  try {
+    await connectDB(); // MongoDB is required
 
-
-const InitalizeConnection = async ()=>{
-    try{
-
-        await main(); // MongoDB is required
-        try {
-            await redisClient.connect(); // Redis is optional (logout blocklist)
-        } catch (err) {
-            console.error("Redis connect failed (continuing without it):", err.message);
-        }
-        console.log("DB Connected");
-        
-        app.listen(process.env.PORT, ()=>{
-            console.log("Server listening at port number: "+ process.env.PORT);
-        })
-
+    // Redis is optional (cache / rate-limit / blocklist) — don't crash without it.
+    if (!redisClient.isOpen) {
+      try {
+        await redisClient.connect();
+      } catch (err) {
+        console.error("Redis connect failed (continuing without it):", err.message);
+      }
     }
-    catch(err){
-        console.log("Error: "+err);
-    }
-}
 
-
-InitalizeConnection();
-
+    server.listen(PORT, () => console.log("Server listening on port " + PORT));
+  } catch (err) {
+    console.error("Startup failed:", err.message);
+  }
+})();

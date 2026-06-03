@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import AdminPanel from "./components/AdminPanel";
 import ProblemPage from "./pages/ProblemPage"
 import Admin from "./pages/Admin";
+import Leaderboard from "./pages/Leaderboard";
 import AdminVideo from "./components/AdminVideo"
 import AdminDelete from "./components/AdminDelete"
 import AdminUpload from "./components/AdminUpload"
@@ -40,7 +41,8 @@ function App(){
       <Route path="/admin/video" element={isAuthenticated && user?.role === 'admin' ? <AdminVideo /> : <Navigate to="/" />} />
       <Route path="/admin/upload/:problemId" element={isAuthenticated && user?.role === 'admin' ? <AdminUpload /> : <Navigate to="/" />} />
       <Route path="/problem/:problemId" element={<ProblemPage/>}></Route>
-      
+      <Route path="/leaderboard" element={isAuthenticated ? <Leaderboard/> : <Navigate to="/login" />}></Route>
+
     </Routes>
   </>
   )

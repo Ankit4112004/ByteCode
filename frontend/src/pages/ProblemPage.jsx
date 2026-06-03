@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import Editor from '@monaco-editor/react';
 import { useParams } from 'react-router';
 import axiosClient from "../utils/axiosClient"
+import socket from "../utils/socket";
 import SubmissionHistory from "../components/SubmissionHistory"
 import ChatAi from '../components/ChatAi';
 import Editorial from '../components/Editorial';
@@ -27,9 +29,23 @@ const ProblemPage = () => {
   const editorRef = useRef(null);
   let {problemId}  = useParams();
 
-  
+  const user = useSelector((s) => s.auth.user);
 
   const { handleSubmit } = useForm();
+
+  // Real-time: join our user room and listen for async submission verdicts.
+  useEffect(() => {
+    if (!user?._id) return;
+    socket.emit("join", user._id);
+
+    const onResult = (result) => {
+      setSubmitResult(result);
+      setActiveRightTab("result");
+    };
+    socket.on("submission:result", onResult);
+
+    return () => socket.off("submission:result", onResult);
+  }, [user]);
 
  useEffect(() => {
     const fetchProblem = async () => {
@@ -101,28 +117,24 @@ const ProblemPage = () => {
   };
 
   const handleSubmitCode = async () => {
-    setLoading(true);
-    setSubmitResult(null);
-    
+    // Async pipeline: POST returns 202 immediately; the verdict arrives later
+    // over the websocket (submission:result). Show a "judging" state until then.
+    setSubmitResult({ status: 'pending' });
+    setActiveRightTab('result');
+
     try {
-        const response = await axiosClient.post(`/submission/submit/${problemId}`, {
-        code:code,
+      await axiosClient.post(`/submission/submit/${problemId}`, {
+        code: code,
         language: selectedLanguage
       }, {
         // Idempotency: a unique key per submit click so a double-click / retry
         // doesn't create duplicate submissions or fire Judge0 twice.
         headers: { "Idempotency-Key": crypto.randomUUID() }
       });
-
-       setSubmitResult(response.data);
-       setLoading(false);
-       setActiveRightTab('result');
-      
+      // result handled by the socket listener
     } catch (error) {
       console.error('Error submitting code:', error);
-      setSubmitResult(null);
-      setLoading(false);
-      setActiveRightTab('result');
+      setSubmitResult({ status: 'error', error: error.response?.data || 'Submission failed' });
     }
   };
 
@@ -457,7 +469,12 @@ const ProblemPage = () => {
           {activeRightTab === 'result' && (
             <div className="flex-1 p-4 overflow-y-auto">
               <h3 className="font-semibold mb-4">Submission Result</h3>
-              {submitResult ? (
+              {submitResult?.status === 'pending' ? (
+                <div className="flex items-center gap-3 text-gray-500">
+                  <span className="loading loading-spinner"></span>
+                  Judging your submission...
+                </div>
+              ) : submitResult ? (
                 <div className={`alert ${submitResult.accepted ? 'alert-success' : 'alert-error'}`}>
                   <div>
                     {submitResult.accepted ? (

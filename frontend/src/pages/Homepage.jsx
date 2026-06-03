@@ -77,7 +77,10 @@ function Homepage() {
         </div>
       
       
-<div className="flex-none">
+<div className="flex-none gap-2">
+  <NavLink to="/leaderboard" className="btn btn-ghost btn-sm">
+    🏆 Leaderboard
+  </NavLink>
   <div className="dropdown dropdown-end">
     {/* Trigger */}
     <div
