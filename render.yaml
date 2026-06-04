@@ -1,0 +1,73 @@
+# Render Blueprint (Infrastructure as Code) for ByteCode.
+# In the Render dashboard: New → Blueprint → pick this repo. Render reads this
+# file, creates the services below, and prompts you for every env var marked
+# `sync: false` (so secrets are entered in the dashboard, never committed).
+#
+# Docs: https://render.com/docs/blueprint-spec
+
+# ── Shared environment, referenced by both backend services ──────────────────
+envVarGroups:
+  - name: bytecode-backend
+    envVars:
+      - key: DB_CONNECT_STRING        # MongoDB Atlas connection string
+        sync: false
+      - key: REDIS_URL                # redis://default:pass@host:port
+        sync: false
+      - key: JWT_KEY                  # long random secret
+        sync: false
+      - key: JUDGE0_KEY               # Judge0 RapidAPI key
+        sync: false
+      - key: OPENROUTER_API_KEY       # AI chat
+        sync: false
+      - key: OPENROUTER_MODEL
+        value: meta-llama/llama-3.1-8b-instruct
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: FRONTEND_URL             # your deployed frontend origin (for CORS)
+        sync: false
+      - key: RUN_WORKER_IN_PROCESS    # free tier: run the BullMQ worker inside the web process
+        value: "true"
+
+services:
+  # ── Backend: web + in-process worker (100% free) ───────────────────────────
+  # One free web service that also runs the BullMQ worker (RUN_WORKER_IN_PROCESS).
+  # To scale later: set RUN_WORKER_IN_PROCESS=false here and add a separate
+  # `type: worker` service running `npm run worker` (paid on Render).
+  - type: web
+    name: bytecode-api
+    runtime: node
+    rootDir: backend
+    region: singapore          # closest to India; change if you prefer
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - fromGroup: bytecode-backend
+
+# ── Optional: host the frontend on Render too (a static site) ────────────────
+# You are hosting the frontend on Vercel, so this is left commented out. If you
+# want everything on Render, uncomment it. VITE_API_URL is auto-wired to the API
+# service's URL, and you can then set FRONTEND_URL (above) to this site's URL.
+#
+#  - type: web
+#    name: bytecode-frontend
+#    runtime: static
+#    rootDir: frontend
+#    buildCommand: npm install && npm run build
+#    staticPublishPath: dist
+#    envVars:
+#      - key: VITE_API_URL
+#        fromService:
+#          name: bytecode-api
+#          type: web
+#          property: host
+#    routes:
+#      - type: rewrite
+#        source: /*
+#        destination: /index.html
