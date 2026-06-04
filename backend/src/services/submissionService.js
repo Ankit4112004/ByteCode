@@ -1,6 +1,6 @@
-const Submission = require("../models/submission");
-const Problem = require("../models/problem");
-const User = require("../models/user");
+const Submission = require("../models/submission.model");
+const Problem = require("../models/problem.model");
+const User = require("../models/user.model");
 const { evaluateTestcases } = require("./evaluation");
 const leaderboard = require("../lib/leaderboard");
 

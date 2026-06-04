@@ -1,4 +1,4 @@
-const redisClient = require("../config/redis");
+const redisClient = require("../config/redis.config");
 
 /**
  * Cache-aside helpers over the existing Redis client.

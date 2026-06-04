@@ -1,8 +1,8 @@
 const { Server } = require("socket.io");
 const { QueueEvents } = require("bullmq");
-const connection = require("./config/bullConnection");
-const { SUBMISSION_QUEUE } = require("./queues/submissionQueue");
-const allowedOrigins = require("./config/origins");
+const connection = require("./config/bull.config");
+const { submissionQueue, SUBMISSION_QUEUE } = require("./queues/submissionQueue");
+const allowedOrigins = require("./config/origins.config");
 
 let io;
 
@@ -38,8 +38,30 @@ function initSocket(server) {
     }
   });
 
-  queueEvents.on("failed", ({ jobId, failedReason }) => {
+  // A job that exhausted its retries (e.g. Judge0 down / circuit breaker open).
+  // Notify the user so the UI stops "judging" instead of hanging forever.
+  queueEvents.on("failed", async ({ jobId, failedReason }) => {
     console.error("Submission job failed:", jobId, failedReason);
+    try {
+      const job = await submissionQueue.getJob(jobId);
+      const userId = job?.data?.userId;
+      if (!userId || !io) return;
+
+      const breakerOpen = /breaker is open/i.test(failedReason || "");
+      io.to(userId).emit("submission:result", {
+        submissionId: jobId,
+        userId,
+        accepted: false,
+        status: "error",
+        error: breakerOpen
+          ? "Judge is temporarily unavailable. Please try again in a moment."
+          : "Evaluation failed. Please try again.",
+        passedTestCases: 0,
+        totalTestCases: 0,
+      });
+    } catch (e) {
+      console.error("failed-notify error:", e.message);
+    }
   });
 
   return io;

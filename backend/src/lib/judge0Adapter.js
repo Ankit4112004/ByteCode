@@ -28,6 +28,7 @@ const breaker = new CircuitBreaker(executeRaw, {
   timeout: 20000,                 // a batch must resolve within 20s
   errorThresholdPercentage: 50,   // open once half of recent calls fail
   resetTimeout: 30000,            // stay open 30s, then probe
+  volumeThreshold: 5,             // need >=5 calls in the window before it can trip
   name: "judge0",
 });
 

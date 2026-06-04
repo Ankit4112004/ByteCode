@@ -5,13 +5,19 @@ import Homepage from "./pages/Homepage";
 import { useDispatch, useSelector } from 'react-redux';
 import { checkAuth } from "./authSlice";
 import { useEffect } from "react";
-import AdminPanel from "./components/AdminPanel";
+import AdminPanel from "./components/admin/AdminPanel";
 import ProblemPage from "./pages/ProblemPage"
 import Admin from "./pages/Admin";
 import Leaderboard from "./pages/Leaderboard";
-import AdminVideo from "./components/AdminVideo"
-import AdminDelete from "./components/AdminDelete"
-import AdminUpload from "./components/AdminUpload"
+import AdminVideo from "./components/admin/AdminVideo"
+import AdminDelete from "./components/admin/AdminDelete"
+import AdminUpload from "./components/admin/AdminUpload";
+import AdminUpdate from "./components/admin/AdminUpdate";
+import AdminEditProblem from "./components/admin/AdminEditProblem";
+import AdminCreateUser from "./components/admin/AdminCreateUser";
+import AdminUsers from "./components/admin/AdminUsers";
+import Profile from "./pages/Profile";
+import StatusPage from "./pages/StatusPage";
 
 function App(){
   
@@ -35,13 +41,19 @@ function App(){
       <Route path="/" element={isAuthenticated ?<Homepage></Homepage>:<Navigate to="/signup" />}></Route>
       <Route path="/login" element={isAuthenticated?<Navigate to="/" />:<Login></Login>}></Route>
       <Route path="/signup" element={isAuthenticated?<Navigate to="/" />:<Signup></Signup>}></Route>
+      <Route path="/status" element={<StatusPage />} />
       <Route path="/admin" element={isAuthenticated && user?.role === 'admin' ? <Admin /> : <Navigate to="/" />} />
+      <Route path="/admin/users" element={isAuthenticated && user?.role === 'admin' ? <AdminUsers /> : <Navigate to="/" />} />
+      <Route path="/admin/create-admin" element={isAuthenticated && user?.role === 'admin' ? <AdminCreateUser /> : <Navigate to="/" />} />
       <Route path="/admin/create" element={isAuthenticated && user?.role === 'admin' ? <AdminPanel /> : <Navigate to="/" />} />
+      <Route path="/admin/update" element={isAuthenticated && user?.role === 'admin' ? <AdminUpdate /> : <Navigate to="/" />} />
+      <Route path="/admin/edit/:problemId" element={isAuthenticated && user?.role === 'admin' ? <AdminEditProblem /> : <Navigate to="/" />} />
       <Route path="/admin/delete" element={isAuthenticated && user?.role === 'admin' ? <AdminDelete /> : <Navigate to="/" />} />
       <Route path="/admin/video" element={isAuthenticated && user?.role === 'admin' ? <AdminVideo /> : <Navigate to="/" />} />
       <Route path="/admin/upload/:problemId" element={isAuthenticated && user?.role === 'admin' ? <AdminUpload /> : <Navigate to="/" />} />
       <Route path="/problem/:problemId" element={<ProblemPage/>}></Route>
       <Route path="/leaderboard" element={isAuthenticated ? <Leaderboard/> : <Navigate to="/login" />}></Route>
+      <Route path="/profile" element={isAuthenticated ? <Profile/> : <Navigate to="/login" />}></Route>
 
     </Routes>
   </>

@@ -1,4 +1,4 @@
-const redisClient = require("../config/redis");
+const redisClient = require("../config/redis.config");
 
 /**
  * Leaderboards backed by Redis Sorted Sets (ZSET) — O(log N) ranked writes/reads.
@@ -11,7 +11,7 @@ const redisClient = require("../config/redis");
 
 const GLOBAL = "leaderboard:global";
 const problemKey = (pid) => `leaderboard:problem:${pid}`;
-const WEIGHT = { easy: 1, medium: 2, hard: 3 };
+const WEIGHT = { easy: 1, medium: 3, hard: 5 };
 
 const safe = async (fn, fallback) => {
   try {

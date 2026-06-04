@@ -1,5 +1,5 @@
 const { Queue } = require("bullmq");
-const connection = require("../config/bullConnection");
+const connection = require("../config/bull.config");
 
 const SUBMISSION_QUEUE = "submissions";
 

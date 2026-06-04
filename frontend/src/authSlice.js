@@ -48,7 +48,7 @@ export const checkAuth = createAsyncThunk(
       if (error.response?.status === 401) {
         return rejectWithValue(null); // Special case for no session
       }
-      return rejectWithValue(error);
+      return rejectWithValue(extractError(error));
     }
   }
 );
@@ -124,7 +124,7 @@ const authSlice = createSlice({
       .addCase(checkAuth.rejected, (state, action) => {
         state.loading = false;
         // If payload is null, it's an expected 401 Unauthorized (no session).
-        state.error = action.payload === null ? null : (action.payload?.message || 'Something went wrong');
+        state.error = action.payload === null ? null : (action.payload || 'Something went wrong');
         state.isAuthenticated = false;
         state.user = null;
       })

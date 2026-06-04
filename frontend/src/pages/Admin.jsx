@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, Edit, Trash2, Home, RefreshCw, Zap,Video } from 'lucide-react';
+import { Plus, Edit, Trash2, Home, RefreshCw, Zap, Video, UserPlus, Users } from 'lucide-react';
 import { NavLink } from 'react-router';
 
 function Admin() {
@@ -11,8 +11,9 @@ function Admin() {
       title: 'Create Problem',
       description: 'Add a new coding problem to the platform',
       icon: Plus,
-      color: 'btn-success',
-      bgColor: 'bg-success/10',
+      color: 'text-emerald-400',
+      bgColor: 'bg-emerald-500/10',
+      btnClass: 'bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-white border border-emerald-500/20 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/20',
       route: '/admin/create'
     },
     {
@@ -20,8 +21,9 @@ function Admin() {
       title: 'Update Problem',
       description: 'Edit existing problems and their details',
       icon: Edit,
-      color: 'btn-warning',
-      bgColor: 'bg-warning/10',
+      color: 'text-amber-400',
+      bgColor: 'bg-amber-500/10',
+      btnClass: 'bg-amber-500/10 hover:bg-amber-500 text-amber-400 hover:text-white border border-amber-500/20 hover:border-amber-500 hover:shadow-lg hover:shadow-amber-500/20',
       route: '/admin/update'
     },
     {
@@ -29,31 +31,54 @@ function Admin() {
       title: 'Delete Problem',
       description: 'Remove problems from the platform',
       icon: Trash2,
-      color: 'btn-error',
-      bgColor: 'bg-error/10',
+      color: 'text-rose-400',
+      bgColor: 'bg-rose-500/10',
+      btnClass: 'bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white border border-rose-500/20 hover:border-rose-500 hover:shadow-lg hover:shadow-rose-500/20',
       route: '/admin/delete'
     },
     {
       id: 'video',
-      title: 'Video Problem',
-      description: 'Upload And Delete Videos',
+      title: 'Video Solutions',
+      description: 'Upload and manage video explanations',
       icon: Video,
-      color: 'btn-success',
-      bgColor: 'bg-success/10',
+      color: 'text-indigo-400',
+      bgColor: 'bg-indigo-500/10',
+      btnClass: 'bg-indigo-500/10 hover:bg-indigo-500 text-indigo-400 hover:text-white border border-indigo-500/20 hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/20',
       route: '/admin/video'
+    },
+    {
+      id: 'create-admin',
+      title: 'Create Admin',
+      description: 'Register a new user with full administrative privileges',
+      icon: UserPlus,
+      color: 'text-fuchsia-400',
+      bgColor: 'bg-fuchsia-500/10',
+      btnClass: 'bg-fuchsia-500/10 hover:bg-fuchsia-500 text-fuchsia-400 hover:text-white border border-fuchsia-500/20 hover:border-fuchsia-500 hover:shadow-lg hover:shadow-fuchsia-500/20',
+      route: '/admin/create-admin'
+    },
+    {
+      id: 'manage-users',
+      title: 'Manage Users',
+      description: 'View all users and promote them to administrators',
+      icon: Users,
+      color: 'text-cyan-400',
+      bgColor: 'bg-cyan-500/10',
+      btnClass: 'bg-cyan-500/10 hover:bg-cyan-500 text-cyan-400 hover:text-white border border-cyan-500/20 hover:border-cyan-500 hover:shadow-lg hover:shadow-cyan-500/20',
+      route: '/admin/users'
     }
   ];
 
   return (
-    <div className="min-h-screen bg-base-200">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-[#0a0a0a]">
+      <div className="container mx-auto px-4 py-16">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-base-content mb-4">
-            Admin Panel
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight flex items-center justify-center gap-4">
+            <Zap className="w-10 h-10 text-indigo-500" />
+            Admin Dashboard
           </h1>
-          <p className="text-base-content/70 text-lg">
-            Manage coding problems on your platform
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            Manage coding problems, video solutions, and platform configuration from your centralized command center.
           </p>
         </div>
 
@@ -62,43 +87,34 @@ function Admin() {
           {adminOptions.map((option) => {
             const IconComponent = option.icon;
             return (
-              <div
+              <NavLink 
+                to={option.route}
                 key={option.id}
-                className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
+                className="group flex flex-col bg-[#151515] border border-white/5 rounded-3xl p-8 hover:bg-[#1a1a1a] hover:border-white/10 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-2 relative overflow-hidden"
               >
-                <div className="card-body items-center text-center p-8">
-                  {/* Icon */}
-                  <div className={`${option.bgColor} p-4 rounded-full mb-4`}>
-                    <IconComponent size={32} className="text-base-content" />
-                  </div>
-                  
-                  {/* Title */}
-                  <h2 className="card-title text-xl mb-2">
+                {/* Icon */}
+                <div className={`${option.bgColor} ${option.color} w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-inner transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
+                  <IconComponent size={32} strokeWidth={1.5} />
+                </div>
+                
+                {/* Text Content */}
+                <div className="flex-1">
+                  <h2 className="text-xl font-bold text-gray-200 mb-3 group-hover:text-white transition-colors">
                     {option.title}
                   </h2>
-                  
-                  {/* Description */}
-                  <p className="text-base-content/70 mb-6">
+                  <p className="text-gray-500 text-sm leading-relaxed mb-8">
                     {option.description}
                   </p>
-                  
-                  {/* Action Button */}
-                  <div className="card-actions">
-                    <div className="card-actions">
-                    <NavLink 
-                    to={option.route}
-                   className={`btn ${option.color} btn-wide`}
-                   >
-                   {option.title}
-                   </NavLink>
-                   </div>
-                  </div>
                 </div>
-              </div>
+                
+                {/* Action Button */}
+                <div className={`w-full py-3 rounded-xl text-sm font-bold text-center transition-all duration-300 ${option.btnClass}`}>
+                  {option.title}
+                </div>
+              </NavLink>
             );
           })}
         </div>
-
       </div>
     </div>
   );

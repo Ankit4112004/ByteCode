@@ -22,3 +22,6 @@ dist-ssr/
 .idea/
 .DS_Store
 *.log
+
+docs/
+SYSTEM_DESIGN_ROADMAP.md

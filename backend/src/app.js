@@ -2,14 +2,14 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-const authRouter = require("./routes/userAuth");
-const problemRouter = require("./routes/problemCreator");
-const submitRouter = require("./routes/submit");
-const aiRouter = require("./routes/aiChatting");
-const videoRouter = require("./routes/videoCreator");
-const discussionRouter = require("./routes/discussion");
-const leaderboardRouter = require("./routes/leaderboard");
-const allowedOrigins = require("./config/origins");
+const authRouter = require("./routes/auth.routes");
+const problemRouter = require("./routes/problem.routes");
+const submitRouter = require("./routes/submission.routes");
+const aiRouter = require("./routes/ai.routes");
+const videoRouter = require("./routes/video.routes");
+const discussionRouter = require("./routes/discussion.routes");
+const leaderboardRouter = require("./routes/leaderboard.routes");
+const allowedOrigins = require("./config/origins.config");
 
 const app = express();
 
