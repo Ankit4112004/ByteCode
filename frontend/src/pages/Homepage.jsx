@@ -24,12 +24,7 @@ function Homepage() {
     setCurrentPage(1);
   };
 
-  const formatSubmissions = (num) => {
-    if (!num) return '0';
-    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-    if (num >= 1000) return Math.floor(num / 1000) + 'K';
-    return num.toString();
-  };
+
 
   useEffect(() => {
     const fetchProblems = async () => {
@@ -382,9 +377,7 @@ function Homepage() {
                   )) : (
                     problem.tags !== 'premium' && problem.tags !== 'video' && <div className="badge badge-info">{problem.tags}</div>
                   )}
-                  <span className="text-xs font-semibold text-slate-500 my-auto ml-auto">
-                    • {formatSubmissions(problem.totalSubmissions)} Submissions
-                  </span>
+
                 </div>
               </div>
             </div>

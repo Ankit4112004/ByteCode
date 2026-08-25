@@ -32,7 +32,7 @@ const submitCode = async (req, res) => {
       testCasesTotal: problem.hiddenTestCases.length,
     });
 
-    await Problem.findByIdAndUpdate(problemId, { $inc: { totalSubmissions: 1 } });
+
     await cacheDel("problems:all", `problem:${problemId}`);
 
     await enqueueSubmission({

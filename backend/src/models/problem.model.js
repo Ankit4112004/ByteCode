@@ -19,10 +19,7 @@ const problemSchema = new Schema({
         type:String,
         enum:['array','linkedList','graph','dp','tree','string','greedy','stack','queue','math','bitManipulation','backtracking','twoPointers','binarySearch','heap','premium','video']
     }],
-    totalSubmissions: {
-        type: Number,
-        default: 0
-    },
+
     visibleTestCases:[
         {
             input:{

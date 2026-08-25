@@ -221,7 +221,7 @@ const getAllProblem = async(req,res)=>{
     const cached = await cacheGet(ALL_PROBLEMS_KEY);
     if (cached) return res.status(200).send(cached);
 
-    const getProblem = await Problem.find({}).select('_id title difficulty tags totalSubmissions');
+    const getProblem = await Problem.find({}).select('_id title difficulty tags');
 
    if(getProblem.length==0)
     return res.status(404).send("Problem is Missing");
@@ -274,7 +274,6 @@ const submittedProblem = async(req,res)=>{
      res.status(500).send("Internal Server Error");
   }
 }
-
 
 
 module.exports = {createProblem,updateProblem,deleteProblem,getProblemById,getAllProblem,solvedAllProblembyUser,submittedProblem};
