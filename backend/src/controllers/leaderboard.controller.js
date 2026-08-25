@@ -29,13 +29,10 @@ const getMe = async (req, res) => {
   try {
     const { rank, score, total } = await leaderboard.getGlobalStanding(req.result._id);
     const rank1 = rank === null ? null : rank + 1; // 1-based for display
-    const percentile =
-      rank === null || total === 0 ? null : Math.round(((total - rank) / total) * 100);
     res.status(200).json({
       rank: rank1,
       score,
       total,
-      percentile,
     });
   } catch (err) {
     res.status(500).json({ error: "Failed to load your standing" });

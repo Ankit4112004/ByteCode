@@ -92,12 +92,7 @@ function Leaderboard() {
               <div className="text-sm text-gray-400">Score</div>
               <div className="text-2xl font-bold text-primary">{me.score}</div>
             </div>
-            {me.percentile !== null && (
-              <div className="text-right">
-                <div className="text-sm text-gray-400">Percentile</div>
-                <div className="text-2xl font-bold text-white">Beats {me.percentile}%</div>
-              </div>
-            )}
+
           </div>
         )}
 
