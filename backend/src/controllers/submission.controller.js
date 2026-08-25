@@ -111,29 +111,4 @@ const getSubmissionStatus = async (req, res) => {
 };
 
 /** Fetch all submissions globally for the Status page with pagination. */
-const getAllSubmissions = async (req, res) => {
-  try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-
-    const total = await Submission.countDocuments({});
-    const submissions = await Submission.find({})
-      .populate('userId', 'firstName role')
-      .populate('problemId', 'title')
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
-      
-    res.status(200).json({
-      submissions,
-      currentPage: page,
-      totalPages: Math.ceil(total / limit),
-      totalSubmissions: total
-    });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to fetch submissions" });
-  }
-};
-
-module.exports = { submitCode, runCode, getSubmissionStatus, getAllSubmissions };
+module.exports = { submitCode, runCode, getSubmissionStatus };

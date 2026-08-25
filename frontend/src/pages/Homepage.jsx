@@ -146,9 +146,7 @@ function Homepage() {
       
       
 <div className="flex-none flex items-center gap-3">
-  <NavLink to="/status" className="btn btn-sm bg-[#e2725b]/15 hover:bg-[#e2725b]/30 text-[#e2725b] border-none font-bold">
-    <Zap className="w-5 h-5" /> Submissions
-  </NavLink>
+
   <NavLink to="/leaderboard" className="btn btn-sm bg-amber-500/15 hover:bg-amber-500/30 text-amber-500 border-none font-bold flex items-center gap-1.5">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
       <path d="M2 22V12h6V4h8v11h6v7" />

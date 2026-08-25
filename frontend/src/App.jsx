@@ -17,7 +17,7 @@ import AdminEditProblem from "./components/admin/AdminEditProblem";
 import AdminCreateUser from "./components/admin/AdminCreateUser";
 import AdminUsers from "./components/admin/AdminUsers";
 import Profile from "./pages/Profile";
-import StatusPage from "./pages/StatusPage";
+
 
 function App(){
   
@@ -41,7 +41,7 @@ function App(){
       <Route path="/" element={isAuthenticated ?<Homepage></Homepage>:<Navigate to="/signup" />}></Route>
       <Route path="/login" element={isAuthenticated?<Navigate to="/" />:<Login></Login>}></Route>
       <Route path="/signup" element={isAuthenticated?<Navigate to="/" />:<Signup></Signup>}></Route>
-      <Route path="/status" element={<StatusPage />} />
+
       <Route path="/admin" element={isAuthenticated && user?.role === 'admin' ? <Admin /> : <Navigate to="/" />} />
       <Route path="/admin/users" element={isAuthenticated && user?.role === 'admin' ? <AdminUsers /> : <Navigate to="/" />} />
       <Route path="/admin/create-admin" element={isAuthenticated && user?.role === 'admin' ? <AdminCreateUser /> : <Navigate to="/" />} />

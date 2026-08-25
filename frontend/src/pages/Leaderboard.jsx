@@ -49,7 +49,7 @@ function Leaderboard() {
           <div className="flex h-full gap-6 text-sm font-semibold uppercase tracking-wider">
             <NavLink to="/" className="flex items-center h-full text-gray-400 hover:text-white transition-colors">Problems</NavLink>
             <NavLink to="/leaderboard" className="relative flex items-center h-full text-primary after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:rounded-t-full after:bg-primary">Leaderboard</NavLink>
-            <NavLink to="/status" className="flex items-center h-full text-gray-400 hover:text-white transition-colors">Submissions</NavLink>
+
           </div>
         </div>
         <div className="text-sm font-semibold">
