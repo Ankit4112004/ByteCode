@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ByteCode — Complete Interview Bible (200+ Questions)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #12121a;
+    --bg-card: #1a1a2e;
+    --bg-card-hover: #1f1f35;
+    --bg-code: #0d1117;
+    --text-primary: #e8e8ef;
+    --text-secondary: #a0a0b8;
+    --text-muted: #6b6b80;
+    --accent-blue: #4f8fff;
+    --accent-purple: #8b5cf6;
+    --accent-green: #22c55e;
+    --accent-orange: #f59e0b;
+    --accent-red: #ef4444;
+    --accent-cyan: #06b6d4;
+    --accent-pink: #ec4899;
+    --border: #2a2a40;
+    --gradient-1: linear-gradient(135deg, #4f8fff 0%, #8b5cf6 100%);
+    --gradient-2: linear-gradient(135deg, #22c55e 0%, #06b6d4 100%);
+    --gradient-3: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+    --gradient-4: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+    --shadow-card: 0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ════════════════ NAVIGATION ════════════════ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(10,10,15,0.92); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.8rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo { font-weight: 800; font-size: 1.3rem; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .nav-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .nav-links a {
+    color: var(--text-secondary); text-decoration: none; font-size: 0.78rem; font-weight: 500;
+    padding: 0.35rem 0.7rem; border-radius: 6px; transition: all 0.2s;
+  }
+  .nav-links a:hover { color: var(--text-primary); background: var(--bg-card); }
+
+  /* ════════════════ HERO ════════════════ */
+  .hero {
+    padding: 8rem 2rem 4rem; text-align: center;
+    background: radial-gradient(ellipse at 50% 0%, rgba(79,143,255,0.12) 0%, transparent 60%);
+  }
+  .hero h1 { font-size: 3.2rem; font-weight: 900; margin-bottom: 1rem; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { font-size: 1.15rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto 2rem; }
+  .badge-row { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+  .badge { padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.78rem; font-weight: 600; border: 1px solid var(--border); background: var(--bg-card); }
+  .badge.blue { border-color: var(--accent-blue); color: var(--accent-blue); }
+  .badge.green { border-color: var(--accent-green); color: var(--accent-green); }
+  .badge.purple { border-color: var(--accent-purple); color: var(--accent-purple); }
+  .badge.orange { border-color: var(--accent-orange); color: var(--accent-orange); }
+
+  /* ════════════════ LAYOUT ════════════════ */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+
+  .section {
+    padding: 4rem 0;
+    border-top: 1px solid var(--border);
+  }
+  .section-header {
+    margin-bottom: 2.5rem;
+  }
+  .section-header h2 {
+    font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .section-header p { color: var(--text-secondary); font-size: 0.95rem; }
+
+  .section-tag {
+    display: inline-block; padding: 0.25rem 0.8rem; border-radius: 12px;
+    font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 0.8rem;
+  }
+  .tag-arch { background: rgba(79,143,255,0.15); color: var(--accent-blue); }
+  .tag-backend { background: rgba(139,92,246,0.15); color: var(--accent-purple); }
+  .tag-frontend { background: rgba(236,72,153,0.15); color: var(--accent-pink); }
+  .tag-devops { background: rgba(245,158,11,0.15); color: var(--accent-orange); }
+  .tag-security { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+  .tag-db { background: rgba(34,197,94,0.15); color: var(--accent-green); }
+  .tag-system { background: rgba(6,182,212,0.15); color: var(--accent-cyan); }
+
+  /* ════════════════ CARDS ════════════════ */
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.8rem; margin-bottom: 1.2rem;
+    box-shadow: var(--shadow-card); transition: border-color 0.25s;
+  }
+  .card:hover { border-color: var(--accent-blue); }
+  .card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.6rem; }
+
+  /* ════════════════ ARCHITECTURE DIAGRAM ════════════════ */
+  .arch-diagram {
+    background: var(--bg-code); border: 1px solid var(--border); border-radius: 12px;
+    padding: 2rem; overflow-x: auto; margin: 1.5rem 0;
+  }
+  .arch-diagram pre {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.82rem;
+    color: var(--accent-cyan); line-height: 1.5; white-space: pre;
+  }
+
+  /* ════════════════ CODE BLOCKS ════════════════ */
+  pre.code-block {
+    background: var(--bg-code); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.2rem 1.5rem; overflow-x: auto; margin: 1rem 0;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.82rem;
+    color: #c9d1d9; line-height: 1.6;
+  }
+  .code-label {
+    display: inline-block; background: var(--bg-card); color: var(--text-muted);
+    font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.6rem;
+    border-radius: 6px 6px 0 0; margin-bottom: -1px; position: relative; top: 1px;
+    font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 0.88em; background: var(--bg-code); padding: 0.15em 0.4em; border-radius: 4px; color: var(--accent-cyan); }
+
+  /* ════════════════ FAQ / QUESTION ACCORDION ════════════════ */
+  .qa { margin-bottom: 0.8rem; }
+  .qa details {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+    overflow: hidden; transition: border-color 0.2s;
+  }
+  .qa details:hover { border-color: rgba(79,143,255,0.4); }
+  .qa details[open] { border-color: var(--accent-blue); }
+  .qa summary {
+    padding: 1rem 1.4rem; cursor: pointer; font-weight: 600; font-size: 0.95rem;
+    color: var(--text-primary); list-style: none; display: flex; align-items: baseline; gap: 0.7rem;
+    user-select: none; transition: background 0.2s;
+  }
+  .qa summary:hover { background: var(--bg-card-hover); }
+  .qa summary::-webkit-details-marker { display: none; }
+  .qa summary::before {
+    content: '▸'; color: var(--accent-blue); font-size: 0.85rem; transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .qa details[open] summary::before { transform: rotate(90deg); }
+  .qa .answer {
+    padding: 0.4rem 1.4rem 1.4rem 2.6rem;
+    color: var(--text-secondary); font-size: 0.92rem; line-height: 1.75;
+  }
+  .qa .answer p { margin-bottom: 0.8rem; }
+  .qa .answer ul, .qa .answer ol { margin: 0.5rem 0 0.8rem 1.2rem; }
+  .qa .answer li { margin-bottom: 0.3rem; }
+  .qa .answer strong { color: var(--text-primary); }
+
+  .q-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 2rem; height: 1.5rem; border-radius: 6px;
+    font-size: 0.72rem; font-weight: 700; flex-shrink: 0;
+    background: rgba(79,143,255,0.15); color: var(--accent-blue);
+  }
+  .q-num.green { background: rgba(34,197,94,0.15); color: var(--accent-green); }
+  .q-num.purple { background: rgba(139,92,246,0.15); color: var(--accent-purple); }
+  .q-num.orange { background: rgba(245,158,11,0.15); color: var(--accent-orange); }
+  .q-num.red { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+  .q-num.pink { background: rgba(236,72,153,0.15); color: var(--accent-pink); }
+  .q-num.cyan { background: rgba(6,182,212,0.15); color: var(--accent-cyan); }
+
+  /* ════════════════ TABLES ════════════════ */
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th { background: var(--bg-card); color: var(--accent-blue); font-weight: 700; text-align: left; padding: 0.8rem 1rem; border: 1px solid var(--border); }
+  td { padding: 0.7rem 1rem; border: 1px solid var(--border); color: var(--text-secondary); vertical-align: top; }
+  tr:hover td { background: rgba(79,143,255,0.04); }
+
+  /* ════════════════ GRID LAYOUTS ════════════════ */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+
+  .stat-card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 1.5rem; text-align: center;
+  }
+  .stat-card .num { font-size: 2.5rem; font-weight: 900; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .stat-card .label { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.3rem; }
+
+  /* ════════════════ FILE TREE ════════════════ */
+  .file-tree {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.82rem;
+    background: var(--bg-code); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.5rem; line-height: 1.7; color: var(--text-secondary);
+  }
+  .file-tree .dir { color: var(--accent-blue); font-weight: 600; }
+  .file-tree .file { color: var(--text-secondary); }
+  .file-tree .comment { color: var(--text-muted); font-style: italic; }
+
+  /* ════════════════ FLOW DIAGRAMS ════════════════ */
+  .flow {
+    display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
+    padding: 1.2rem; background: var(--bg-code); border-radius: 10px;
+    border: 1px solid var(--border); margin: 1rem 0; font-size: 0.85rem;
+  }
+  .flow-step {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 0.5rem 0.9rem; font-weight: 600; color: var(--accent-cyan); white-space: nowrap;
+  }
+  .flow-arrow { color: var(--text-muted); font-size: 1.1rem; }
+
+  /* ════════════════ RESPONSIVE ════════════════ */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 2rem; }
+    .nav-links { display: none; }
+    .container { padding: 0 1rem; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* ════════════════ FOOTER ════════════════ */
+  footer {
+    padding: 3rem 2rem; text-align: center; border-top: 1px solid var(--border);
+    color: var(--text-muted); font-size: 0.85rem;
+  }
+
+  /* print styles */
+  @media print {
+    .nav { display: none; }
+    body { background: #fff; color: #111; }
+    .qa details { break-inside: avoid; }
+    .card, .qa details { border-color: #ccc; background: #f9f9f9; }
+    .hero { padding-top: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     NAVIGATION
+     ══════════════════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="nav-logo">ByteCode Interview Bible</div>
+  <div class="nav-links">
+    <a href="#architecture">Architecture</a>
+    <a href="#sec-overview">Overview</a>
+    <a href="#sec-backend">Backend</a>
+    <a href="#sec-auth">Auth</a>
+    <a href="#sec-db">Database</a>
+    <a href="#sec-redis">Redis</a>
+    <a href="#sec-queue">Queue</a>
+    <a href="#sec-circuit">Circuit Breaker</a>
+    <a href="#sec-socket">WebSocket</a>
+    <a href="#sec-leaderboard">Leaderboard</a>
+    <a href="#sec-idempotency">Idempotency</a>
+    <a href="#sec-frontend">Frontend</a>
+    <a href="#sec-devops">DevOps</a>
+    <a href="#sec-security">Security</a>
+    <a href="#sec-system">System Design</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     HERO
+     ══════════════════════════════════════════════════════════════════ -->
+<header class="hero">
+  <h1>ByteCode Interview Bible</h1>
+  <p>Complete architecture documentation, system design concepts, and <strong>200+ interview questions</strong> covering every single aspect of the ByteCode competitive programming platform.</p>
+  <div class="badge-row">
+    <span class="badge blue">200+ Questions</span>
+    <span class="badge green">Full Architecture</span>
+    <span class="badge purple">System Design</span>
+    <span class="badge orange">Production Patterns</span>
+  </div>
+
+  <div class="grid-3" style="margin-top:3rem;">
+    <div class="stat-card"><div class="num">200+</div><div class="label">Interview Questions</div></div>
+    <div class="stat-card"><div class="num">15</div><div class="label">Topic Sections</div></div>
+    <div class="stat-card"><div class="num">10</div><div class="label">System Design Patterns</div></div>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ████████████████████████████████████████████████████████████████████
+     SECTION 1: COMPLETE ARCHITECTURE
+     ████████████████████████████████████████████████████████████████████ -->
+<section class="section" id="architecture">
+  <div class="section-header">
+    <span class="section-tag tag-arch">Architecture</span>
+    <h2>📐 Complete System Architecture</h2>
+    <p>End-to-end architecture of the ByteCode platform — every layer, every data flow, every design pattern.</p>
+  </div>
+
+  <!-- High-Level Diagram -->
+  <div class="card">
+    <h3>High-Level Architecture Diagram</h3>
+    <div class="arch-diagram"><pre>
+                    ┌──────────────────────────────────┐
+   Vercel           │        Frontend (React 19)        │
+                    │  Monaco · Redux · Socket.io-client │
+                    └────────────────┬─────────────────┘
+                                     │ HTTPS + httpOnly cookie
+                 ┌───────────────────▼────────────────────┐
+   Render /      │           API Tier (Express 5)          │
+   Railway       │  rate-limit · auth+blocklist · cache    │
+                 │  controllers → services → repositories  │
+                 └───┬──────────────┬───────────────┬──────┘
+             enqueue │         cache │         read/write
+                     ▼              ▼               ▼
+             ┌──────────────┐ ┌──────────┐  ┌──────────────┐
+             │ BullMQ Queue │ │  Redis   │  │   MongoDB    │
+             │   (Redis)    │ │ cache /  │  │   (Atlas)    │
+             └──────┬───────┘ │ ZSET LB  │  └──────────────┘
+                    │         │ blocklist │
+                    │         └──────────┘
+                    ▼
+             ┌──────────────┐   circuit breaker + retry
+   Worker    │  Worker(s)   │──────────────────────────►  Judge0
+   Process   │  BullMQ      │                             (RapidAPI)
+             │  consumer    │── save verdict ──► Socket.io ──► browser
+             └──────────────┘
+    </pre></div>
+  </div>
+
+  <!-- Submission Flow -->
+  <div class="card">
+    <h3>Submission Flow (The Core Pipeline)</h3>
+    <div class="flow">
+      <div class="flow-step">User clicks Submit</div><span class="flow-arrow">→</span>
+      <div class="flow-step">POST /submission/submit/:id</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Auth Middleware</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Rate Limiter</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Idempotency Check</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Create Pending Record</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Enqueue (BullMQ)</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Return 202</div>
+    </div>
+    <div class="flow" style="margin-top:0.5rem;">
+      <div class="flow-step">Worker Picks Job</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Load Submission+Problem</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Build Batch (Judge0)</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Circuit Breaker Check</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Submit to Judge0</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Poll Results</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Parse Verdict</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Save to MongoDB</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Update Leaderboard</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Socket.io Push</div><span class="flow-arrow">→</span>
+      <div class="flow-step">Browser Gets Result</div>
+    </div>
+  </div>
+
+  <!-- Project Structure -->
+  <div class="card">
+    <h3>Project File Structure</h3>
+    <div class="file-tree">
+<span class="dir">ByteCode/</span>
+├── <span class="dir">backend/</span>
+│   └── <span class="dir">src/</span>
+│       ├── <span class="file">index.js</span>           <span class="comment">← Web server entry point (HTTP + Socket.io)</span>
+│       ├── <span class="file">app.js</span>             <span class="comment">← Express app (CORS, middleware, routes)</span>
+│       ├── <span class="file">server.js</span>          <span class="comment">← Vercel serverless adapter</span>
+│       ├── <span class="file">socket.js</span>          <span class="comment">← Socket.io init + QueueEvents listener</span>
+│       ├── <span class="dir">config/</span>
+│       │   ├── <span class="file">db.config.js</span>       <span class="comment">← MongoDB connection</span>
+│       │   ├── <span class="file">redis.config.js</span>    <span class="comment">← node-redis client</span>
+│       │   ├── <span class="file">bull.config.js</span>     <span class="comment">← ioredis for BullMQ</span>
+│       │   └── <span class="file">origins.config.js</span>  <span class="comment">← CORS allowed origins</span>
+│       ├── <span class="dir">controllers/</span>
+│       │   ├── <span class="file">auth.controller.js</span>        <span class="comment">← register/login/logout/admin</span>
+│       │   ├── <span class="file">submission.controller.js</span>  <span class="comment">← submit/run/status</span>
+│       │   ├── <span class="file">problem.controller.js</span>     <span class="comment">← CRUD + cache-aside</span>
+│       │   ├── <span class="file">ai.controller.js</span>          <span class="comment">← LLM chat (OpenRouter)</span>
+│       │   ├── <span class="file">leaderboard.controller.js</span> <span class="comment">← global/personal/per-problem</span>
+│       │   ├── <span class="file">discussion.controller.js</span>  <span class="comment">← threaded comments</span>
+│       │   ├── <span class="file">profile.controller.js</span>     <span class="comment">← stats via aggregation</span>
+│       │   └── <span class="file">video.controller.js</span>       <span class="comment">← Cloudinary signed upload</span>
+│       ├── <span class="dir">middleware/</span>
+│       │   ├── <span class="file">auth.middleware.js</span>        <span class="comment">← Factory: JWT verify + blocklist</span>
+│       │   ├── <span class="file">user.middleware.js</span>        <span class="comment">← createAuthMiddleware()</span>
+│       │   ├── <span class="file">admin.middleware.js</span>       <span class="comment">← createAuthMiddleware('admin')</span>
+│       │   ├── <span class="file">rateLimiter.middleware.js</span> <span class="comment">← Redis ZSET sliding window</span>
+│       │   └── <span class="file">idempotency.middleware.js</span> <span class="comment">← Idempotency-Key header</span>
+│       ├── <span class="dir">models/</span>
+│       │   ├── <span class="file">user.model.js</span>       <span class="comment">← User + post-delete hook</span>
+│       │   ├── <span class="file">problem.model.js</span>    <span class="comment">← Problem with test cases</span>
+│       │   ├── <span class="file">submission.model.js</span> <span class="comment">← Submission + compound index</span>
+│       │   ├── <span class="file">discussion.model.js</span> <span class="comment">← Threaded comments + upvotes</span>
+│       │   └── <span class="file">solutionVideo.model.js</span> <span class="comment">← Cloudinary video metadata</span>
+│       ├── <span class="dir">services/</span>
+│       │   ├── <span class="file">submissionService.js</span> <span class="comment">← Saga-style process + compensate</span>
+│       │   └── <span class="file">evaluation.js</span>        <span class="comment">← Template Method for judging</span>
+│       ├── <span class="dir">lib/</span>
+│       │   ├── <span class="file">judge0Adapter.js</span>  <span class="comment">← Adapter + Circuit Breaker (opossum)</span>
+│       │   ├── <span class="file">cache.js</span>          <span class="comment">← Cache-aside (get/set/del)</span>
+│       │   └── <span class="file">leaderboard.js</span>    <span class="comment">← Redis ZSET leaderboards</span>
+│       ├── <span class="dir">queues/</span>
+│       │   └── <span class="file">submissionQueue.js</span> <span class="comment">← BullMQ Queue (producer)</span>
+│       ├── <span class="dir">workers/</span>
+│       │   ├── <span class="file">index.js</span>             <span class="comment">← Standalone worker entry</span>
+│       │   └── <span class="file">submissionWorker.js</span>  <span class="comment">← BullMQ Worker (consumer)</span>
+│       └── <span class="dir">utils/</span>
+│           ├── <span class="file">problemUtility.js</span>  <span class="comment">← Judge0 HTTP calls + polling</span>
+│           └── <span class="file">validator.js</span>       <span class="comment">← Input validation</span>
+├── <span class="dir">frontend/</span>
+│   └── <span class="dir">src/</span>
+│       ├── <span class="file">App.jsx</span>             <span class="comment">← React Router + auth guards</span>
+│       ├── <span class="file">authSlice.js</span>        <span class="comment">← Redux Toolkit auth</span>
+│       ├── <span class="dir">store/</span>              <span class="comment">← Redux store config</span>
+│       ├── <span class="dir">utils/</span>              <span class="comment">← axiosClient, socket.js</span>
+│       ├── <span class="dir">pages/</span>              <span class="comment">← Homepage, ProblemPage, Login, etc.</span>
+│       └── <span class="dir">components/</span>         <span class="comment">← admin/, chat/, problem/, ui/</span>
+├── <span class="file">render.yaml</span>            <span class="comment">← Render Blueprint (IaC)</span>
+└── <span class="dir">.github/workflows/</span>
+    └── <span class="file">keep-alive.yml</span>      <span class="comment">← GitHub Actions cron ping</span>
+    </div>
+  </div>
+
+  <!-- Design Patterns Table -->
+  <div class="card">
+    <h3>Design Patterns & System Design Concepts Used</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Pattern / Concept</th><th>Where in Code</th><th>Why It Matters</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Async Job Queue (Producer/Consumer)</strong></td><td>BullMQ — <code>submissionQueue.js</code> enqueues, <code>submissionWorker.js</code> consumes</td><td>API never blocks on slow Judge0; user gets 202 instantly</td></tr>
+          <tr><td><strong>Back-pressure</strong></td><td>Worker <code>concurrency: 5</code></td><td>Caps simultaneous Judge0 calls, protects RapidAPI quota</td></tr>
+          <tr><td><strong>Rate Limiting (Sliding Window)</strong></td><td>Redis ZSET in <code>rateLimiter.middleware.js</code></td><td>True sliding window; no burst-at-boundary unlike fixed window</td></tr>
+          <tr><td><strong>Idempotency</strong></td><td><code>Idempotency-Key</code> header → Redis in <code>idempotency.middleware.js</code></td><td>Prevents duplicate submissions from double-clicks/retries</td></tr>
+          <tr><td><strong>Circuit Breaker</strong></td><td><code>opossum</code> around Judge0 in <code>judge0Adapter.js</code></td><td>Fails fast when Judge0 is down instead of hammering a dead API</td></tr>
+          <tr><td><strong>Cache-Aside</strong></td><td>Redis cache in <code>lib/cache.js</code>, used in problem controller</td><td>Reduces MongoDB load; invalidated on writes</td></tr>
+          <tr><td><strong>Saga / Compensating Transaction</strong></td><td><code>submissionService.js</code> — marks error on failure</td><td>Never leaves submissions stuck on "pending"</td></tr>
+          <tr><td><strong>Pub/Sub + Real-time Push</strong></td><td>BullMQ <code>QueueEvents</code> → Socket.io in <code>socket.js</code></td><td>Zero-polling verdict delivery to the browser</td></tr>
+          <tr><td><strong>Stateless Auth + Token Blocklist</strong></td><td>JWT httpOnly cookie + Redis blocklist in <code>auth.middleware.js</code></td><td>Stateless scaling with proper logout support</td></tr>
+          <tr><td><strong>Right Data Structure (ZSET)</strong></td><td>Redis Sorted Sets for leaderboards in <code>lib/leaderboard.js</code></td><td>O(log N) ranked writes/reads vs O(N log N) DB sort</td></tr>
+          <tr><td><strong>Factory Pattern</strong></td><td><code>createAuthMiddleware(role)</code>, <code>createRateLimiter(config)</code></td><td>Eliminates code duplication; single source of truth</td></tr>
+          <tr><td><strong>Adapter Pattern</strong></td><td><code>judge0Adapter.js</code> wrapping raw Judge0 calls</td><td>Swapping to self-hosted judge only changes one file</td></tr>
+          <tr><td><strong>Template Method</strong></td><td><code>evaluateTestcases()</code> shared by run + submit flows</td><td>Same evaluation skeleton, different test case sets</td></tr>
+          <tr><td><strong>Fail-Open Resilience</strong></td><td>All Redis calls: cache, rate limiter, blocklist, leaderboard</td><td>Redis down ≠ app down; availability &gt; strictness</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Tech Stack -->
+  <div class="card">
+    <h3>Complete Tech Stack</h3>
+    <div class="grid-2">
+      <div>
+        <h4 style="color:var(--accent-blue);margin-bottom:0.5rem;">Frontend</h4>
+        <ul style="color:var(--text-secondary);font-size:0.9rem;">
+          <li>React 19 + Vite</li>
+          <li>Redux Toolkit (createAsyncThunk)</li>
+          <li>React Router v7</li>
+          <li>Tailwind CSS v4 + DaisyUI</li>
+          <li>Monaco Editor (@monaco-editor/react)</li>
+          <li>Socket.io-client</li>
+          <li>Zod (form validation)</li>
+          <li>React Hook Form</li>
+          <li>Framer Motion (animations)</li>
+          <li>Lucide React (icons)</li>
+          <li>Axios</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="color:var(--accent-purple);margin-bottom:0.5rem;">Backend</h4>
+        <ul style="color:var(--text-secondary);font-size:0.9rem;">
+          <li>Node.js + Express 5</li>
+          <li>MongoDB + Mongoose</li>
+          <li>Redis (node-redis + ioredis)</li>
+          <li>BullMQ (job queue)</li>
+          <li>Socket.io</li>
+          <li>Opossum (circuit breaker)</li>
+          <li>JWT (jsonwebtoken) + bcrypt</li>
+          <li>Axios (Judge0 HTTP calls)</li>
+          <li>Cloudinary SDK</li>
+          <li>OpenAI SDK (OpenRouter)</li>
+          <li>Validator.js</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- API Routes -->
+  <div class="card">
+    <h3>Complete API Route Map</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Method</th><th>Route</th><th>Auth</th><th>Middleware</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>POST</td><td><code>/user/register</code></td><td>Public</td><td>IP rate limit</td><td>Register new user</td></tr>
+          <tr><td>POST</td><td><code>/user/login</code></td><td>Public</td><td>IP rate limit</td><td>Login + set JWT cookie</td></tr>
+          <tr><td>POST</td><td><code>/user/logout</code></td><td>User</td><td>—</td><td>Logout + blocklist token</td></tr>
+          <tr><td>GET</td><td><code>/user/check</code></td><td>User</td><td>—</td><td>Validate session</td></tr>
+          <tr><td>GET</td><td><code>/user/profile</code></td><td>User</td><td>—</td><td>Profile stats (aggregation)</td></tr>
+          <tr><td>DELETE</td><td><code>/user/deleteProfile</code></td><td>User</td><td>—</td><td>Self-delete</td></tr>
+          <tr><td>POST</td><td><code>/user/admin/register</code></td><td>Admin</td><td>—</td><td>Create admin user</td></tr>
+          <tr><td>GET</td><td><code>/user/all</code></td><td>Admin</td><td>—</td><td>List all users</td></tr>
+          <tr><td>PUT</td><td><code>/user/role/:id</code></td><td>Admin</td><td>—</td><td>Change user role</td></tr>
+          <tr><td>DELETE</td><td><code>/user/:id</code></td><td>Admin</td><td>—</td><td>Admin delete user</td></tr>
+          <tr><td>POST</td><td><code>/problem/create</code></td><td>Admin</td><td>—</td><td>Create problem (validates reference solution)</td></tr>
+          <tr><td>PUT</td><td><code>/problem/update/:id</code></td><td>Admin</td><td>—</td><td>Update problem</td></tr>
+          <tr><td>DELETE</td><td><code>/problem/delete/:id</code></td><td>Admin</td><td>—</td><td>Delete problem</td></tr>
+          <tr><td>GET</td><td><code>/problem/getAllProblem</code></td><td>User</td><td>Cache-aside</td><td>List all problems</td></tr>
+          <tr><td>GET</td><td><code>/problem/problemById/:id</code></td><td>User</td><td>Cache-aside</td><td>Single problem detail</td></tr>
+          <tr><td>GET</td><td><code>/problem/problemSolvedByUser</code></td><td>User</td><td>—</td><td>User's solved list</td></tr>
+          <tr><td>GET</td><td><code>/problem/submittedProblem/:pid</code></td><td>User</td><td>—</td><td>Submission history for problem</td></tr>
+          <tr><td>POST</td><td><code>/submission/submit/:id</code></td><td>User</td><td>Rate limit + Idempotency</td><td>Async submit (returns 202)</td></tr>
+          <tr><td>POST</td><td><code>/submission/run/:id</code></td><td>User</td><td>Rate limit</td><td>Sync run against visible tests</td></tr>
+          <tr><td>GET</td><td><code>/submission/status/:submissionId</code></td><td>User</td><td>—</td><td>Poll submission status</td></tr>
+          <tr><td>GET</td><td><code>/submission/all</code></td><td>Public</td><td>—</td><td>Global submissions (paginated)</td></tr>
+          <tr><td>POST</td><td><code>/ai/chat</code></td><td>User</td><td>—</td><td>AI doubt solver</td></tr>
+          <tr><td>GET</td><td><code>/leaderboard</code></td><td>User</td><td>—</td><td>Global top 50</td></tr>
+          <tr><td>GET</td><td><code>/leaderboard/me</code></td><td>User</td><td>—</td><td>Personal rank + percentile</td></tr>
+          <tr><td>GET</td><td><code>/leaderboard/problem/:problemId</code></td><td>User</td><td>—</td><td>Per-problem fastest</td></tr>
+          <tr><td>GET</td><td><code>/discussion/problem/:problemId</code></td><td>User</td><td>—</td><td>Get comments</td></tr>
+          <tr><td>POST</td><td><code>/discussion/problem/:problemId</code></td><td>User</td><td>—</td><td>Post comment</td></tr>
+          <tr><td>POST</td><td><code>/discussion/:commentId/reply</code></td><td>User</td><td>—</td><td>Reply to comment</td></tr>
+          <tr><td>POST</td><td><code>/discussion/:commentId/upvote</code></td><td>User</td><td>—</td><td>Toggle upvote</td></tr>
+          <tr><td>DELETE</td><td><code>/discussion/:commentId</code></td><td>User</td><td>—</td><td>Delete comment (author/admin)</td></tr>
+          <tr><td>GET</td><td><code>/video/create/:problemId</code></td><td>Admin</td><td>—</td><td>Cloudinary signed upload</td></tr>
+          <tr><td>POST</td><td><code>/video/save</code></td><td>Admin</td><td>—</td><td>Save video metadata</td></tr>
+          <tr><td>DELETE</td><td><code>/video/delete/:problemId</code></td><td>Admin</td><td>—</td><td>Delete video</td></tr>
+          <tr><td>GET</td><td><code>/health</code></td><td>Public</td><td>—</td><td>Health check</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Redis Usage Map -->
+  <div class="card">
+    <h3>Redis — All 6 Roles in One Instance</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Role</th><th>Data Structure</th><th>Key Pattern</th><th>TTL</th></tr></thead>
+        <tbody>
+          <tr><td>Cache-aside</td><td>STRING (JSON)</td><td><code>problems:all</code>, <code>problem:{id}</code></td><td>300s (5 min)</td></tr>
+          <tr><td>Token Blocklist</td><td>STRING</td><td><code>token:{jwt}</code></td><td>JWT expiry timestamp</td></tr>
+          <tr><td>Rate Limiting</td><td>ZSET</td><td><code>rl:{prefix}:{userId|ip}</code></td><td>windowMs</td></tr>
+          <tr><td>Idempotency</td><td>STRING (JSON)</td><td><code>idemp:{key}</code></td><td>24 hours</td></tr>
+          <tr><td>Global Leaderboard</td><td>ZSET</td><td><code>leaderboard:global</code></td><td>No TTL</td></tr>
+          <tr><td>Per-Problem Leaderboard</td><td>ZSET</td><td><code>leaderboard:problem:{id}</code></td><td>No TTL</td></tr>
+          <tr><td>BullMQ Queue Data</td><td>Various (List, Hash, ZSET)</td><td><code>bull:submissions:*</code></td><td>Managed by BullMQ</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Two Redis Clients -->
+  <div class="card">
+    <h3>Why Two Redis Clients?</h3>
+    <p style="color:var(--text-secondary);">The project uses <strong>two separate Redis client libraries</strong> talking to the same Redis instance:</p>
+    <div class="grid-2" style="margin-top:1rem;">
+      <div style="padding:1rem;border:1px solid var(--border);border-radius:8px;">
+        <h4 style="color:var(--accent-blue);">node-redis (redis.config.js)</h4>
+        <p style="color:var(--text-secondary);font-size:0.88rem;">Used for: cache, blocklist, rate limiter, idempotency, leaderboard. The general-purpose client for application-level Redis commands.</p>
+      </div>
+      <div style="padding:1rem;border:1px solid var(--border);border-radius:8px;">
+        <h4 style="color:var(--accent-purple);">ioredis (bull.config.js)</h4>
+        <p style="color:var(--text-secondary);font-size:0.88rem;">Used exclusively by BullMQ. BullMQ requires ioredis with <code>maxRetriesPerRequest: null</code>. This is a hard requirement from BullMQ's architecture.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ████████████████████████████████████████████████████████████████████
+     SECTION 2: PROJECT OVERVIEW QUESTIONS (Q1-Q18)
+     ████████████████████████████████████████████████████████████████████ -->
+<section class="section" id="sec-overview">
+  <div class="section-header">
+    <span class="section-tag tag-arch">Overview</span>
+    <h2>🏗️ Project Overview & Architecture (Q1–Q18)</h2>
+  </div>
+
+  <div class="qa"><details><summary><span class="q-num">Q1</span> What is ByteCode? Give a 60-second elevator pitch.</summary><div class="answer"><p>ByteCode is a full-stack LeetCode-style competitive programming platform. Users solve DSA problems in an in-browser Monaco editor (C++, Java, JavaScript), run code against visible test cases instantly, and submit against hidden test cases asynchronously. The submission pipeline is a <strong>fault-tolerant async queue</strong>: the controller enqueues the job, a BullMQ worker evaluates it via Judge0, and the verdict is pushed back over Socket.io — no polling. It also features Redis ZSET leaderboards, a threaded discussion forum, an AI coding tutor via OpenRouter, video editorials via Cloudinary, and a full admin panel. The system implements 10+ production-grade patterns: circuit breaker, cache-aside, sliding-window rate limiter, idempotency, saga/compensating transactions, and fail-open resilience.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q2</span> Why did you build this instead of just using LeetCode?</summary><div class="answer"><p>This project was a <strong>vehicle to implement real backend patterns</strong>. While LeetCode is a product, ByteCode is an engineering showcase. Every pattern — job queue, circuit breaker, cache-aside, rate limiter — is small, isolated, and defensible. It demonstrates that I can build systems beyond CRUD: an asynchronous pipeline with back-pressure, real-time push, and fault tolerance.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q3</span> Walk me through the complete submission flow, from button click to verdict on screen.</summary><div class="answer"><p><strong>1.</strong> User clicks Submit → browser POSTs to <code>/submission/submit/:id</code> with code + language.<br><strong>2.</strong> Request passes through: <code>userMiddleware</code> (JWT verify + Redis blocklist check) → <code>submitLimiter</code> (sliding-window rate limit) → <code>idempotency</code> (check Idempotency-Key header).<br><strong>3.</strong> Controller creates a Submission document with <code>status: "pending"</code> in MongoDB, increments <code>totalSubmissions</code> on the Problem, invalidates cache, then calls <code>enqueueSubmission()</code>.<br><strong>4.</strong> BullMQ adds a job to the <code>submissions</code> queue with <code>jobId = submissionId</code> (for idempotent dedup) and returns. Controller responds <strong>202 Accepted</strong>.<br><strong>5.</strong> The BullMQ Worker (concurrency: 5) picks the job, calls <code>processSubmission()</code>.<br><strong>6.</strong> Service loads the Submission and Problem from MongoDB, calls <code>evaluateTestcases()</code> with hidden test cases.<br><strong>7.</strong> <code>evaluateTestcases()</code> builds a Judge0 batch via <code>judge0Adapter.execute()</code>, which passes through the <strong>opossum circuit breaker</strong>.<br><strong>8.</strong> If the breaker is closed, raw HTTP calls go to Judge0 RapidAPI: POST batch → poll GET until all status_ids &gt; 2 (up to 30 attempts).<br><strong>9.</strong> Results are parsed: count passed test cases, sum runtime, track max memory, determine status (accepted/wrong/error).<br><strong>10.</strong> Verdict is saved to the Submission document. If accepted and first solve, <code>User.problemSolved</code> is updated with <code>$addToSet</code> and leaderboard scores are updated.<br><strong>11.</strong> Worker returns the result object. BullMQ emits a <code>completed</code> event via QueueEvents.<br><strong>12.</strong> <code>socket.js</code> listens to QueueEvents, parses the return value, and does <code>io.to(userId).emit("submission:result", result)</code>.<br><strong>13.</strong> The browser's Socket.io client receives the event and updates the UI.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q4</span> Why is the submission flow asynchronous instead of a simple synchronous request-response?</summary><div class="answer"><p>Judge0 is an <strong>external API</strong> that takes 2–10+ seconds per evaluation. A synchronous flow would: (a) block the Express event loop, reducing throughput to near-zero under load; (b) tie up HTTP connections during the slow external call; (c) risk timeouts on proxies/load balancers (e.g. Render's 30s timeout); (d) provide no natural place for retry/backoff if Judge0 fails. The async queue decouples the <strong>acceptance</strong> of a submission from its <strong>evaluation</strong>, so the API stays responsive (202 in ~50ms), back-pressure is controlled (concurrency: 5), and retries are automatic (3 attempts with exponential backoff).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q5</span> What's the difference between "Run" and "Submit"?</summary><div class="answer"><p><strong>Run</strong> tests against <strong>visible</strong> test cases, is <strong>synchronous</strong> (the controller calls <code>evaluateTestcases()</code> directly and waits), and does NOT create a Submission record — it's ephemeral feedback. <strong>Submit</strong> tests against <strong>hidden</strong> test cases, is <strong>asynchronous</strong> (enqueued via BullMQ), creates a persistent Submission document, updates the leaderboard on acceptance, and the result is pushed via Socket.io. Both share the same <code>evaluateTestcases()</code> Template Method — they only differ in which test cases are passed and what happens with the result.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q6</span> Explain the layered architecture of the backend.</summary><div class="answer"><p>The backend follows a <strong>Controller → Service → Repository</strong> layering:<br><strong>Controllers</strong> handle HTTP concerns: parse request, validate input, call service, format response.<br><strong>Services</strong> (<code>submissionService.js</code>, <code>evaluation.js</code>) contain business logic: orchestrate evaluation, persist verdicts, update leaderboards.<br><strong>Lib</strong> (<code>cache.js</code>, <code>leaderboard.js</code>, <code>judge0Adapter.js</code>) are infrastructure adapters — they abstract Redis, Judge0, etc.<br><strong>Models</strong> are Mongoose schemas, acting as the repository/data-access layer.<br><strong>Middleware</strong> handles cross-cutting concerns: auth, rate limiting, idempotency.<br>This separation means you can swap MongoDB for PostgreSQL by changing models, or swap Judge0 for a self-hosted judge by changing only the adapter.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q7</span> Why Express 5 specifically?</summary><div class="answer"><p>Express 5 adds native support for async error handling in route handlers (rejected promises are automatically forwarded to the error handler without needing <code>try/catch</code> wrappers or <code>express-async-errors</code>). It also removes deprecated APIs and improves path routing. Since this is a greenfield project, there's no legacy compatibility concern.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q8</span> What design patterns are used in this project? Name at least 8.</summary><div class="answer"><ol><li><strong>Producer/Consumer</strong> — BullMQ queue + worker</li><li><strong>Circuit Breaker</strong> — opossum around Judge0</li><li><strong>Cache-Aside</strong> — Redis cache for problems</li><li><strong>Factory Pattern</strong> — <code>createAuthMiddleware()</code>, <code>createRateLimiter()</code></li><li><strong>Adapter Pattern</strong> — <code>judge0Adapter.js</code></li><li><strong>Template Method</strong> — <code>evaluateTestcases()</code></li><li><strong>Saga / Compensating Transaction</strong> — <code>submissionService.js</code></li><li><strong>Pub/Sub</strong> — QueueEvents → Socket.io</li><li><strong>Middleware Chain</strong> — Express middleware pipeline</li><li><strong>Singleton</strong> — Redis client, Socket.io instance</li></ol></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q9</span> What is the "fail-open" philosophy and where is it applied?</summary><div class="answer"><p>Fail-open means: if a non-critical dependency (Redis) is unavailable, <strong>allow the request to proceed</strong> rather than crashing. Applied in: <strong>cache</strong> (miss → query DB), <strong>rate limiter</strong> (skip check → allow request), <strong>token blocklist</strong> (skip check → JWT is still valid by signature), <strong>leaderboard</strong> (return empty array). The philosophy is <strong>availability &gt; strictness</strong>. MongoDB is the only hard dependency — the app can't function without its data.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q10</span> How does the project handle two different deployment targets (Vercel vs Render)?</summary><div class="answer"><p>Two separate entry points: <code>server.js</code> exports a serverless function handler for <strong>Vercel</strong> (no HTTP server, no Socket.io — just the Express app behind a ready-promise). <code>index.js</code> creates an <code>http.createServer</code>, attaches Socket.io, starts the BullMQ worker in-process, and runs a keep-alive timer for <strong>Render/Railway</strong>. The same <code>app.js</code> (Express middleware + routes) is shared by both.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q11</span> What external services does the project depend on?</summary><div class="answer"><ul><li><strong>Judge0</strong> (RapidAPI) — code execution engine</li><li><strong>MongoDB Atlas</strong> — primary database</li><li><strong>Redis</strong> (hosted) — caching, queues, leaderboard, rate limiting, blocklist, idempotency</li><li><strong>Cloudinary</strong> — video hosting and signed uploads</li><li><strong>OpenRouter</strong> — LLM API gateway (routes to models like Llama 3.1)</li><li><strong>Vercel</strong> — frontend hosting (static SPA)</li><li><strong>Render</strong> — backend hosting (web service + in-process worker)</li></ul></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q12</span> What is <code>RUN_WORKER_IN_PROCESS</code> and why does it exist?</summary><div class="answer"><p>On Render's free tier, you get one web service. A separate BullMQ worker would need a paid worker service. When <code>RUN_WORKER_IN_PROCESS=true</code>, the <code>index.js</code> entry point calls <code>createSubmissionWorker()</code> inside the same Node.js process as the web server. This is a pragmatic cost optimization. For production at scale, you'd set it to <code>false</code> and run <code>npm run worker</code> as a separate service, scaled independently.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q13</span> Explain the keep-alive mechanism. Why is it needed?</summary><div class="answer"><p>Render's free tier spins down a service after ~15 minutes of no inbound traffic. This would kill the in-process BullMQ worker. The keep-alive has <strong>two layers</strong>: (1) <strong>In-app self-ping</strong>: <code>setInterval</code> every 14 minutes hitting <code>/health</code> via the <code>RENDER_EXTERNAL_URL</code> — only during active hours (08:30–21:30 IST) to save free instance-hours overnight. (2) <strong>GitHub Actions cron</strong>: <code>keep-alive.yml</code> runs every 10 minutes during the same IST window, pinging from GitHub's runners — this can also <strong>wake</strong> a sleeping service (the in-app ping can't do that since the process itself is asleep).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q14</span> What does the <code>render.yaml</code> file do?</summary><div class="answer"><p>It's a <strong>Render Blueprint</strong> — Infrastructure as Code. When you connect the repo to Render and select "Blueprint", it reads this YAML and automatically creates the web service with the correct build/start commands, region (Singapore), plan (free), health check path, and environment variable groups. Secrets like <code>DB_CONNECT_STRING</code> are marked <code>sync: false</code> so they're entered in the dashboard, never committed. It's the equivalent of a Terraform/CloudFormation file for Render.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q15</span> Why CommonJS (<code>require</code>) in the backend and ESM (<code>import</code>) in the frontend?</summary><div class="answer"><p>The frontend uses Vite which is ESM-native. The backend uses <code>"type": "commonjs"</code> because some dependencies (notably BullMQ's Worker, opossum, older Mongoose patterns) have historically had smoother CJS support. Express 5 works with both. This is a pragmatic choice — not ideological.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q16</span> How is CORS configured and why is <code>credentials: true</code> critical?</summary><div class="answer"><p>CORS is configured in <code>origins.config.js</code> with three allowed origins: <code>FRONTEND_URL</code> env var, a regex for localhost (any port), and the Vercel production URL. <code>credentials: true</code> is <strong>required</strong> because auth uses httpOnly cookies. Without it, the browser won't send or accept cookies on cross-origin requests. Both Express CORS middleware and Socket.io's CORS config use the same origins array.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q17</span> What's the health endpoint for and who calls it?</summary><div class="answer"><p><code>GET /health</code> returns <code>{ status: "ok" }</code>. It's called by: (1) Render's health check system (configured in <code>render.yaml</code> as <code>healthCheckPath</code>) to verify the service is ready; (2) the in-app keep-alive timer; (3) the GitHub Actions cron workflow. It's intentionally lightweight — no DB query, no Redis call — just a 200 OK to prove the process is alive.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q18</span> What happens at server startup? Walk through <code>index.js</code>.</summary><div class="answer"><p><strong>1.</strong> Load <code>.env</code> via dotenv. <strong>2.</strong> Import <code>app</code> (Express), configs, socket module, worker factory. <strong>3.</strong> Create <code>http.createServer(app)</code> and call <code>initSocket(server)</code> to attach Socket.io + QueueEvents listener. <strong>4.</strong> In an async IIFE: connect to MongoDB (required — fails loudly), connect to Redis (optional — continues without it). <strong>5.</strong> Start listening on <code>PORT</code>. <strong>6.</strong> If <code>RUN_WORKER_IN_PROCESS=true</code>, call <code>createSubmissionWorker()</code>. <strong>7.</strong> Call <code>startKeepAlive()</code> to begin the self-ping timer if on Render.</p></div></details></div>
+
+</section>
+
+
+<!-- ████████████████████████████████████████████████████████████████████
+     SECTION 3: AUTH & SECURITY (Q19-Q40)
+     ████████████████████████████████████████████████████████████████████ -->
+<section class="section" id="sec-auth">
+  <div class="section-header">
+    <span class="section-tag tag-security">Auth & Security</span>
+    <h2>🔐 Authentication & Authorization (Q19–Q40)</h2>
+  </div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q19</span> How does authentication work end-to-end?</summary><div class="answer"><p>On login/register, the server hashes the password with <strong>bcrypt</strong> (salt rounds: 10), creates a JWT containing <code>{ _id, emailId, role }</code> signed with <code>JWT_KEY</code> (1-hour expiry), and sets it as an <strong>httpOnly, secure, sameSite=none</strong> cookie. On every subsequent request, the auth middleware extracts the cookie, verifies the JWT signature + expiry, checks the Redis token blocklist, loads the user from MongoDB, and attaches <code>req.result</code>. On logout, the token is added to a Redis blocklist with TTL = JWT expiry time, and the cookie is cleared (maxAge: 0).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q20</span> Why httpOnly cookies instead of localStorage?</summary><div class="answer"><p><strong>httpOnly</strong> means JavaScript cannot read the cookie via <code>document.cookie</code> — this prevents <strong>XSS attacks</strong> from stealing the token. If you store JWT in localStorage, any XSS vulnerability can exfiltrate it. With httpOnly cookies, even if an attacker injects script, they can't access the token. The cookie is automatically sent by the browser on every request, so the frontend doesn't need to manually manage authorization headers.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q21</span> Explain <code>sameSite: "none"</code> and <code>secure: true</code>. Why are both needed?</summary><div class="answer"><p>The frontend (Vercel: <code>byte-code-frontend.vercel.app</code>) and backend (Render: <code>*.onrender.com</code>) are on <strong>different domains</strong>. Browsers block cross-origin cookies by default. <code>sameSite: "none"</code> tells the browser to send the cookie on cross-origin requests. But browsers require <code>secure: true</code> (HTTPS only) whenever <code>sameSite: "none"</code> is used — this is a security requirement to prevent MITM attacks. Both flags together enable cross-origin cookie auth over HTTPS.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q22</span> What is the token blocklist and why not just delete the JWT on logout?</summary><div class="answer"><p>JWTs are <strong>stateless</strong> — the server doesn't store them. You can't "delete" a JWT from the server side; it's valid until it expires. The blocklist is a Redis SET: on logout, <code>token:{jwt}</code> → "Blocked" with TTL = remaining JWT lifetime. On every auth check, the middleware calls <code>redisClient.exists()</code> to see if the token is blocked. This gives you the scalability benefits of stateless JWT with the security of revocable sessions.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q23</span> What happens if Redis is down during auth? Can users still log in?</summary><div class="answer"><p>Yes — the blocklist check is wrapped in a try/catch that <strong>fails open</strong>. If Redis is unreachable, the middleware logs a warning and skips the blocklist check. The JWT signature + expiry are still verified (that's crypto, no external dependency). Users who logged out while Redis was up might have their old tokens still work briefly — but the JWT's 1-hour expiry limits the exposure window. This is the availability-over-strictness tradeoff.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q24</span> Explain the Factory Pattern in <code>createAuthMiddleware()</code>.</summary><div class="answer"><p>Instead of having two near-identical middleware files (one checking <code>role === 'admin'</code>, one not), there's a single factory function: <code>createAuthMiddleware(requiredRole)</code>. It returns a middleware closure. <code>user.middleware.js</code> exports <code>createAuthMiddleware()</code> (no role = any user). <code>admin.middleware.js</code> exports <code>createAuthMiddleware("admin")</code>. This eliminates code duplication — the only difference between user and admin auth is a single <code>if</code> check on <code>payload.role</code>.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q25</span> Why is the role checked from the JWT payload rather than the DB user object?</summary><div class="answer"><p>The JWT is signed server-side with a secret key, so <code>payload.role</code> is <strong>tamper-proof</strong>. An attacker can't modify the role in the JWT without invalidating the signature. Checking from the JWT avoids an extra DB read. However, the middleware also does <code>User.findById(_id)</code> to verify the user still exists — this catches deleted accounts. The role in the JWT is trusted because it was set at sign time by the server.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q26</span> What's the bcrypt salt rounds (cost factor) and why 10?</summary><div class="answer"><p>Salt rounds of 10 means 2^10 = 1024 iterations of the hashing function. This takes ~100ms on modern hardware, which is negligible for a login request but makes brute-force attacks impractical (~10 hashes/second). Higher values (12, 14) are more secure but slower. 10 is the widely-accepted default balancing security and performance.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q27</span> How does <code>jwt.verify()</code> differ from <code>jwt.decode()</code>?</summary><div class="answer"><p><code>jwt.verify()</code> checks the <strong>signature</strong> using the secret key AND checks expiry — it throws if invalid. <code>jwt.decode()</code> just base64-decodes the payload without any verification. In the codebase, <code>verify()</code> is used in auth middleware (security-critical), while <code>decode()</code> is used in logout to extract the expiry time for the blocklist TTL — the token's content doesn't need to be trusted there, just its expiry field.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q28</span> Why is <code>emailId</code> marked as <code>immutable: true</code> in the User schema?</summary><div class="answer"><p>Mongoose's <code>immutable</code> prevents the field from being changed after creation via <code>.save()</code> or <code>findOneAndUpdate()</code>. This is important because the email is a unique identifier used in JWT payloads and throughout the system. Allowing email changes could break references or create security issues (e.g., someone changing to another person's email).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q29</span> What's the user deletion cascade? What happens when an admin deletes a user?</summary><div class="answer"><p>The User schema has a <code>post('findOneAndDelete')</code> Mongoose hook that automatically deletes all submissions for that user: <code>mongoose.model('submission').deleteMany({ userId: userInfo._id })</code>. This is a cascading delete — it ensures no orphaned submission records remain. The hook fires after any <code>findByIdAndDelete()</code> or <code>findOneAndDelete()</code> call.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q30</span> How does the admin prevent deleting themselves?</summary><div class="answer"><p>In <code>adminDeleteUser</code>, there's a check: <code>if (id === req.result._id.toString())</code> — if the target user ID matches the admin's own ID, it returns 400 "You cannot delete your own admin account." This prevents accidental self-removal that would lock out administration.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q31</span> What rate limits are applied to auth routes?</summary><div class="answer"><p>Login: 8 requests per 60 seconds per IP. Register: 5 requests per 60 seconds per IP. Both use the <code>createRateLimiter()</code> factory with <code>by: "ip"</code> (since users aren't authenticated yet). This slows brute-force password attacks and registration spam.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q32</span> Why rate-limit login by IP rather than by email?</summary><div class="answer"><p>At the login endpoint, you don't yet know if the email is valid (it might not exist in the DB). Rate limiting by IP catches attackers trying multiple emails. Rate limiting by email could also be useful (prevents credential stuffing against a known email), but IP-based is the simpler first defense that catches the broadest set of attacks.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q33</span> What's the JWT expiry and why 1 hour?</summary><div class="answer"><p>The JWT expires in 1 hour (<code>expiresIn: "1h"</code>). This balances UX (user doesn't need to re-login every 5 minutes) with security (a stolen/leaked token has limited usefulness). Combined with the Redis blocklist for immediate revocation on logout, 1 hour is a reasonable window. Some apps use refresh tokens for longer sessions — this project keeps it simple with a single short-lived token.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q34</span> How does the frontend check if a user is still authenticated on page reload?</summary><div class="answer"><p>In <code>App.jsx</code>, a <code>useEffect</code> on mount dispatches <code>checkAuth()</code> — a Redux Toolkit <code>createAsyncThunk</code> that GETs <code>/user/check</code>. The cookie is sent automatically. If valid, the backend returns the user object; if not, it returns 401. The slice treats a 401 as "no session" (sets <code>isAuthenticated: false</code>, <code>error: null</code>) rather than showing an error — this is expected on first visit.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q35</span> What's the <code>validate()</code> function doing for registration?</summary><div class="answer"><p>It checks that <code>firstName</code>, <code>emailId</code>, and <code>password</code> are all present in the request body (mandatory fields). Then it uses the <code>validator</code> library's <code>isEmail()</code> to verify the email format. The strong password check is commented out for development convenience but would be enabled in production.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q36</span> Why does the admin register route sit behind <code>adminMiddleware</code>?</summary><div class="answer"><p>Only an existing admin can create another admin. This prevents privilege escalation — a regular user can't POST to <code>/user/admin/register</code> because the middleware checks <code>payload.role === "admin"</code> from the JWT. The first admin must be created by directly inserting into the database or temporarily disabling the middleware.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q37</span> What security vulnerability did the original admin register have (Bug 5)?</summary><div class="answer"><p>The original code never set <code>req.body.role = 'admin'</code>, so calling the admin register route still created a user with role "user" (the schema default). The fix explicitly forces <code>req.body.role = 'admin'</code> before calling <code>User.create()</code>. The route is already admin-protected, so only admins can reach it — the bug was that it didn't actually grant admin privileges.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q38</span> How does <code>req.result</code> flow through the middleware chain?</summary><div class="answer"><p>The auth middleware calls <code>User.findById()</code> and sets <code>req.result = result</code> (the full Mongoose user document). Every downstream middleware and controller can then access <code>req.result._id</code>, <code>req.result.role</code>, <code>req.result.firstName</code>, etc. This avoids redundant DB lookups — the user is fetched once per request.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q39</span> Why does the cookie have <code>path: "/"</code>?</summary><div class="answer"><p><code>path: "/"</code> means the cookie is sent with every request to the backend, regardless of the URL path. Without it, the browser might scope the cookie to the path of the response that set it. Since auth is needed on <code>/user/*</code>, <code>/problem/*</code>, <code>/submission/*</code>, etc., the cookie must be available on all paths.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q40</span> What happens if someone tampers with the JWT payload (e.g., changes role to admin)?</summary><div class="answer"><p><code>jwt.verify()</code> will throw an <code>JsonWebTokenError</code> because the signature no longer matches the payload. JWT signatures use HMAC-SHA256 with the secret key. Changing even one character in the payload invalidates the signature. The request is rejected with 401. This is why the JWT secret must never be leaked.</p></div></details></div>
+
+</section>
+
+
+<!-- ████████████████████████████████████████████████████████████████████
+     SECTION 4: DATABASE (Q41-Q60)
+     ████████████████████████████████████████████████████████████████████ -->
+<section class="section" id="sec-db">
+  <div class="section-header">
+    <span class="section-tag tag-db">Database</span>
+    <h2>🗃️ MongoDB & Mongoose (Q41–Q60)</h2>
+  </div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q41</span> Why MongoDB over a relational database like PostgreSQL?</summary><div class="answer"><p>Problems have variable-length arrays (test cases, start code per language, reference solutions per language, tags) that map naturally to <strong>embedded documents</strong> in MongoDB. In SQL, these would require multiple join tables. The data is mostly read-heavy with simple query patterns (no complex JOINs needed). MongoDB Atlas provides a generous free tier for hosting. The schema flexibility also allows rapid iteration during development.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q42</span> Walk me through all 5 Mongoose models and their relationships.</summary><div class="answer"><p><strong>User</strong> — core identity (firstName, emailId, password, role, problemSolved[ObjectId→Problem]).<br><strong>Problem</strong> — DSA problem (title, description, difficulty, tags, visibleTestCases[], hiddenTestCases[], startCode[], referenceSolution[], problemCreator→User).<br><strong>Submission</strong> — one code attempt (userId→User, problemId→Problem, code, language, status, runtime, memory, testCasesPassed/Total). Compound index on <code>{userId:1, problemId:1}</code>.<br><strong>Discussion</strong> — threaded comment (problemId→Problem, userId→User, text, parentId→Discussion (self-ref), upvotes[ObjectId→User]).<br><strong>SolutionVideo</strong> — Cloudinary video (problemId→Problem, userId→User, cloudinaryPublicId, secureUrl, duration).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q43</span> Why is there a compound index on <code>{userId:1, problemId:1}</code> in Submission?</summary><div class="answer"><p>The most common queries are: "all submissions by this user for this problem" (submission history on the problem page) and "accepted submissions by this user" (for profile stats). The compound index lets MongoDB satisfy both queries efficiently with an <strong>index scan</strong> instead of a <strong>collection scan</strong>. The <code>userId</code> prefix means queries on just <code>userId</code> also benefit (leftmost prefix rule).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q44</span> Explain the <code>$addToSet</code> operation used for <code>problemSolved</code>.</summary><div class="answer"><p><code>$addToSet</code> adds a value to an array <strong>only if it doesn't already exist</strong>. When a user gets an accepted submission, the service does <code>User.findByIdAndUpdate(userId, { $addToSet: { problemSolved: problemId } })</code>. This is idempotent — submitting the same problem multiple times won't create duplicates. It's an atomic operation, so no race conditions between concurrent submissions.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q45</span> What is the Mongoose <code>post('findOneAndDelete')</code> hook and why use it?</summary><div class="answer"><p>It's a <strong>post middleware</strong> that runs after a <code>findOneAndDelete()</code> completes. In the User model, it deletes all submissions belonging to the deleted user: <code>mongoose.model('submission').deleteMany({ userId: userInfo._id })</code>. This is a cascading delete that prevents orphaned data. Using a hook keeps the cleanup logic co-located with the model rather than scattered across controllers.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q46</span> How does the profile stats endpoint use MongoDB aggregation?</summary><div class="answer"><p>The <code>getProfileStats</code> controller runs two aggregation pipelines: (1) <code>Problem.aggregate([{$group: {_id: "$difficulty", count: {$sum: 1}}}])</code> counts total problems by difficulty. (2) <code>Submission.aggregate([{$match: {userId, status:'accepted'}}, {$group: {_id: "$problemId"}}, {$lookup: {from: 'problems', ...}}, {$facet: {byDifficulty: [...], byTag: [...]}}])</code> counts unique solved problems grouped by difficulty and by tag. It also fetches the last 10 submissions and a year-long activity calendar using <code>$dateToString</code>.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q47</span> What's the <code>$facet</code> stage in aggregation?</summary><div class="answer"><p><code>$facet</code> runs multiple aggregation sub-pipelines on the same input documents <strong>in parallel</strong>, outputting each as a named field. In the profile stats, it produces <code>byDifficulty</code> (grouped by difficulty) and <code>byTag</code> (unwound and grouped by tag) from the same set of solved problems — in a single aggregation call instead of two separate queries. This reduces database round trips.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q48</span> Why embed test cases as arrays instead of a separate collection?</summary><div class="answer"><p>Test cases are <strong>always accessed with their problem</strong> — you never query test cases independently. Embedding avoids a JOIN (<code>$lookup</code>) on every problem read. The data size is small (a few KB of input/output strings). This follows MongoDB's rule of thumb: embed when the child data is always accessed with the parent and doesn't grow unboundedly.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q49</span> How does <code>populate()</code> work and where is it used?</summary><div class="answer"><p>Mongoose <code>populate()</code> replaces an ObjectId reference with the actual document from the referenced collection (like a client-side JOIN). Used in: submissions list (<code>populate('userId', 'firstName role')</code> and <code>populate('problemId', 'title')</code>), discussions (<code>populate('userId', 'firstName')</code>), and solved problems (<code>populate({path: 'problemSolved', select: '_id title difficulty tags'})</code>). The <code>select</code> parameter limits which fields are fetched — important for performance.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q50</span> What's the <code>enum</code> validator on the difficulty field?</summary><div class="answer"><p><code>enum: ['easy', 'medium', 'hard']</code> restricts the difficulty field to exactly those three values. Mongoose will throw a validation error if you try to set it to anything else. Similarly, submission language is <code>enum: ['javascript', 'c++', 'java']</code>, user role is <code>enum: ['user', 'admin']</code>, and submission status is <code>enum: ['pending', 'accepted', 'wrong', 'error']</code>.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q51</span> Why <code>timestamps: true</code> on schemas?</summary><div class="answer"><p>It automatically adds <code>createdAt</code> and <code>updatedAt</code> fields managed by Mongoose. <code>createdAt</code> is used for sorting submissions chronologically (<code>sort({ createdAt: -1 })</code>), the activity calendar (<code>$dateToString</code> on <code>createdAt</code>), and showing when discussions were posted. <code>updatedAt</code> tracks the last modification of any document.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q52</span> How are tags implemented and what's the enum restriction?</summary><div class="answer"><p>Tags is an array of strings with enum validation covering 16 categories: <code>array, linkedList, graph, dp, tree, string, greedy, stack, queue, math, bitManipulation, backtracking, twoPointers, binarySearch, heap, premium, video</code>. This prevents typos and ensures consistency across all problems. The frontend uses these exact values for filtering.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q53</span> How does the discussion threading work with <code>parentId</code>?</summary><div class="answer"><p>The Discussion model has a <code>parentId</code> field that references itself (self-referential). Top-level comments have <code>parentId: null</code>. Replies set <code>parentId</code> to the comment they're replying to. The server returns all comments flat (sorted by <code>createdAt</code>); the <strong>client</strong> nests them by matching <code>parentId</code> to build the thread tree. This avoids recursive queries on the server.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q54</span> How are upvotes implemented atomically?</summary><div class="answer"><p>The <code>toggleUpvote</code> controller checks if the user already upvoted using <code>comment.upvotes.some()</code>. Then it uses an <strong>atomic</strong> MongoDB update: <code>$pull</code> (remove) if already upvoted, <code>$addToSet</code> (add without duplicates) if not. This is a single atomic operation, so concurrent clicks can't double-add or double-remove a user's upvote.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q55</span> What does <code>select()</code> do in Mongoose queries?</summary><div class="answer"><p><code>.select('_id title difficulty tags')</code> performs a <strong>projection</strong> — only those fields are fetched from MongoDB. This reduces network transfer and memory usage. For example, <code>getAllProblem</code> doesn't fetch test cases, start code, or reference solutions — just the metadata needed for the listing page.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q56</span> Why is <code>emailId</code> both <code>unique</code> and <code>lowercase: true</code>?</summary><div class="answer"><p><code>unique</code> creates a unique index so two users can't register with the same email. <code>lowercase: true</code> normalizes the email before saving, preventing "John@Gmail.com" and "john@gmail.com" from being treated as different users. <code>trim: true</code> removes leading/trailing whitespace.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q57</span> How does pagination work in <code>getAllSubmissions</code>?</summary><div class="answer"><p>Uses <strong>skip/limit</strong> pagination: <code>page</code> and <code>limit</code> come from query params. <code>skip = (page - 1) * limit</code>. The query sorts by <code>createdAt: -1</code> (newest first), skips the first N, and limits to the page size. It also returns <code>totalPages</code> and <code>totalSubmissions</code> via <code>countDocuments()</code>. This is simple but has O(N) skip cost for deep pages — cursor-based pagination would be better at scale.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q58</span> What's the difference between <code>findByIdAndUpdate</code> vs <code>save()</code>?</summary><div class="answer"><p><code>findByIdAndUpdate</code> is a single atomic DB operation, bypasses some middleware. <code>save()</code> loads the document into memory, applies changes, then writes back — it runs validators and middleware hooks. In <code>submissionService.js</code>, <code>submission.save()</code> is used because the document is already loaded and multiple fields need updating. For simple atomic updates like <code>$addToSet</code>, <code>findByIdAndUpdate</code> is preferred.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q59</span> How does the problem creation flow validate the reference solution?</summary><div class="answer"><p>Before saving a problem, the controller submits each reference solution to Judge0 against the visible test cases. For each language, it builds a batch, submits to Judge0, polls for results. If any test case doesn't return <code>status_id: 3</code> (Accepted), it responds 400 — the problem isn't created. This ensures the reference solution is correct before students see it.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q60</span> Why does <code>runValidators: true</code> matter in <code>findByIdAndUpdate</code>?</summary><div class="answer"><p>By default, Mongoose <code>findByIdAndUpdate</code> skips schema validators (enum, min, max, etc.). <code>runValidators: true</code> forces them to run. In <code>updateProblem</code>, this ensures the updated difficulty is still one of ['easy', 'medium', 'hard'], tags are valid enum values, etc. Without it, invalid data could sneak into the database.</p></div></details></div>
+</section>
+
+
+<!-- ████████████████████████████████████████████████████████████████████
+     SECTION 5: REDIS (Q61-Q82)
+     ████████████████████████████████████████████████████████████████████ -->
+<section class="section" id="sec-redis">
+  <div class="section-header">
+    <span class="section-tag tag-backend">Redis</span>
+    <h2>⚡ Redis — Cache, Rate Limit, Blocklist (Q61–Q82)</h2>
+  </div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q61</span> How does the cache-aside pattern work in this project?</summary><div class="answer"><p><strong>Read path:</strong> Controller calls <code>cacheGet(key)</code>. If Redis returns data → serve it (cache hit). If null → query MongoDB → call <code>cacheSet(key, data, 300)</code> → serve the DB result. <strong>Write path:</strong> After any create/update/delete on a problem, call <code>cacheDel("problems:all", "problem:{id}")</code> to invalidate. This is the textbook cache-aside (lazy-loading) pattern. TTL is 300 seconds (5 minutes) as a safety net against stale data.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q62</span> Why cache-aside instead of write-through or write-behind?</summary><div class="answer"><p><strong>Write-through</strong> updates cache on every write — adds latency to writes and caches data that may never be read. <strong>Write-behind</strong> queues writes — adds complexity and risks data loss. <strong>Cache-aside</strong> is the simplest: only cache what's actually read, invalidate on write. For a system with moderate write frequency and frequent reads (problem listing page), cache-aside is the best tradeoff between complexity and effectiveness.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q63</span> What are the cache keys and what do they store?</summary><div class="answer"><p><code>problems:all</code> — JSON array of all problems (title, difficulty, tags, totalSubmissions). <code>problem:{id}</code> — JSON of a single problem's detail (with video info merged in). Both are serialized with <code>JSON.stringify()</code> and deserialized with <code>JSON.parse()</code> via the <code>cacheGet</code>/<code>cacheSet</code> helpers in <code>lib/cache.js</code>.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q64</span> Explain the sliding-window rate limiter implementation.</summary><div class="answer"><p>Uses a Redis <strong>Sorted Set (ZSET)</strong> per user/IP. Each request adds a member scored by the current timestamp. The algorithm: (1) <code>ZREMRANGEBYSCORE</code> removes entries older than the window. (2) <code>ZADD</code> adds the current request with timestamp as score. (3) <code>ZCARD</code> counts remaining entries. (4) <code>EXPIRE</code> sets TTL on the key. All four commands are pipelined in a <code>multi()</code> (transaction). If <code>count > max</code>, return 429 with <code>Retry-After</code> header.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q65</span> Why is a sliding window better than a fixed window?</summary><div class="answer"><p>A fixed window (e.g., "10 requests per minute starting at :00") has a <strong>burst-at-boundary</strong> problem: a user can make 10 requests at :59 and 10 more at :00 — 20 requests in 2 seconds. A sliding window counts requests in the last 60 seconds from <em>now</em>, so the limit is always enforced consistently. The ZSET approach gives true sliding-window behavior with O(log N) operations.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q66</span> Why is <code>Math.random()</code> appended to the ZSET member?</summary><div class="answer"><p>ZSET members must be unique. If two requests arrive at the exact same millisecond, they'd have the same score AND same value, causing one to be silently dropped. Appending <code>-${Math.random()}</code> to the timestamp ensures uniqueness. This is a subtle but critical detail for correctness.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q67</span> What rate limits exist in the system?</summary><div class="answer"><p><strong>Login:</strong> 8/min per IP. <strong>Register:</strong> 5/min per IP. <strong>Submit:</strong> 10/min per user. <strong>Run:</strong> 20/min per user. Auth routes use IP-based limiting (user isn't identified yet). Submission routes use user-based limiting (after auth middleware provides <code>req.result</code>).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q68</span> What's the <code>multi()</code> call doing in the rate limiter?</summary><div class="answer"><p><code>multi()</code> creates a Redis <strong>pipeline</strong> — all four commands (ZREMRANGEBYSCORE, ZADD, ZCARD, EXPIRE) are sent in a single round-trip, reducing network latency. Note: in node-redis, <code>multi()</code> is a transaction (MULTI/EXEC), meaning all commands execute atomically. No other client can see the intermediate state.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q69</span> How does the idempotency middleware prevent duplicate submissions?</summary><div class="answer"><p>The client sends a unique <code>Idempotency-Key</code> header per action. The middleware checks Redis for <code>idemp:{key}</code>. If found, it <strong>replays the cached response</strong> (status code + body) without running the handler. If not found, it wraps <code>res.json()</code> to capture the response — on success (2xx), it stores the response in Redis with 24-hour TTL. So a network retry or double-click gets the exact same response without creating a duplicate submission.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q70</span> How does the idempotency middleware intercept <code>res.json()</code>?</summary><div class="answer"><p>It saves a reference to the original: <code>const originalJson = res.json.bind(res)</code>. Then it replaces <code>res.json</code> with a wrapper that: (1) stores the response in Redis if status is 2xx, (2) calls the original <code>originalJson(body)</code>. This is the <strong>decorator pattern</strong> applied to Express response methods — non-invasive, doesn't require changes to controllers.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q71</span> What's the TTL for each Redis use case and why?</summary><div class="answer"><p><strong>Cache:</strong> 300s — balances freshness with DB load reduction. <strong>Blocklist:</strong> JWT expiry time — no need to keep it after the JWT would naturally expire. <strong>Rate limit:</strong> <code>Math.ceil(windowMs / 1000)</code> — auto-cleanup matches the rate limit window. <strong>Idempotency:</strong> 24 hours — covers network retries and user coming back to retry. <strong>Leaderboard:</strong> No TTL — persistent ranking data.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q72</span> How does <code>redisClient.expireAt()</code> differ from <code>expire()</code>?</summary><div class="answer"><p><code>expire(key, seconds)</code> sets a relative TTL. <code>expireAt(key, unixTimestamp)</code> sets an absolute expiry time. The blocklist uses <code>expireAt</code> with <code>payload.exp</code> (the JWT's expiry as a Unix timestamp) — so the blocklist entry dies at exactly the same moment the JWT would naturally become invalid, regardless of when the logout happened.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q73</span> Why two different Redis client libraries (node-redis vs ioredis)?</summary><div class="answer"><p>BullMQ <strong>requires</strong> ioredis — it's a hard dependency. BullMQ needs <code>maxRetriesPerRequest: null</code> to handle long-blocking operations (BRPOPLPUSH for queue consumption). The rest of the app uses node-redis (the official Redis Node.js client). Both connect to the same Redis instance via <code>REDIS_URL</code>. This is a documented BullMQ requirement, not a design choice.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q74</span> What happens when the ZSET rate limiter key expires?</summary><div class="answer"><p>Redis automatically deletes the key when its TTL expires — this is cleanup. The TTL is set to <code>Math.ceil(windowMs / 1000)</code> on every request. If a user is inactive for longer than the window, the key disappears, and the next request starts fresh with count = 1. No manual garbage collection needed.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q75</span> How does <code>setEx()</code> work and where is it used?</summary><div class="answer"><p><code>setEx(key, ttlSeconds, value)</code> atomically sets a value AND its expiry in one command. Used in: cache (<code>cacheSet</code>) and idempotency store. It's preferred over separate <code>set()</code> + <code>expire()</code> because it's atomic — there's no window where the key exists without a TTL.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q76</span> Explain the <code>isOpen</code> check before Redis operations.</summary><div class="answer"><p>Every Redis operation first checks <code>redisClient.isOpen</code>. If false (Redis is disconnected/unavailable), the function returns a fallback (null for reads, no-op for writes). This is the <strong>fail-open</strong> pattern. It prevents the app from throwing unhandled errors when Redis is temporarily down and keeps the request processing pipeline moving.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q77</span> How is cache invalidation done and what's the "two-key" delete?</summary><div class="answer"><p>On any problem write (create/update/delete), <code>invalidateProblemCache(id)</code> calls <code>cacheDel("problems:all", "problem:{id}")</code> — it deletes BOTH the list cache and the individual problem cache in one call. <code>cacheDel</code> accepts variadic keys and passes them as an array to <code>redisClient.del(keys)</code>. This ensures both caches are always consistent with the DB.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q78</span> What is a Redis pipeline vs a transaction? Which does the rate limiter use?</summary><div class="answer"><p>A <strong>pipeline</strong> batches commands in one network round-trip but doesn't guarantee atomicity. A <strong>transaction</strong> (MULTI/EXEC) batches commands AND guarantees they execute atomically — no other commands interleave. The rate limiter uses <code>multi()</code> which is a transaction. This matters because another request from the same user could race between ZREMRANGEBYSCORE and ZCARD, giving an incorrect count.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q79</span> How does the <code>sendCommand()</code> call work for leaderboard ZADD?</summary><div class="answer"><p>For the "LT" flag (ZADD only updates if the new score is <strong>less than</strong> the current one), node-redis's typed API doesn't directly support it. So the code uses <code>redisClient.sendCommand(["ZADD", key, "LT", score, member])</code> — this sends a raw Redis command. It's used for <code>recordBestRuntime</code> to keep only the fastest (lowest) runtime per user per problem.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q80</span> What data structure would you use if you needed a time-series of submissions?</summary><div class="answer"><p>Redis <strong>Streams</strong> (XADD/XREAD) for real-time append-only log with time-based IDs, or <strong>TimeSeries</strong> module for aggregated metrics. For the activity calendar (submissions per day), MongoDB aggregation with <code>$dateToString</code> is already used — this is fine since it's a batch query for profile stats, not a hot real-time path.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q81</span> How would you handle Redis failover in production?</summary><div class="answer"><p>Use <strong>Redis Sentinel</strong> (automatic failover) or a managed service like <strong>Redis Cloud</strong> / <strong>ElastiCache</strong> with multi-AZ replicas. The node-redis client supports Sentinel configuration. The fail-open design means brief outages don't crash the app — the system degrades gracefully to no caching, no rate limiting (temporarily), and uses JWT expiry as the only logout mechanism.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num purple">Q82</span> What's the memory impact of storing full JWTs as blocklist keys?</summary><div class="answer"><p>JWTs are ~200-300 bytes. With 1-hour expiry, at most you'd have <code>active_users * sessions_per_user</code> keys at once. For thousands of users, this is a few MB — negligible for Redis. The <code>expireAt</code> ensures automatic cleanup. At massive scale, you could hash the JWT (SHA-256 = 32 bytes) instead of storing the full token.</p></div></details></div>
+
+</section>
+
+
+<!-- ████████████████████████████████████████████████████████████████████
+     SECTION 6: JOB QUEUE (Q83-Q105)
+     ████████████████████████████████████████████████████████████████████ -->
+<section class="section" id="sec-queue">
+  <div class="section-header">
+    <span class="section-tag tag-backend">Queue</span>
+    <h2>📦 BullMQ — Job Queue & Workers (Q83–Q105)</h2>
+  </div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q83</span> What is BullMQ and why use it over RabbitMQ or Kafka?</summary><div class="answer"><p>BullMQ is a Node.js job queue library built on Redis. Chosen because: (1) We already have Redis — no additional infrastructure. (2) It's Node-native with excellent TypeScript/Promise support. (3) Perfect for task queues (not streaming). RabbitMQ would add a separate broker to manage. Kafka is for high-throughput event streaming — overkill for ~10 submissions/minute. BullMQ is the right tool for this scale.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q84</span> Explain the Producer-Consumer pattern as implemented.</summary><div class="answer"><p><strong>Producer</strong> (<code>submissionQueue.js</code>): Creates a BullMQ <code>Queue</code>, exports <code>enqueueSubmission()</code> which calls <code>queue.add("evaluate", payload, { jobId: submissionId })</code>. The controller calls this and returns 202.<br><strong>Consumer</strong> (<code>submissionWorker.js</code>): Creates a BullMQ <code>Worker</code> with a processor function that calls <code>processSubmission()</code>. It runs with <code>concurrency: 5</code>. <br><strong>Communication</strong>: They share the same Redis and queue name (<code>"submissions"</code>) but can be in different processes.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q85</span> What does <code>concurrency: 5</code> mean and why that number?</summary><div class="answer"><p>The worker processes at most <strong>5 jobs simultaneously</strong>. This is <strong>back-pressure</strong> control. Judge0's RapidAPI plan has rate limits (~100 requests/minute). Each submission may make 2 API calls (submit batch + poll). With concurrency 5, at most 10 Judge0 calls run in parallel. The rest queue up and wait their turn. This prevents quota exhaustion during traffic spikes.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q86</span> What happens when a job fails? Describe the retry policy.</summary><div class="answer"><p>Configured in <code>defaultJobOptions</code>: <code>attempts: 3</code> with <code>backoff: { type: "exponential", delay: 2000 }</code>. So: 1st retry after 2s, 2nd after 4s, 3rd after 8s. If all 3 fail, the job is marked as permanently failed. <code>removeOnFail: false</code> keeps failed jobs in Redis for inspection (acting as a dead-letter queue). <code>removeOnComplete: 1000</code> keeps the last 1000 completed jobs for debugging.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q87</span> What is <code>UnrecoverableError</code> and when is it thrown?</summary><div class="answer"><p>BullMQ's <code>UnrecoverableError</code> bypasses the retry policy — the job is immediately marked as failed, no retries attempted. The worker throws it when the circuit breaker is open: <code>if (/breaker is open/i.test(err.message)) throw new UnrecoverableError(err.message)</code>. Rationale: if Judge0 is down (breaker open), retrying after 2/4/8 seconds won't help — the breaker stays open for 30 seconds. Fail fast so the user gets feedback immediately.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q88</span> Why is <code>jobId: submissionId</code> set when enqueuing?</summary><div class="answer"><p>BullMQ uses <code>jobId</code> for <strong>deduplication</strong>. If a job with the same ID already exists in the queue, adding it again is a no-op. This prevents the same submission from being evaluated twice if the enqueue call is somehow retried (e.g., network glitch). Combined with the Idempotency-Key middleware, this provides two layers of duplicate protection.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q89</span> How does the worker return results to the web tier?</summary><div class="answer"><p>The worker's processor function returns the result object (containing <code>submissionId</code>, <code>userId</code>, <code>accepted</code>, <code>status</code>, etc.). BullMQ stores this as the job's <code>returnvalue</code>. BullMQ's <code>QueueEvents</code> class (in <code>socket.js</code>) listens for <code>completed</code> events, extracts <code>returnvalue</code>, and emits it via Socket.io to the user's room. This is a Pub/Sub bridge: BullMQ → Socket.io → browser.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q90</span> What's the <code>QueueEvents</code> class and how does it differ from the Worker?</summary><div class="answer"><p><code>Worker</code> processes jobs (pulls from queue, executes handler). <code>QueueEvents</code> is a passive listener — it subscribes to Redis keyspace notifications to receive events (completed, failed, progress) about jobs <strong>without</strong> processing them. In <code>socket.js</code>, QueueEvents listens for completed/failed events and bridges them to Socket.io. The Worker and QueueEvents can be in different processes.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q91</span> How does the failed-job notification work in <code>socket.js</code>?</summary><div class="answer"><p>QueueEvents listens for the <code>failed</code> event. When a job exhausts retries, <code>socket.js</code> fetches the job data (<code>submissionQueue.getJob(jobId)</code>) to get the <code>userId</code>, then emits a <code>submission:result</code> event with an error status. It even checks if the failure was due to a breaker-open error and provides a user-friendly message. This prevents the UI from hanging forever on "judging...".</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q92</span> What is exponential backoff and why use it for retries?</summary><div class="answer"><p>Exponential backoff increases the delay between retries: 2s → 4s → 8s. This prevents <strong>thundering herd</strong>: if Judge0 goes down and 100 jobs fail simultaneously, they don't all retry at the same instant. The staggered retries give the external service time to recover without being overwhelmed by a burst of retries.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q93</span> Can the worker run in a separate process? How?</summary><div class="answer"><p>Yes — <code>npm run worker</code> runs <code>src/workers/index.js</code>, which connects to the same MongoDB and Redis, then calls <code>createSubmissionWorker()</code>. Since BullMQ coordinates through Redis, the worker process doesn't need any direct communication with the web process. You can run multiple worker instances for horizontal scaling. On Render, this would be a separate <code>type: worker</code> service (paid).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q94</span> What are the tradeoffs of in-process vs separate worker?</summary><div class="answer"><p><strong>In-process:</strong> Simple, one deployment, free on Render. But: worker and web server share CPU/memory; a long-running evaluation blocks event loop for web requests; can't scale independently. <strong>Separate process:</strong> Independent scaling, isolated resources, better fault isolation. But: additional cost, deployment complexity. The <code>RUN_WORKER_IN_PROCESS</code> flag makes this a runtime config decision.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q95</span> What is <code>removeOnComplete: 1000</code>?</summary><div class="answer"><p>After a job completes successfully, BullMQ keeps it in Redis for inspection. <code>removeOnComplete: 1000</code> means: keep the last 1000 completed jobs and auto-delete older ones. This provides a debugging window (you can inspect recent jobs via BullMQ's dashboard) while preventing unbounded Redis memory growth.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q96</span> What is <code>removeOnFail: false</code>?</summary><div class="answer"><p>Failed jobs are <strong>never automatically deleted</strong>. They remain in Redis indefinitely, acting as a <strong>dead-letter queue</strong>. You can inspect them to understand why they failed, retry them manually, or build alerting on failure counts. In production, you'd add a cleanup cron for jobs older than N days.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q97</span> How does BullMQ handle process crashes mid-job?</summary><div class="answer"><p>BullMQ uses a lock mechanism. When a worker picks a job, it acquires a lock (a Redis key with a TTL). If the worker crashes, the lock expires, and BullMQ considers the job as failed/stalled. It can then be retried by another worker. This provides <strong>at-least-once delivery</strong> — a job might be processed more than once on failure, but never lost.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q98</span> What Redis data structures does BullMQ use internally?</summary><div class="answer"><p>BullMQ uses: <strong>Lists</strong> (LPUSH/BRPOPLPUSH for the queue), <strong>Hashes</strong> (job data and metadata), <strong>Sorted Sets</strong> (delayed/prioritized jobs, scheduled retries), <strong>Strings</strong> (locks, counters), and <strong>Pub/Sub channels</strong> (QueueEvents notifications). A single queue creates ~6 Redis keys with the prefix <code>bull:{queueName}:</code>.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q99</span> How would you monitor the queue in production?</summary><div class="answer"><p>Options: (1) <strong>Bull Board</strong> or <strong>Arena</strong> — web dashboards that connect to the same Redis and display queue stats, job statuses, and allow manual retries. (2) Custom metrics: expose <code>queue.getJobCounts()</code> (waiting, active, completed, failed) via a <code>/metrics</code> endpoint, scraped by Prometheus. (3) Alerting on <code>failed</code> count exceeding a threshold.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q100</span> What's the difference between <code>add()</code> and <code>addBulk()</code> in BullMQ?</summary><div class="answer"><p><code>add()</code> enqueues a single job. <code>addBulk()</code> enqueues multiple jobs in one Redis round-trip — useful for batch operations. The project uses <code>add()</code> since each submission is enqueued individually as it arrives. Batch enqueue would be useful if, say, an admin re-evaluates all submissions for a problem.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q101</span> How does BullMQ's <code>maxRetriesPerRequest: null</code> work?</summary><div class="answer"><p>ioredis normally retries failed Redis commands a limited number of times. BullMQ's blocking operations (like BRPOPLPUSH, which waits for new jobs) can block for a long time. If ioredis gives up retrying, the worker stops receiving jobs. <code>maxRetriesPerRequest: null</code> tells ioredis to retry forever — ensuring the worker reconnects after transient Redis outages.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q102</span> What is "at-least-once" vs "at-most-once" vs "exactly-once" delivery?</summary><div class="answer"><p><strong>At-most-once:</strong> Job processed 0 or 1 times (fire-and-forget). <strong>At-least-once:</strong> Job processed 1+ times (retries, but may duplicate). <strong>Exactly-once:</strong> Job processed exactly 1 time (hardest, requires dedup). BullMQ provides at-least-once. The <code>jobId: submissionId</code> deduplication and the idempotency middleware together approximate exactly-once behavior at the application level.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q103</span> Why does <code>enqueueSubmission</code> set the job name to "evaluate"?</summary><div class="answer"><p><code>queue.add("evaluate", payload, options)</code> — <code>"evaluate"</code> is the job name. In BullMQ, different named jobs can have different processor handlers (using <code>worker.on('evaluate', handler)</code>). Currently there's only one job type, but the architecture allows adding more (e.g., "re-evaluate", "batch-check") without changing the queue. It's future-proofing.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q104</span> How would you add job priority to the submission queue?</summary><div class="answer"><p>BullMQ supports priority via <code>queue.add(name, data, { priority: 1 })</code> — lower number = higher priority. You could give premium users priority 1 and free users priority 5. BullMQ uses a Redis ZSET scored by priority to manage the order. Jobs with the same priority are FIFO.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q105</span> What happens to queued jobs if the backend restarts?</summary><div class="answer"><p>Jobs are stored in <strong>Redis</strong>, not in the Node.js process. When the backend restarts, the worker reconnects to Redis and resumes processing pending jobs. Any jobs that were mid-execution when the crash happened will be retried after their lock expires (stalled job recovery). No jobs are lost — this is a key advantage of a persistent queue.</p></div></details></div>
+
+</section>
+
+
+<!-- ████████████████████████████████████████████████████████████████████
+     SECTION 7: CIRCUIT BREAKER & JUDGE0 (Q106-Q122)
+     ████████████████████████████████████████████████████████████████████ -->
+<section class="section" id="sec-circuit">
+  <div class="section-header">
+    <span class="section-tag tag-backend">Resilience</span>
+    <h2>🔌 Circuit Breaker & Judge0 (Q106–Q122)</h2>
+  </div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q106</span> What is the Circuit Breaker pattern and why is it needed?</summary><div class="answer"><p>Without a circuit breaker, if Judge0 goes down, every submission would wait 20 seconds (timeout), consuming worker threads and degrading the entire system. The circuit breaker <strong>monitors failure rates</strong>. When failures exceed a threshold, it <strong>opens</strong> (trips) and immediately rejects all subsequent calls for a cooldown period — failing fast (~1ms) instead of waiting for timeouts. After the cooldown, it enters <strong>half-open</strong> state, letting one probe request through to test recovery.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q107</span> Explain the three states of the circuit breaker.</summary><div class="answer"><p><strong>CLOSED</strong> (normal): All requests pass through. Failures are counted. <strong>OPEN</strong> (tripped): All requests are immediately rejected with "Breaker is open" error. Timer runs for <code>resetTimeout</code> (30s). <strong>HALF-OPEN</strong> (probing): One request is allowed through. If it succeeds → CLOSED. If it fails → OPEN again. The opossum library logs state transitions: "Judge0 circuit OPEN — failing fast", "HALF-OPEN — probing", "CLOSED — recovered".</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q108</span> What are the opossum configuration parameters and what do they mean?</summary><div class="answer"><p><code>timeout: 20000</code> — a batch must resolve within 20s or it's counted as a failure. <code>errorThresholdPercentage: 50</code> — open the breaker once 50% of recent calls fail. <code>resetTimeout: 30000</code> — stay open for 30s before trying half-open. <code>volumeThreshold: 5</code> — need ≥5 calls in the measurement window before the breaker can trip (prevents premature tripping on 1 out of 2 calls = 50%).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q109</span> What is the Adapter Pattern in <code>judge0Adapter.js</code>?</summary><div class="answer"><p>The adapter provides a clean, stable interface: <code>judge0Adapter.execute(submissions)</code> and <code>judge0Adapter.getLanguageId(language)</code>. Controllers and services depend on this interface, not on the raw Judge0 HTTP details (URLs, headers, polling logic). To switch from Judge0 RapidAPI to a self-hosted judge, you'd only change the adapter — no other file needs modification. This is the <strong>Dependency Inversion Principle</strong> in action.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q110</span> How does the batch submission to Judge0 work?</summary><div class="answer"><p><strong>Step 1:</strong> POST to <code>/submissions/batch</code> with an array of <code>{source_code, language_id, stdin, expected_output}</code>. Judge0 returns an array of tokens (UUIDs). <strong>Step 2:</strong> GET <code>/submissions/batch?tokens=t1,t2,t3&fields=*</code> to poll results. Keep polling every 1 second until all <code>status_id > 2</code> (1=In Queue, 2=Processing, 3=Accepted, 4+=terminal states). Max 30 attempts. <strong>Step 3:</strong> Return the submissions array with status, time, memory, stderr, etc.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q111</span> What's the Template Method pattern in <code>evaluateTestcases()</code>?</summary><div class="answer"><p><code>evaluateTestcases(code, language, testcases)</code> is the shared evaluation skeleton. Both <code>runCode</code> (visible tests, synchronous) and the submission worker (hidden tests, async) call the <strong>same function</strong> — they only differ in: (1) which test case array is passed, and (2) what they do with the result (run returns it directly; worker saves to DB + updates leaderboard). The invariant algorithm (build batch → execute → parse) is defined once.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q112</span> What was Bug 1 (the setTimeout bug) and how was it fixed?</summary><div class="answer"><p>The old <code>waiting()</code> function had <code>setTimeout(() => { return; }, timer)</code> — the return was inside setTimeout's callback, not the outer function. The promise resolved immediately (with undefined) instead of waiting. Fix: <code>const waiting = (timer) => new Promise(resolve => setTimeout(resolve, timer))</code> — properly wraps setTimeout in a Promise that resolves after the delay.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q113</span> What was Bug 3 (the infinite polling loop)?</summary><div class="answer"><p>The original <code>submitToken()</code> polled Judge0 results in an infinite <code>while(true)</code> loop with no exit condition. If Judge0 never returned results (stuck token), it would loop forever, consuming CPU and never resolving. Fix: Added <code>MAX_ATTEMPTS = 30</code> with a for loop, and throws an error after 30 seconds: "Judge0 timed out: results not ready after 30s".</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q114</span> How does the circuit breaker interact with BullMQ retries?</summary><div class="answer"><p>When the breaker is open, it throws immediately. The worker catches this and wraps it in <code>UnrecoverableError</code>, which tells BullMQ to skip all retries and fail immediately. Without this, BullMQ would retry 3 times with backoff (2s, 4s, 8s = 14s total), during which the breaker is still open (30s). Using <code>UnrecoverableError</code> gives the user feedback in &lt;1 second instead of after 14 seconds.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q115</span> What's the <code>volumeThreshold: 5</code> setting for?</summary><div class="answer"><p>Prevents the breaker from tripping prematurely. If only 2 requests were made and 1 failed, that's 50% failure rate — but it might just be a transient error. <code>volumeThreshold: 5</code> requires at least 5 requests in the measurement window before the percentage check applies. This avoids false positives during low-traffic periods.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q116</span> How does the "Run" endpoint handle a breaker-open error?</summary><div class="answer"><p>In <code>runCode</code>, the catch block checks <code>/breaker is open/i.test(err.message)</code>. If true, it returns <strong>503 Service Unavailable</strong> with a user-friendly message: "Judge is temporarily unavailable. Please try again in a moment." If it's any other error, it returns 500. The 503 status code is semantically correct for temporary unavailability.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q117</span> What language IDs does Judge0 use and how are they mapped?</summary><div class="answer"><p><code>getLanguageById()</code> maps: <code>"c++"→54</code>, <code>"java"→62</code>, <code>"javascript"→63</code>. These are Judge0 CE (Community Edition) language IDs. The controller normalizes "cpp" to "c++" before passing to the adapter. If a new language is added, only this mapping and the schema enum need updating.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q118</span> What is <code>status_id</code> in Judge0 results?</summary><div class="answer"><p>Judge0 status IDs: <strong>1</strong>=In Queue, <strong>2</strong>=Processing, <strong>3</strong>=Accepted, <strong>4</strong>=Wrong Answer, <strong>5</strong>=Time Limit Exceeded, <strong>6</strong>=Compilation Error, <strong>7-14</strong>=various runtime errors. The polling loop waits until all <code>status_id > 2</code>. The evaluator maps: 3→"accepted", 4→"wrong", anything else→"error".</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q119</span> Why does <code>breaker.fire()</code> not use <code>breaker.call()</code>?</summary><div class="answer"><p><code>fire()</code> and <code>call()</code> are effectively the same in opossum — <code>fire()</code> is the preferred API. It passes the arguments to the wrapped function (<code>executeRaw</code>), respects the circuit state, and returns a Promise. If the breaker is open, it immediately rejects without calling the function.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q120</span> How would you add fallback behavior to the circuit breaker?</summary><div class="answer"><p>Opossum supports <code>breaker.fallback(fn)</code> — a function called when the breaker is open. You could return a "service unavailable" response, or queue the request for later retry, or use a cached previous result. Currently, the project lets the error propagate to the caller (worker or controller) which handles it appropriately.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q121</span> What metrics does opossum track internally?</summary><div class="answer"><p>Opossum tracks: success count, failure count, timeout count, rejection count (breaker open), latency percentiles, and event history. You can access these via <code>breaker.stats</code> or listen to events: <code>breaker.on('success')</code>, <code>breaker.on('failure')</code>, <code>breaker.on('timeout')</code>, <code>breaker.on('reject')</code>. These can be exported to Prometheus for monitoring.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q122</span> What's the Saga / Compensating Transaction in <code>submissionService.js</code>?</summary><div class="answer"><p>The <code>processSubmission</code> function has a try/catch saga: <strong>Try:</strong> evaluate → save verdict → update user + leaderboard. <strong>Catch (compensating action):</strong> If ANY step fails, set <code>submission.status = "error"</code> and <code>submission.errorMessage = "Evaluation failed: " + err.message</code>, then rethrow for BullMQ retry. This ensures a submission <strong>never stays stuck on "pending"</strong> — it either succeeds or moves to an explicit error state.</p></div></details></div>
+
+</section>
+
+
+<!-- ████████████████████████████████████████████████████████████████████
+     SECTION 8: WEBSOCKET (Q123-Q138)
+     ████████████████████████████████████████████████████████████████████ -->
+<section class="section" id="sec-socket">
+  <div class="section-header">
+    <span class="section-tag tag-backend">Real-Time</span>
+    <h2>🔌 WebSocket & Socket.io (Q123–Q138)</h2>
+  </div>
+
+  <div class="qa"><details><summary><span class="q-num">Q123</span> Why Socket.io instead of raw WebSockets or SSE?</summary><div class="answer"><p>Socket.io provides: (1) <strong>Automatic fallback</strong> to long-polling if WebSocket isn't available. (2) <strong>Rooms</strong> — users join a room named after their userId; we emit to that room. (3) <strong>Reconnection</strong> — auto-reconnect with backoff on disconnection. (4) <strong>CORS handling</strong> built-in. (5) <strong>Structured events</strong> (named channels like "submission:result"). Raw WebSockets would require building all of this from scratch. SSE (Server-Sent Events) is one-directional (server→client only) — Socket.io supports bidirectional communication.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q124</span> How does the room-based push work?</summary><div class="answer"><p>When a user connects, the client emits <code>socket.emit("join", userId)</code>. The server handles this: <code>socket.join(userId.toString())</code>. When a submission completes, the server does <code>io.to(result.userId).emit("submission:result", result)</code> — this sends the verdict <strong>only to sockets in that user's room</strong>. Other users don't receive it. If the user has multiple tabs open, all tabs receive the event (they're all in the same room).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q125</span> How does the QueueEvents → Socket.io bridge work?</summary><div class="answer"><p>In <code>socket.js</code>, after creating the Socket.io server, a BullMQ <code>QueueEvents</code> instance subscribes to the "submissions" queue. On the <code>completed</code> event, it receives <code>{ returnvalue }</code> — the JSON result from the worker. It parses the result, extracts <code>userId</code>, and emits via Socket.io. This bridges two different Pub/Sub systems: BullMQ (Redis-based) → Socket.io (WebSocket-based).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q126</span> What happens if the user's browser disconnects before the verdict arrives?</summary><div class="answer"><p>The Socket.io emit goes to an empty room — the event is silently discarded. But the submission result is also <strong>persisted to MongoDB</strong>. The user can: (1) Reconnect and poll <code>GET /submission/status/:submissionId</code>. (2) View it in their submission history on the problem page. The WebSocket push is the fast path; the database is the reliable fallback.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q127</span> Why is there no auth on the Socket.io connection?</summary><div class="answer"><p>The current implementation trusts the client-sent <code>userId</code> on the <code>join</code> event. This is a simplification. In production, you'd verify the JWT cookie in the Socket.io <code>io.use()</code> middleware: extract the cookie, verify the JWT, and use the decoded <code>_id</code> as the room name. The current approach works because the socket is only used for <strong>receiving</strong> (not sending sensitive data).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q128</span> How does the frontend Socket.io client work?</summary><div class="answer"><p><code>utils/socket.js</code> creates a single shared socket: <code>io(VITE_API_URL, { withCredentials: true, autoConnect: true })</code>. <code>withCredentials</code> sends cookies (for potential future auth). <code>autoConnect: true</code> connects immediately on import. The ProblemPage component emits <code>socket.emit("join", userId)</code> and listens for <code>socket.on("submission:result", callback)</code> to update the UI when a verdict arrives.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q129</span> Why is the socket instance a module-level singleton?</summary><div class="answer"><p>Creating multiple socket connections to the same server would waste resources and cause duplicate events. By exporting a single <code>socket</code> instance from <code>utils/socket.js</code>, all React components share the same connection. This is the Singleton pattern applied to a network resource.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q130</span> How would you scale Socket.io across multiple server instances?</summary><div class="answer"><p>Use the <strong>Socket.io Redis adapter</strong> (<code>@socket.io/redis-adapter</code>). It uses Redis Pub/Sub so that an <code>io.to(userId).emit()</code> on Server A is forwarded to Server B (which might hold the user's actual WebSocket connection). Without the adapter, Socket.io only emits to connections on the local process. BullMQ QueueEvents already uses Redis, so both processes see the event — the gap is Socket.io rooms, which are process-local by default.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q131</span> What's the difference between <code>io.emit()</code>, <code>io.to().emit()</code>, and <code>socket.emit()</code>?</summary><div class="answer"><p><code>io.emit(event, data)</code> — broadcast to ALL connected clients. <code>io.to(room).emit(event, data)</code> — send to all sockets in a specific room. <code>socket.emit(event, data)</code> — send to that ONE specific socket only. The project uses <code>io.to(userId).emit()</code> to target a specific user's room. Never uses broadcast (that would leak verdicts to everyone).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q132</span> Why is <code>typeof result === "string"</code> checked in the QueueEvents handler?</summary><div class="answer"><p>BullMQ's <code>returnvalue</code> might be serialized as a JSON string depending on the Redis client version or BullMQ version. The code defensively checks: if it's a string, <code>JSON.parse()</code> it; if it's already an object, use it directly. This prevents crashes from unexpected serialization behavior.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q133</span> How does Socket.io handle reconnection?</summary><div class="answer"><p>Socket.io client has built-in reconnection with exponential backoff. If the connection drops (server restart, network issue), it automatically attempts to reconnect. On reconnection, the client should re-emit <code>join</code> to re-enter the room. The <code>autoConnect: true</code> option means the connection is established immediately when the module is imported.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q134</span> What transport does Socket.io use?</summary><div class="answer"><p>Socket.io initially connects via <strong>HTTP long-polling</strong> (for reliability), then <strong>upgrades to WebSocket</strong> if the environment supports it. This is the "transport upgrade" mechanism. On Render's web service, WebSocket is supported, so the upgrade happens. On Vercel serverless, WebSocket is NOT supported — which is why the Vercel entry point (<code>server.js</code>) doesn't initialize Socket.io.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q135</span> Why does <code>initSocket()</code> return <code>io</code> and export <code>getIO()</code>?</summary><div class="answer"><p><code>initSocket(server)</code> creates the Socket.io instance and returns it. <code>getIO()</code> provides access to the same instance from other modules (if needed). This avoids circular dependencies and ensures the socket is initialized only once (with the HTTP server). It's a lazy singleton accessor pattern.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q136</span> What happens to pending events when the user is offline?</summary><div class="answer"><p>They're lost — Socket.io doesn't queue events for offline clients. When the user reconnects, they won't receive events emitted during their disconnection. This is acceptable because the database is the source of truth. The user can poll <code>/submission/status/:id</code> or see the result in their submission history. The WebSocket push is an <strong>optimization</strong>, not the only delivery mechanism.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q137</span> Could you replace Socket.io push with polling? What are the tradeoffs?</summary><div class="answer"><p>Yes — the <code>GET /submission/status/:submissionId</code> endpoint exists as a polling fallback. Tradeoffs: <strong>Polling</strong> is simpler (no WebSocket infrastructure) but adds latency (poll interval), wastes bandwidth (empty responses), and doesn't scale well (N users × M polls/sec). <strong>Push</strong> is instant (zero-latency) and efficient (only sends when there's data) but requires WebSocket infrastructure and doesn't work on serverless (Vercel).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num">Q138</span> How does the CORS config for Socket.io relate to the Express CORS config?</summary><div class="answer"><p>Both use the same <code>allowedOrigins</code> array from <code>origins.config.js</code>. Express CORS is handled by the <code>cors</code> middleware. Socket.io CORS is configured in the <code>Server</code> constructor: <code>cors: { origin: allowedOrigins, credentials: true }</code>. They must match — otherwise the browser would block the WebSocket upgrade handshake (which starts as an HTTP request subject to CORS).</p></div></details></div>
+
+</section>
+
+
+<!-- ████████████████████████████████████████████████████████████████████
+     SECTION 9: LEADERBOARD (Q139-Q152)
+     ████████████████████████████████████████████████████████████████████ -->
+<section class="section" id="sec-leaderboard">
+  <div class="section-header">
+    <span class="section-tag tag-db">Leaderboard</span>
+    <h2>🏆 Leaderboard — Redis Sorted Sets (Q139–Q152)</h2>
+  </div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q139</span> Why use Redis Sorted Sets (ZSET) instead of a MongoDB query for leaderboards?</summary><div class="answer"><p>A MongoDB approach would require: <code>User.find().sort({score: -1}).limit(50)</code> — this is <strong>O(N log N)</strong> on every request (sorting all users). A Redis ZSET maintains elements in sorted order by score. <code>ZREVRANGE</code> retrieves the top-50 in <strong>O(log N + 50)</strong> — essentially constant time regardless of user count. At 100K users, MongoDB sort takes hundreds of milliseconds; Redis ZSET takes &lt;1ms. It's the <strong>right data structure</strong> for ranked access.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q140</span> How are the two types of leaderboard structured?</summary><div class="answer"><p><strong>Global leaderboard</strong> (<code>leaderboard:global</code>): member = userId, score = weighted solve count (easy=1, medium=3, hard=5 points). Uses <code>ZINCRBY</code> to add points on each first solve. <strong>Per-problem leaderboard</strong> (<code>leaderboard:problem:{id}</code>): member = userId, score = best runtime in milliseconds. Uses <code>ZADD LT</code> (Less Than flag) — only updates if the new score is lower than the existing one, keeping the fastest time.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q141</span> What is <code>ZADD LT</code> and why is it critical?</summary><div class="answer"><p><code>ZADD key LT score member</code> only updates the score if the new score is <strong>less than</strong> the current one. This ensures we always keep the <strong>fastest</strong> (lowest) runtime per user per problem. Without LT, a slower subsequent submission would overwrite the best time. This is an atomic, idempotent operation — safe for concurrent submissions.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q142</span> Why <code>ZREVRANGE</code> for global but <code>ZRANGE</code> for per-problem?</summary><div class="answer"><p>Global leaderboard: higher score = more problems solved = <strong>better</strong>. <code>ZREVRANGE</code> returns members in descending score order (highest first). Per-problem leaderboard: lower score = faster runtime = <strong>better</strong>. <code>ZRANGE</code> returns members in ascending score order (lowest first). The sort direction matches the ranking semantics.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q143</span> How does the weighting system work?</summary><div class="answer"><p><code>WEIGHT = { easy: 1, medium: 3, hard: 5 }</code>. On first accept, <code>ZINCRBY leaderboard:global WEIGHT[difficulty] userId</code>. So solving 10 easy problems (10 pts) ranks below solving 2 hard problems (10 pts) if someone also solved 1 easy (11 pts). The weighting incentivizes tackling harder problems.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q144</span> How is double-counting prevented on the leaderboard?</summary><div class="answer"><p>In <code>submissionService.js</code>, before calling <code>leaderboard.addSolve()</code>, the code checks: <code>user.problemSolved.some(p => p.toString() === problemId.toString())</code>. If the user has already solved this problem, <code>addSolve()</code> is NOT called. Points are only added on the <strong>first accepted submission</strong> per problem. The <code>$addToSet</code> on <code>problemSolved</code> is also idempotent.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q145</span> How is the user's percentile calculated?</summary><div class="answer"><p><code>percentile = Math.round(((total - rank) / total) * 100)</code> where <code>rank</code> is 0-based (from <code>ZREVRANK</code>) and <code>total</code> is from <code>ZCARD</code>. If you're rank 5 out of 100, percentile = (100-5)/100 * 100 = 95%. This means you're in the top 5%. If not ranked (no solves), percentile is null.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q146</span> What does <code>ZREVRANK</code> return?</summary><div class="answer"><p>The 0-based rank of a member in descending order. Rank 0 = highest score = #1 on the leaderboard. The controller adds 1 for display: <code>rank1 = rank + 1</code>. If the member doesn't exist in the ZSET, <code>ZREVRANK</code> returns null.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q147</span> Why does <code>parseFlat()</code> exist?</summary><div class="answer"><p>Redis <code>ZRANGE/ZREVRANGE ... WITHSCORES</code> returns a flat array: <code>[member1, score1, member2, score2, ...]</code>. <code>parseFlat()</code> converts this to <code>[{userId, score}, ...]</code> by iterating in steps of 2. It's a utility to transform Redis's wire format into a usable JavaScript structure.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q148</span> How does <code>attachNames()</code> resolve userIds to names?</summary><div class="answer"><p>The leaderboard ZSET only stores userIds (strings). <code>attachNames()</code> extracts all IDs, does a single <code>User.find({ _id: { $in: ids } }).select("firstName")</code> — ONE database query for all users. It builds a Map for O(1) lookup, then maps entries to include <code>firstName</code>. This is the N+1 query optimization: 1 query instead of 50.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q149</span> What does the <code>safe()</code> wrapper function do?</summary><div class="answer"><p><code>safe(fn, fallback)</code> wraps every Redis call: if Redis is closed or the call throws, return the fallback (e.g., empty array, <code>{rank:null, score:0, total:0}</code>). This is the fail-open pattern applied to leaderboard operations. The leaderboard is a nice-to-have; it shouldn't take down the API.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q150</span> Why convert runtime from seconds to milliseconds for the per-problem leaderboard?</summary><div class="answer"><p>Judge0 returns runtime in <strong>seconds</strong> (float, e.g., 0.042). Storing as milliseconds (integer, 42) avoids floating-point precision issues in Redis ZSET scores and gives cleaner display values. <code>Math.round((runtimeSeconds || 0) * 1000)</code> handles the conversion.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q151</span> How would you implement a weekly/monthly leaderboard?</summary><div class="answer"><p>Use time-bucketed keys: <code>leaderboard:global:2026-W30</code> (ISO week). On each solve, ZINCRBY both the permanent key and the current week/month key. Set a TTL on the time-bucketed key (e.g., 35 days for monthly) for automatic cleanup. The frontend would show tabs: All Time, This Week, This Month — each querying a different key.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num green">Q152</span> What's the time complexity of each leaderboard operation?</summary><div class="answer"><p><code>ZINCRBY</code>: O(log N). <code>ZADD LT</code>: O(log N). <code>ZREVRANGE 0 49 WITHSCORES</code>: O(log N + 50). <code>ZREVRANK</code>: O(log N). <code>ZSCORE</code>: O(1). <code>ZCARD</code>: O(1). All operations are sub-millisecond at any practical scale. This is why Redis ZSET is the right data structure for leaderboards.</p></div></details></div>
+
+</section>
+
+
+<!-- ████████████████████████████████████████████████████████████████████
+     SECTION 10: IDEMPOTENCY & SAGA (Q153-Q162)
+     ████████████████████████████████████████████████████████████████████ -->
+<section class="section" id="sec-idempotency">
+  <div class="section-header">
+    <span class="section-tag tag-backend">Reliability</span>
+    <h2>🔄 Idempotency & Saga (Q153–Q162)</h2>
+  </div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q153</span> What does "idempotent" mean and why does it matter for submissions?</summary><div class="answer"><p>An idempotent operation produces the same result no matter how many times it's executed. For submissions: a network glitch might cause the browser to retry the POST. Without idempotency, the same code would be submitted and judged <strong>twice</strong>, wasting Judge0 quota, creating duplicate records, and confusing the user. With the <code>Idempotency-Key</code> header, the second request gets the cached response from the first — no duplicate work.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q154</span> Who generates the Idempotency-Key?</summary><div class="answer"><p>The <strong>client</strong> (frontend) generates a unique key per action — typically a UUID or a hash of (userId + problemId + timestamp). The key is sent as an HTTP header. The server doesn't generate it because the server can't distinguish a retry from a new request without client-provided context. This follows the same pattern as Stripe's idempotency keys.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q155</span> What if the idempotency key is not sent?</summary><div class="answer"><p>The middleware checks <code>if (!key) return next()</code> — the request proceeds normally without idempotency protection. This is fail-open: not sending the header is valid (older clients, testing, etc.). The middleware is an enhancement, not a requirement.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q156</span> Why is the idempotency TTL 24 hours?</summary><div class="answer"><p>It needs to be long enough to cover: network retries (seconds), user double-clicks (seconds), and a user potentially navigating away and coming back to retry (minutes to hours). 24 hours is generous enough to cover all retry scenarios. It also auto-cleans up — old keys don't accumulate forever.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q157</span> Why only cache 2xx responses in the idempotency middleware?</summary><div class="answer"><p>If the first request failed (4xx/5xx), the client should be able to retry with the same key and get a fresh attempt. Caching error responses would prevent recovery — the client would keep getting the same error. Only successes are cached because they represent completed work that shouldn't be duplicated.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q158</span> What is a Saga pattern?</summary><div class="answer"><p>In distributed systems, a saga is a sequence of local transactions where each step has a <strong>compensating action</strong>. If step 3 fails, you run the compensating actions for steps 2 and 1 to undo partial work. In <code>submissionService.js</code>, the saga is: evaluate → save verdict → update user/leaderboard. If any step fails, the compensating action sets <code>status: "error"</code> and <code>errorMessage</code>, ensuring the submission is never left in "pending" state.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q159</span> What's the compensating action in <code>submissionService.js</code>?</summary><div class="answer"><p>In the catch block: <code>submission.status = "error"; submission.errorMessage = "Evaluation failed: " + err.message; await submission.save().catch(() => {})</code>. The <code>.catch(() => {})</code> on save ensures that even if MongoDB is also failing, we don't throw a secondary error — we just silently fail the compensating write and rethrow the original error for BullMQ to handle.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q160</span> How do idempotency and BullMQ's jobId dedup work together?</summary><div class="answer"><p>They provide <strong>two layers</strong> of protection: (1) HTTP level: the idempotency middleware prevents the controller from even executing on a retry — the cached response is replayed. (2) Queue level: BullMQ's <code>jobId: submissionId</code> prevents duplicate jobs. If the idempotency cache misses (expired, Redis restart) but the job was already queued, BullMQ silently ignores the duplicate add. Belt and suspenders.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q161</span> What happens if step 2 (save verdict) fails but step 1 (evaluate) succeeded?</summary><div class="answer"><p>The compensating action marks the submission as "error". The user sees "Evaluation failed." The Judge0 work is wasted (can't un-execute code), but the database is in a consistent state. On BullMQ retry, <code>processSubmission</code> runs again — it finds the submission (still "pending" status because the save in step 2 failed), re-evaluates, and tries again. The 3-attempt retry policy gives it multiple chances.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q162</span> How does <code>$addToSet</code> help with idempotent leaderboard updates?</summary><div class="answer"><p>If the leaderboard update crashes and BullMQ retries, <code>$addToSet: { problemSolved: problemId }</code> won't add a duplicate. And the <code>alreadySolved</code> check prevents calling <code>leaderboard.addSolve()</code> again. Even if both safeguards fail, <code>ZINCRBY</code> on a ZSET is NOT idempotent (it would double-add points). This is why the <code>alreadySolved</code> check is the critical gate — it prevents double-counting at the application level.</p></div></details></div>
+
+</section>
+
+
+<!-- ████████████████████████████████████████████████████████████████████
+     SECTION 11: FRONTEND (Q163-Q185)
+     ████████████████████████████████████████████████████████████████████ -->
+<section class="section" id="sec-frontend">
+  <div class="section-header">
+    <span class="section-tag tag-frontend">Frontend</span>
+    <h2>⚛️ Frontend — React, Redux, UI (Q163–Q185)</h2>
+  </div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q163</span> What is the frontend tech stack?</summary><div class="answer"><p>React 19, Vite (build tool), Redux Toolkit (state management), React Router v7 (routing), Tailwind CSS v4 + DaisyUI (styling), Monaco Editor (code editor), Socket.io-client (real-time), Zod + React Hook Form (validation), Framer Motion (animations), Lucide React (icons), Axios (HTTP client).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q164</span> Why Redux Toolkit over Context API or Zustand?</summary><div class="answer"><p>Redux Toolkit provides: <code>createAsyncThunk</code> for async operations with pending/fulfilled/rejected states — perfect for auth flows (login, register, check). <code>createSlice</code> with immer for immutable updates. DevTools for debugging state changes. For a project with multiple async flows (auth, submissions, AI chat), Redux's structured approach is more maintainable than Context's prop-drilling or ad-hoc state management.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q165</span> Explain the <code>authSlice.js</code> state machine.</summary><div class="answer"><p>State: <code>{ user, isAuthenticated, loading, error }</code>. Four async thunks: <code>registerUser</code>, <code>loginUser</code>, <code>checkAuth</code>, <code>logoutUser</code>. Each has 3 reducer cases: <strong>pending</strong> (loading=true, error=null), <strong>fulfilled</strong> (loading=false, user=payload, isAuthenticated=true), <strong>rejected</strong> (loading=false, error=payload, user=null, isAuthenticated=false). Special case: <code>checkAuth</code> rejected with 401 sets error=null (expected "no session" state, not an error).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q166</span> What is <code>createAsyncThunk</code> and how is it used?</summary><div class="answer"><p><code>createAsyncThunk("auth/login", async (credentials, {rejectWithValue}) => {...})</code> creates an action creator that dispatches pending/fulfilled/rejected automatically. The async function does the API call. On success, it returns data (→ <code>action.payload</code> in fulfilled). On error, it calls <code>rejectWithValue(message)</code> (→ <code>action.payload</code> in rejected). This eliminates manual action types and dispatch boilerplate.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q167</span> How does <code>axiosClient.js</code> work?</summary><div class="answer"><p>Creates an Axios instance with: <code>baseURL: import.meta.env.VITE_API_URL</code> (the backend URL from Vite env vars), <code>withCredentials: true</code> (sends cookies cross-origin), and default <code>Content-Type: application/json</code>. All API calls use this client, centralizing base URL and credential configuration. If you need interceptors (e.g., auto-logout on 401), you'd add them here.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q168</span> How is routing structured in <code>App.jsx</code>?</summary><div class="answer"><p>React Router v7 with <code>&lt;Routes&gt;</code> and <code>&lt;Route&gt;</code>. Auth guards use ternary expressions: <code>isAuthenticated ? &lt;Homepage/&gt; : &lt;Navigate to="/signup"/&gt;</code>. Admin routes check both <code>isAuthenticated</code> AND <code>user?.role === 'admin'</code>. There are routes for: login, signup, home (problem list), problem page, admin panel (create, update, delete, video, users), leaderboard, profile, and status page.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q169</span> What's the Monaco Editor and why use it over a textarea?</summary><div class="answer"><p>Monaco is the same editor engine that powers VS Code. It provides: syntax highlighting for C++/Java/JavaScript, IntelliSense-like autocomplete, bracket matching, error markers, code folding, minimap, keyboard shortcuts, and proper indentation. <code>@monaco-editor/react</code> wraps it as a React component. A textarea would provide none of these features — unusable for writing code.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q170</span> How does the frontend handle the "Run" vs "Submit" flow differently?</summary><div class="answer"><p><strong>Run:</strong> POST to <code>/submission/run/:id</code>, wait for response (synchronous), display results immediately — pass/fail per test case, runtime, memory. <strong>Submit:</strong> POST to <code>/submission/submit/:id</code>, get 202 immediately, show "Judging..." spinner, wait for Socket.io <code>submission:result</code> event, update UI with verdict. The submit flow also generates and sends an <code>Idempotency-Key</code> header.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q171</span> How does Zod validation work on the frontend?</summary><div class="answer"><p>Zod defines schemas (e.g., <code>z.object({ emailId: z.string().email(), password: z.string().min(6) })</code>). <code>@hookform/resolvers</code> integrates Zod with React Hook Form via <code>zodResolver(schema)</code>. When the form is submitted, Zod validates the data and returns typed errors to the form. This provides client-side validation before the API call, improving UX with instant feedback.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q172</span> What is the <code>extractError()</code> helper in the auth slice?</summary><div class="answer"><p>It normalizes Axios error responses into human-readable strings. The backend sends errors in various formats: plain text strings ("Error: ..."), JSON with <code>error</code> field, JSON with <code>message</code> field. <code>extractError</code> checks all formats and falls back to a generic message. If there's no response at all (network error), it returns "Cannot reach server." This ensures the UI always has a displayable error message.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q173</span> How does the profile stats page work?</summary><div class="answer"><p>It calls <code>GET /user/profile</code> which runs MongoDB aggregation pipelines. The response includes: total problems by difficulty, solved problems by difficulty, solved by tag, last 10 submissions, and a year-long activity calendar (submissions per day). The frontend renders: progress bars (solved/total per difficulty), a tag cloud, a submission history table, and a GitHub-style activity grid.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q174</span> What's the AI chat component and how does it work?</summary><div class="answer"><p><code>ChatAi.jsx</code> provides a problem-scoped chat assistant. It sends the full problem context (title, description, test cases, start code) plus the conversation history to <code>POST /ai/chat</code>. The backend forwards to OpenRouter (LLM API). The system prompt instructs the AI to use Socratic teaching — nudge first, then hint, only give solutions when explicitly asked. Responses are rendered as markdown in the chat UI.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q175</span> What components exist for the problem page?</summary><div class="answer"><p><code>ProblemPage.jsx</code> is the main container with tabbed sections. Sub-components: <code>Discussion.jsx</code> (threaded comments with reply/upvote), <code>Editorial.jsx</code> (solution explanation with complexity analysis + video), <code>SubmissionHistory.jsx</code> (user's past submissions for this problem), and <code>ChatAi.jsx</code> (AI assistant). The Monaco Editor is inline in ProblemPage.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q176</span> What admin components exist?</summary><div class="answer"><p><code>AdminPanel.jsx</code> (create problem), <code>AdminUpdate.jsx</code> (list problems for editing), <code>AdminEditProblem.jsx</code> (edit form), <code>AdminDelete.jsx</code> (delete problems), <code>AdminVideo.jsx</code> (manage video editorials), <code>AdminUpload.jsx</code> (Cloudinary upload), <code>AdminUsers.jsx</code> (manage users), <code>AdminCreateUser.jsx</code> (create admin). All are protected by the <code>isAuthenticated && user?.role === 'admin'</code> route guard.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q177</span> How does <code>vercel.json</code> handle client-side routing?</summary><div class="answer"><p>The rewrite rule <code>{ source: "/(.*)", destination: "/" }</code> sends ALL requests to <code>index.html</code>. Without this, navigating directly to <code>/problem/abc123</code> would return a 404 from Vercel's static hosting (no file at that path). The rewrite ensures React Router handles all paths client-side. This is standard SPA deployment configuration.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q178</span> What is <code>import.meta.env.VITE_API_URL</code>?</summary><div class="answer"><p>Vite exposes environment variables prefixed with <code>VITE_</code> via <code>import.meta.env</code>. <code>VITE_API_URL</code> is set in <code>.env</code> (e.g., <code>http://localhost:3000</code> in dev, <code>https://bytecode-api.onrender.com</code> in production). It's the backend base URL used by both Axios and Socket.io. Vite replaces these at build time (static replacement), not runtime.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q179</span> How does the loading state work in the auth flow?</summary><div class="answer"><p>In <code>App.jsx</code>: <code>if (loading) return &lt;spinner/&gt;</code>. On mount, <code>checkAuth()</code> is dispatched. While the API call is in flight, <code>loading: true</code> shows a spinner. This prevents a flash of the login page before the auth check completes. Once <code>checkAuth</code> resolves (fulfilled or rejected), <code>loading: false</code> renders the appropriate route.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q180</span> What's the difference between <code>Navigate</code> and <code>useNavigate</code>?</summary><div class="answer"><p><code>&lt;Navigate to="/login"/&gt;</code> is a component — rendering it causes a redirect (used in route elements for auth guards). <code>useNavigate()</code> is a hook that returns a <code>navigate</code> function for imperative navigation (used in event handlers, after form submission). Both use the same React Router machinery under the hood.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q181</span> How does Framer Motion enhance the UI?</summary><div class="answer"><p>Framer Motion provides declarative animations. <code>AnimatedBackground.jsx</code> uses it for subtle background effects. Components can animate on mount (<code>initial</code>, <code>animate</code>), on exit (<code>exit</code>), and on hover/tap (<code>whileHover</code>, <code>whileTap</code>). It's used for page transitions, card hover effects, and loading animations — adding polish without jQuery-style imperative animation code.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q182</span> What is DaisyUI and why use it with Tailwind?</summary><div class="answer"><p>DaisyUI is a component library built on Tailwind CSS that provides pre-designed components (buttons, modals, cards, dropdowns, alerts) as CSS classes. Instead of writing <code>bg-blue-500 text-white px-4 py-2 rounded-lg</code>, you write <code>btn btn-primary</code>. It speeds up development while maintaining Tailwind's customizability. Tailwind v4 handles the utility classes; DaisyUI adds the component layer.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q183</span> How does the discussion component handle threading?</summary><div class="answer"><p>The API returns all comments flat (sorted by createdAt). The frontend groups them: top-level comments have <code>parentId: null</code>. For each top-level comment, it finds all comments where <code>parentId === comment._id</code> and renders them as indented replies. This client-side nesting avoids recursive database queries and simplifies the API.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q184</span> How does Cloudinary video upload work from the frontend?</summary><div class="answer"><p><strong>Step 1:</strong> Admin clicks upload → frontend GETs <code>/video/create/:problemId</code> to get a <strong>signed upload</strong> (signature, timestamp, public_id, API key). <strong>Step 2:</strong> Frontend POSTs the video file directly to Cloudinary's upload URL (bypassing the backend — saves bandwidth). <strong>Step 3:</strong> On success, frontend POSTs the metadata (secureUrl, duration, cloudinaryPublicId) to <code>/video/save</code> to persist it. This is the <strong>signed upload</strong> pattern — the backend authorizes the upload without handling the file.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num pink">Q185</span> Why <code>withCredentials: true</code> on both Axios and Socket.io?</summary><div class="answer"><p>Both need to send the httpOnly JWT cookie to the backend. Without <code>withCredentials</code>, the browser won't include cookies on cross-origin requests (Vercel → Render). Axios uses it for HTTP requests; Socket.io uses it for the initial HTTP handshake (which carries the cookie for potential auth). Both must be explicitly opted in for cross-origin credentials.</p></div></details></div>
+
+</section>
+
+
+<!-- ████████████████████████████████████████████████████████████████████
+     SECTION 12: DEVOPS (Q186-Q197)
+     ████████████████████████████████████████████████████████████████████ -->
+<section class="section" id="sec-devops">
+  <div class="section-header">
+    <span class="section-tag tag-devops">DevOps</span>
+    <h2>🚀 Deployment & DevOps (Q186–Q197)</h2>
+  </div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q186</span> What is the deployment architecture?</summary><div class="answer"><p>Frontend: <strong>Vercel</strong> (static SPA, CDN-backed). Backend: <strong>Render</strong> (web service with in-process BullMQ worker). Database: <strong>MongoDB Atlas</strong> (managed cluster). Cache/Queue: <strong>Redis</strong> (hosted, shared by cache + BullMQ + leaderboard + rate limit + blocklist + idempotency). External APIs: Judge0 (RapidAPI), Cloudinary (video), OpenRouter (AI).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q187</span> How does the GitHub Actions cron workflow work?</summary><div class="answer"><p><code>keep-alive.yml</code> runs on two cron schedules: every 10 minutes from 03:00-16:00 UTC (08:30-21:30 IST) and at 16:00 UTC (21:30 IST). It curls the <code>API_HEALTH_URL</code> with retries (5 attempts, 60s timeout each, 15s between retries). This keeps the Render free-tier service alive during Indian business hours and wakes it after overnight sleep. The URL is stored as a repository variable (not a secret — it's public).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q188</span> Why IST time windows for keep-alive?</summary><div class="answer"><p>The platform targets Indian users. Active hours are 08:30-21:30 IST. Outside this window, the service sleeps to conserve Render's free-tier instance hours (750 hours/month). The in-app self-ping and GitHub cron both skip pings outside this window. This pragmatic optimization makes the free tier work for a side project.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q189</span> What's the difference between the self-ping and the GitHub cron ping?</summary><div class="answer"><p>The <strong>self-ping</strong> (in <code>index.js</code>) keeps the service from sleeping when it's already running — it pings <code>/health</code> every 14 minutes. But if the service is already asleep, the self-ping code isn't running! The <strong>GitHub cron</strong> runs on GitHub's infrastructure (external to Render), so it can <strong>wake</strong> a sleeping service by hitting it from outside. The first request takes ~50 seconds (cold start), hence the retry logic.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q190</span> What is Render Blueprint (Infrastructure as Code)?</summary><div class="answer"><p><code>render.yaml</code> defines services declaratively: type (web), runtime (node), build/start commands, health check path, environment variable groups with <code>sync: false</code> for secrets. When you connect the repo to Render via "New → Blueprint", Render reads this file and creates everything automatically. Changes to the YAML trigger service updates on the next deploy. It's similar to Terraform or AWS CloudFormation but specific to Render.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q191</span> Why is the Render region set to Singapore?</summary><div class="answer"><p>Singapore is the closest Render region to India — lower latency for Indian users. MongoDB Atlas cluster should also be in the same region (Mumbai or Singapore) to minimize database query latency. Co-locating compute and data in the same region is a fundamental latency optimization.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q192</span> How does <code>autoDeploy: true</code> work?</summary><div class="answer"><p>Every push to the main branch triggers an automatic build and deploy on Render. Render watches the GitHub repo via a webhook. On push: install dependencies (<code>npm install</code>), start the service (<code>npm start</code>), wait for the health check to pass, then swap traffic to the new instance. If the health check fails, the deploy is rolled back.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q193</span> What are the environment variables and how are secrets managed?</summary><div class="answer"><p>Secrets (<code>DB_CONNECT_STRING</code>, <code>REDIS_URL</code>, <code>JWT_KEY</code>, <code>JUDGE0_KEY</code>, API keys) are stored in Render's dashboard with <code>sync: false</code> — never committed to the repo. Non-secrets (<code>OPENROUTER_MODEL</code>, <code>RUN_WORKER_IN_PROCESS</code>) are set in the YAML directly. <code>.env</code> files are in <code>.gitignore</code> for local development only.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q194</span> How does Vercel host the frontend?</summary><div class="answer"><p>Vercel detects the Vite project, runs <code>npm run build</code> (which produces a <code>dist/</code> folder of static HTML/JS/CSS), and serves it from a global CDN. The <code>vercel.json</code> rewrite ensures all paths serve <code>index.html</code> for client-side routing. <code>VITE_API_URL</code> is set in Vercel's environment variables dashboard to point to the Render backend.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q195</span> How would you add CI/CD with testing?</summary><div class="answer"><p>Add a GitHub Actions workflow: on PR/push → install deps → run linter (<code>npm run lint</code>) → run unit tests (Jest for backend, Vitest for frontend) → run integration tests (Supertest for API endpoints with a test MongoDB). Only if all pass → merge allowed. Vercel and Render already do CD (auto-deploy on push). The missing piece is CI (automated testing).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q196</span> What does <code>.unref()</code> do on the keep-alive timer?</summary><div class="answer"><p><code>setInterval(...).unref()</code> tells Node.js: don't keep the event loop alive just for this timer. If all other work is done and the server shuts down, the unreffed timer won't prevent process exit. Without it, a graceful shutdown would hang waiting for the next interval tick. It's a Node.js process lifecycle best practice.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num orange">Q197</span> How do you monitor the production backend?</summary><div class="answer"><p>Currently: Render's built-in logs and metrics (CPU, memory, request count). The <code>/health</code> endpoint provides basic liveness. To improve: add structured JSON logging (winston/pino), expose <code>/metrics</code> for Prometheus, add Sentry for error tracking, add Bull Board for queue monitoring, and set up PagerDuty/Slack alerts on health check failures or error rate spikes.</p></div></details></div>
+
+</section>
+
+
+<!-- ████████████████████████████████████████████████████████████████████
+     SECTION 13: SECURITY (Q198-Q210)
+     ████████████████████████████████████████████████████████████████████ -->
+<section class="section" id="sec-security">
+  <div class="section-header">
+    <span class="section-tag tag-security">Security</span>
+    <h2>🛡️ Security & Best Practices (Q198–Q210)</h2>
+  </div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q198</span> How is XSS (Cross-Site Scripting) prevented?</summary><div class="answer"><p><strong>httpOnly cookies</strong> prevent JavaScript from accessing the JWT. React <strong>auto-escapes</strong> JSX output (no dangerouslySetInnerHTML except where explicitly needed). Discussion text is trimmed and length-limited (2000 chars). The AI chat uses markdown rendering, which should sanitize HTML. To further harden: add Content-Security-Policy headers and sanitize user-generated HTML with DOMPurify.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q199</span> How is CSRF (Cross-Site Request Forgery) mitigated?</summary><div class="answer"><p><code>sameSite: "none"</code> with <code>secure: true</code> allows cross-origin cookies but only over HTTPS. The real CSRF protection comes from: (1) CORS restricting which origins can make requests (only whitelisted domains). (2) Custom <code>Content-Type: application/json</code> header — browsers don't send JSON POST from forms (form submissions use <code>application/x-www-form-urlencoded</code>). (3) For additional security, add CSRF tokens on state-changing routes.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q200</span> How are passwords stored?</summary><div class="answer"><p>Passwords are hashed with <strong>bcrypt</strong> (salt rounds: 10) before storing in MongoDB. The original password is never stored or logged. On login, <code>bcrypt.compare()</code> hashes the attempt and compares — no plain-text comparison. Even if the database is compromised, passwords can't be easily reversed (bcrypt is intentionally slow to hash).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q201</span> What's the NoSQL injection risk and how is it handled?</summary><div class="answer"><p>MongoDB is vulnerable to operator injection: <code>{ "password": { "$gt": "" } }</code> would match any non-empty password. Mongoose schemas with typed fields (String, Number) reject object values — they're cast and validated. The <code>emailId</code> field has <code>trim</code> and <code>lowercase</code> transforms. However, for extra safety, you could add <code>express-mongo-sanitize</code> middleware to strip <code>$</code> operators from request bodies.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q202</span> How does Cloudinary signed upload prevent unauthorized uploads?</summary><div class="answer"><p>The backend generates a signature using the Cloudinary API secret: <code>cloudinary.utils.api_sign_request(params, API_SECRET)</code>. The frontend uploads to Cloudinary with this signature. Cloudinary verifies the signature matches the parameters. Without the server-generated signature, you can't upload — the API secret is never exposed to the client. This is the <strong>signed upload</strong> security model.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q203</span> What security headers should be added?</summary><div class="answer"><p>Use <code>helmet</code> middleware for: <code>X-Content-Type-Options: nosniff</code> (prevents MIME sniffing), <code>X-Frame-Options: DENY</code> (prevents clickjacking), <code>Strict-Transport-Security</code> (enforces HTTPS), <code>Content-Security-Policy</code> (restricts resource loading), <code>X-XSS-Protection</code>. These are not currently implemented — they'd be a good production hardening step.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q204</span> Can a user see another user's code or hidden test cases?</summary><div class="answer"><p>Hidden test cases are never included in the <code>getProblemById</code> response — it uses <code>.select()</code> to exclude <code>hiddenTestCases</code>. Submissions belong to a <code>userId</code>; the status endpoint checks <code>userId: req.result._id</code>. However, the <code>/submission/all</code> endpoint returns all submissions (including code) without auth — this is a deliberate design choice for the public status page, but could be restricted.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q205</span> What happens with code injection via submitted code?</summary><div class="answer"><p>User code runs in <strong>Judge0's sandboxed environment</strong> — not on the backend server. Judge0 uses Linux containers with resource limits (CPU time, memory, process count). Even malicious code (fork bombs, file system access) is contained. The backend never executes user code — it only forwards it to Judge0 via API. The separation of execution from the application server is a critical security boundary.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q206</span> How is the JWT secret managed?</summary><div class="answer"><p><code>JWT_KEY</code> is an environment variable — never hardcoded or committed. In <code>render.yaml</code>, it's marked <code>sync: false</code> (entered in dashboard). Locally, it's in <code>.env</code> which is in <code>.gitignore</code>. If the secret is compromised, all existing JWTs can be forged. You'd rotate the secret immediately, which invalidates all sessions (users must re-login).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q207</span> What input validation exists beyond Mongoose schemas?</summary><div class="answer"><p>Backend: <code>validator.js</code> checks mandatory fields and email format. Mongoose enum validators for difficulty, language, role, status. <code>maxLength: 2000</code> on discussion text. Frontend: Zod schemas for form validation (email format, password length). However, there's no explicit rate limiting on AI chat or video upload — these should be added.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q208</span> What's the attack surface for the rate limiter?</summary><div class="answer"><p>IP-based limits can be bypassed with rotating proxies/VPNs. User-based limits require auth (harder to spam but you can create accounts). If Redis is down, the rate limiter fails open — all requests pass. Mitigation: add WAF (Cloudflare), combine IP + user limits, add CAPTCHA on auth routes, and consider fingerprinting.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q209</span> How does the discussion delete check authorization?</summary><div class="answer"><p><code>deleteDiscussion</code> checks: <code>isAuthor = comment.userId.toString() === req.result._id.toString()</code> AND <code>isAdmin = req.result.role === "admin"</code>. If neither, returns 403. It also deletes all replies: <code>Discussion.deleteMany({ $or: [{ _id: commentId }, { parentId: commentId }] })</code>. This cascading delete prevents orphaned replies.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num red">Q210</span> What are the known security improvements for production?</summary><div class="answer"><ol><li>Add Socket.io JWT authentication middleware</li><li>Add <code>helmet</code> security headers</li><li>Add <code>express-mongo-sanitize</code></li><li>Enable strong password validation</li><li>Add CAPTCHA on registration</li><li>Rate-limit AI chat endpoint</li><li>Add request body size limits</li><li>Implement refresh tokens for longer sessions</li><li>Add audit logging for admin actions</li><li>Add HTTPS redirect middleware</li></ol></div></details></div>
+
+</section>
+
+
+<!-- ████████████████████████████████████████████████████████████████████
+     SECTION 14: SYSTEM DESIGN (Q211-Q230)
+     ████████████████████████████████████████████████████████████████████ -->
+<section class="section" id="sec-system">
+  <div class="section-header">
+    <span class="section-tag tag-system">System Design</span>
+    <h2>🌐 System Design & Scalability (Q211–Q230)</h2>
+  </div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q211</span> How would you scale ByteCode to 100K concurrent users?</summary><div class="answer"><p><strong>Frontend:</strong> Already on Vercel CDN — scales automatically. <strong>API tier:</strong> Horizontal scaling behind a load balancer (multiple Express instances). Add Redis adapter for Socket.io. <strong>Workers:</strong> Scale separately from the API (that's why the in-process vs separate toggle exists). Add more workers with higher concurrency. <strong>Database:</strong> MongoDB Atlas auto-scales; add read replicas for read-heavy queries. <strong>Redis:</strong> Redis Cluster for sharding across multiple nodes. <strong>Judge0:</strong> Self-host instead of RapidAPI — run judge containers on Kubernetes for unlimited throughput.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q212</span> What's the bottleneck in the current architecture?</summary><div class="answer"><p><strong>Judge0 RapidAPI</strong> — external, rate-limited, adds latency. It's the single biggest bottleneck. Solutions: self-host Judge0, use judge containers directly, or implement a local evaluation engine. Secondary bottleneck: single Render web service (CPU/memory shared with worker). Solution: separate worker process, horizontal scaling.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q213</span> Why is horizontal scaling possible with this architecture?</summary><div class="answer"><p>The API is <strong>stateless</strong>: auth state is in JWT (cookie), session state is in Redis, data is in MongoDB. Any API instance can serve any request. Workers coordinate through Redis (BullMQ). Socket.io rooms can be shared via Redis adapter. No instance holds critical in-memory state. This is why "shared-nothing" architecture enables horizontal scaling.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q214</span> What is back-pressure and how does the system implement it?</summary><div class="answer"><p>Back-pressure prevents a fast producer from overwhelming a slow consumer. Here: users submit fast (producer), but Judge0 evaluation is slow (consumer). <strong>Worker concurrency: 5</strong> limits simultaneous evaluations. If the queue grows, submissions wait — they don't overload Judge0. The 202 response tells the user their submission is queued, not lost. <strong>Rate limiting</strong> also provides back-pressure at the API level (10 submits/min/user).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q215</span> Design a notification system for ByteCode (submission results, replies, etc.).</summary><div class="answer"><p>Create a <code>Notification</code> model: <code>{userId, type, message, read, metadata, createdAt}</code>. <strong>Producers:</strong> submission worker (verdict), discussion controller (reply/upvote). <strong>Delivery:</strong> real-time via Socket.io (push to user room), persisted in MongoDB for history. <strong>Consumer:</strong> frontend notification bell with unread count badge. <strong>API:</strong> GET /notifications (list), PATCH /notifications/:id/read, DELETE /notifications/:id.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q216</span> How would you implement contest mode?</summary><div class="answer"><p>Create a <code>Contest</code> model: <code>{title, startTime, endTime, problems[], participants[]}</code>. Time-boxed access: problems visible only between start/end. Separate leaderboard ZSET per contest: <code>leaderboard:contest:{id}</code> scored by (problems_solved * 1000 - penalty_time). Lock submissions after end time. Real-time ranking updates via Socket.io. Add penalty for wrong submissions (like ICPC).</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q217</span> Compare REST vs GraphQL for this project. Why REST?</summary><div class="answer"><p>REST fits because: (1) API calls are well-defined (get problem, submit code, get leaderboard) — no need for flexible querying. (2) REST is simpler to implement and debug. (3) Cache-aside works naturally with REST (cache by URL). (4) GraphQL shines when clients need different views of the same data (mobile vs web) — not a concern here. (5) The team is more familiar with REST.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q218</span> What's the CAP theorem and which tradeoffs does this system make?</summary><div class="answer"><p>CAP: you can have at most 2 of Consistency, Availability, Partition-tolerance. The system chooses <strong>AP</strong> (Availability + Partition tolerance): when Redis partitions, the system stays available (fail-open) at the cost of temporary inconsistency (e.g., rate limits not enforced, stale cache). MongoDB Atlas provides strong consistency within a region. This is the right tradeoff for a user-facing web app — downtime is worse than slightly stale data.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q219</span> How would you implement a custom judge instead of Judge0?</summary><div class="answer"><p>Run Docker containers with language runtimes (GCC, JDK, Node). For each submission: (1) Start a sandboxed container with resource limits (cgroups: CPU time, memory, no network). (2) Mount the source code as a file. (3) Compile if needed. (4) Run with stdin from each test case. (5) Compare stdout to expected output. (6) Kill if time/memory exceeded. Use Kubernetes Jobs or AWS Fargate for scaling. The <code>judge0Adapter.js</code> would swap its HTTP calls for container orchestration calls.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q220</span> What's the difference between vertical and horizontal scaling?</summary><div class="answer"><p><strong>Vertical:</strong> Bigger machine (more CPU/RAM). Simple but has limits. <strong>Horizontal:</strong> More machines behind a load balancer. Requires stateless design. This architecture supports horizontal scaling because: JWT auth is stateless, Redis holds shared state, MongoDB is accessed by connection string. You can run 10 API instances and 5 worker instances — they all share the same Redis and MongoDB.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q221</span> How would you add full-text search for problems?</summary><div class="answer"><p>Options: (1) <strong>MongoDB Atlas Search</strong> (built-in Lucene-based full-text search, simplest). (2) <strong>Elasticsearch</strong> (dedicated search engine, most powerful). (3) <strong>Redis Search</strong> (RedisSearch module). For this project, MongoDB Atlas Search is the best fit — no additional infrastructure, supports fuzzy matching, autocomplete, and relevance scoring on title/description/tags fields.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q222</span> How does the system handle a thundering herd on cache invalidation?</summary><div class="answer"><p>When <code>problems:all</code> cache expires and 100 requests arrive, all miss the cache and query MongoDB — this is the "cache stampede." Mitigation strategies: (1) <strong>Lock-based:</strong> Only the first request queries DB; others wait for the cache to be populated. (2) <strong>Probabilistic early expiry:</strong> Refresh the cache before it expires. (3) <strong>Background refresh:</strong> A cron job keeps the cache warm. Currently, the 5-minute TTL and moderate traffic make this unlikely, but it's a valid scaling concern.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q223</span> What is event-driven architecture and how does this project use it?</summary><div class="answer"><p>Events decouple producers from consumers. BullMQ is event-driven: the controller (producer) emits a "submission" event to the queue; the worker (consumer) processes it independently. QueueEvents is a pure event listener. Socket.io is event-driven: server emits events, client subscribes. The system could be further evolved with an event bus (e.g., EventEmitter, Redis Pub/Sub) for cross-cutting concerns like analytics, logging, or notifications.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q224</span> How would you add rate limiting to protect against DDoS?</summary><div class="answer"><p>Layer defense: (1) <strong>CDN/WAF</strong> (Cloudflare) — blocks at the network edge before traffic hits the server. (2) <strong>Reverse proxy</strong> (nginx) — connection-level rate limiting. (3) <strong>Application</strong> — the existing Redis ZSET rate limiter for per-user/IP limits. (4) <strong>Queue</strong> — BullMQ concurrency limits Judge0 calls. A true DDoS should be handled at layers 1-2, not the application layer.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q225</span> What are the tradeoffs of the AI chat implementation?</summary><div class="answer"><p><strong>Pros:</strong> Problem-scoped context (can't go off-topic), Socratic teaching approach, streaming-ready architecture (OpenAI SDK). <strong>Cons:</strong> No rate limiting (users could spam expensive LLM calls), no conversation persistence (refreshing loses history), no streaming in current implementation (waits for full response). Improvements: add per-user rate limiting, persist chat history in MongoDB, implement SSE streaming for real-time token output.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q226</span> Explain database indexing strategy for this project.</summary><div class="answer"><p>Explicit indexes: <code>Submission: {userId:1, problemId:1}</code> (compound index for user's submissions per problem). Implicit indexes from Mongoose <code>unique: true</code>: <code>User.emailId</code>, <code>SolutionVideo.cloudinaryPublicId</code>. <code>Discussion.problemId</code> has <code>index: true</code>. MongoDB auto-creates an <code>_id</code> index on every collection. Missing: index on <code>Submission.status</code> for the profile aggregation's <code>$match: {status: 'accepted'}</code> — adding it would speed up profile stats.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q227</span> What observability would you add for production?</summary><div class="answer"><p><strong>Logging:</strong> Structured JSON logs (pino/winston) with request IDs for tracing. <strong>Metrics:</strong> Prometheus + Grafana — API latency (p50/p95/p99), queue depth, Judge0 circuit breaker state, cache hit rate. <strong>Tracing:</strong> OpenTelemetry distributed traces across API → Queue → Worker → Judge0. <strong>Error tracking:</strong> Sentry for crash reports with stack traces and context. <strong>Alerting:</strong> PagerDuty/Slack on error rate spikes, queue depth > threshold, health check failures.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q228</span> How would you handle database migrations with Mongoose?</summary><div class="answer"><p>Mongoose is schema-flexible (no strict migrations like SQL), but for production you'd use: (1) <strong>migrate-mongo</strong> — a migration tool that runs scripts in order. (2) For adding fields: use <code>default</code> values in the schema (existing documents get defaults on read). (3) For renaming/restructuring: write a migration script that bulk-updates documents. (4) For removing fields: <code>$unset</code> in a migration. Always test migrations against a staging database first.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q229</span> What testing strategy would you implement?</summary><div class="answer"><p><strong>Unit tests:</strong> Jest for services (mock DB/Redis), test evaluation logic, cache helpers, rate limiter logic. <strong>Integration tests:</strong> Supertest for API endpoints with a test MongoDB (mongodb-memory-server). Test auth flows, CRUD, submission pipeline. <strong>E2E tests:</strong> Cypress/Playwright for critical user flows (signup → solve → submit → see verdict). <strong>Load tests:</strong> k6 or Artillery to verify rate limits and back-pressure under concurrent submissions.</p></div></details></div>
+
+  <div class="qa"><details><summary><span class="q-num cyan">Q230</span> What would you change if you rebuilt this project from scratch?</summary><div class="answer"><p>(1) <strong>TypeScript</strong> end-to-end for type safety. (2) <strong>Self-hosted Judge0</strong> instead of RapidAPI dependency. (3) <strong>Refresh tokens</strong> for longer sessions. (4) <strong>Streaming AI responses</strong> via SSE. (5) <strong>WebSocket auth</strong> from day one. (6) <strong>PostgreSQL</strong> for referential integrity (user↔submission foreign keys). (7) <strong>Cursor-based pagination</strong> instead of skip/limit. (8) <strong>Event sourcing</strong> for submission state changes. (9) <strong>Container orchestration</strong> (Docker + K8s) instead of Render. (10) <strong>Tests from the start</strong> — TDD.</p></div></details></div>
+
+</section>
+
+
+<!-- ████████████████████████████████████████████████████████████████████
+     QUESTION COUNT SUMMARY
+     ████████████████████████████████████████████████████████████████████ -->
+<section class="section" style="border-top:2px solid var(--accent-blue);">
+  <div class="section-header" style="text-align:center;">
+    <h2>📊 Question Coverage Summary</h2>
+    <p>Every aspect of the ByteCode project covered across 230 interview questions.</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Section</th><th>Questions</th><th>Count</th></tr></thead>
+      <tbody>
+        <tr><td>Project Overview & Architecture</td><td>Q1–Q18</td><td>18</td></tr>
+        <tr><td>Authentication & Authorization</td><td>Q19–Q40</td><td>22</td></tr>
+        <tr><td>MongoDB & Mongoose</td><td>Q41–Q60</td><td>20</td></tr>
+        <tr><td>Redis — Cache, Rate Limit, Blocklist</td><td>Q61–Q82</td><td>22</td></tr>
+        <tr><td>BullMQ — Job Queue & Workers</td><td>Q83–Q105</td><td>23</td></tr>
+        <tr><td>Circuit Breaker & Judge0</td><td>Q106–Q122</td><td>17</td></tr>
+        <tr><td>WebSocket & Socket.io</td><td>Q123–Q138</td><td>16</td></tr>
+        <tr><td>Leaderboard — Redis ZSET</td><td>Q139–Q152</td><td>14</td></tr>
+        <tr><td>Idempotency & Saga</td><td>Q153–Q162</td><td>10</td></tr>
+        <tr><td>Frontend — React, Redux</td><td>Q163–Q185</td><td>23</td></tr>
+        <tr><td>Deployment & DevOps</td><td>Q186–Q197</td><td>12</td></tr>
+        <tr><td>Security & Best Practices</td><td>Q198–Q210</td><td>13</td></tr>
+        <tr><td>System Design & Scalability</td><td>Q211–Q230</td><td>20</td></tr>
+        <tr style="font-weight:700;"><td>TOTAL</td><td>Q1–Q230</td><td style="color:var(--accent-green);font-size:1.2rem;">230</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+</div> <!-- /container -->
+
+<footer>
+  <p><strong>ByteCode Interview Bible</strong> — 230 Questions covering complete architecture, every design pattern, and all system design concepts.</p>
+  <p style="margin-top:0.5rem;">Built from actual codebase analysis. No question can be asked beyond this document.</p>
+</footer>
+
+</body>
+</html>
