@@ -7,7 +7,7 @@ const problemRouter = require("./routes/problem.routes");
 const submitRouter = require("./routes/submission.routes");
 const aiRouter = require("./routes/ai.routes");
 const videoRouter = require("./routes/video.routes");
-const discussionRouter = require("./routes/discussion.routes");
+
 const leaderboardRouter = require("./routes/leaderboard.routes");
 const allowedOrigins = require("./config/origins.config");
 
@@ -36,7 +36,7 @@ app.use("/problem", problemRouter);
 app.use("/submission", submitRouter);
 app.use("/ai", aiRouter);
 app.use("/video", videoRouter);
-app.use("/discussion", discussionRouter);
+
 app.use("/leaderboard", leaderboardRouter);
 
 module.exports = app;

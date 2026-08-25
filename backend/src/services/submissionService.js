@@ -35,7 +35,7 @@ async function processSubmission(submissionId) {
     submission.errorMessage = verdict.errorMessage;
     await submission.save();
 
-    // Step 3: on accept, mark solved + update leaderboards (no double-counting)
+    // Step 3: on accept, mark solved + update global leaderboard (no double-counting)
     if (verdict.status === "accepted") {
       const user = await User.findById(submission.userId).select("problemSolved");
       const alreadySolved = user?.problemSolved?.some(
@@ -48,8 +48,6 @@ async function processSubmission(submissionId) {
         });
         await leaderboard.addSolve(submission.userId, problem.difficulty);
       }
-      // best-runtime ladder updates on every accepted run
-      await leaderboard.recordBestRuntime(submission.problemId, submission.userId, verdict.runtime);
     }
 
     return buildResult(submission, verdict);

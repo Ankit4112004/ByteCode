@@ -39,23 +39,4 @@ const getMe = async (req, res) => {
   }
 };
 
-// GET /leaderboard/problem/:problemId — fastest solutions for one problem
-const getProblemBoard = async (req, res) => {
-  try {
-    const top = await leaderboard.getProblemTop(req.params.problemId, 50);
-    const ids = top.map((e) => e.userId);
-    const users = await User.find({ _id: { $in: ids } }).select("firstName");
-    const nameById = new Map(users.map((u) => [u._id.toString(), u.firstName]));
-    res.status(200).json(
-      top.map((e, i) => ({
-        rank: i + 1,
-        firstName: nameById.get(e.userId) || "User",
-        runtimeMs: e.score, // best runtime in ms
-      }))
-    );
-  } catch (err) {
-    res.status(500).json({ error: "Failed to load problem leaderboard" });
-  }
-};
-
-module.exports = { getGlobal, getMe, getProblemBoard };
+module.exports = { getGlobal, getMe };

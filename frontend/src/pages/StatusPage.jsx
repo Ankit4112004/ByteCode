@@ -31,10 +31,6 @@ function StatusPage() {
     };
 
     fetchSubmissions();
-    
-    // Auto-refresh every 10 seconds to act like a real-time status page
-    const interval = setInterval(fetchSubmissions, 10000);
-    return () => clearInterval(interval);
   }, [page]);
 
   const formatDate = (dateString) => {

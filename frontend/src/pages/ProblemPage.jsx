@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import {
-  Video, FileText, BookOpen, Lightbulb, History, Bot, MessagesSquare,
+  Video, FileText, BookOpen, Lightbulb, History, Bot,
   ChevronDown, Copy, Check, RotateCcw, Play, Send, Loader2,
   Clock, Cpu, CheckCircle2, XCircle, FlaskConical, BadgeCheck,
   Maximize2, Minimize2, LayoutGrid, Crown,
@@ -14,7 +14,7 @@ import socket from "../utils/socket";
 import SubmissionHistory from "../components/problem/SubmissionHistory"
 import ChatAi from '../components/chat/ChatAi';
 import Editorial from '../components/problem/Editorial';
-import Discussion from '../components/problem/Discussion';
+
 
 const langMap = {
         cpp: 'C++',
@@ -34,7 +34,7 @@ const LEFT_TABS = [
   { id: 'solutions', label: 'Solutions', icon: Lightbulb },
   { id: 'submissions', label: 'Submissions', icon: History },
   { id: 'chatAI', label: 'ChatAI', icon: Bot },
-  { id: 'discuss', label: 'Discuss', icon: MessagesSquare },
+
 ];
 
 // default panel layouts
@@ -291,10 +291,6 @@ const ProblemPage = () => {
       await axiosClient.post(`/submission/submit/${problemId}`, {
         code: code,
         language: selectedLanguage
-      }, {
-        // Idempotency: a unique key per submit click so a double-click / retry
-        // doesn't create duplicate submissions or fire Judge0 twice.
-        headers: { "Idempotency-Key": crypto.randomUUID() }
       });
       // result handled by the socket listener
     } catch (error) {
@@ -648,9 +644,7 @@ const ProblemPage = () => {
                     </div>
                   )}
 
-                  {activeLeftTab === 'discuss' && (
-                    <Discussion problemId={problemId} />
-                  )}
+
                 </>
               )}
             </div>

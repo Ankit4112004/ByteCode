@@ -1,16 +1,14 @@
 const redisClient = require("../config/redis.config");
 
 /**
- * Leaderboards backed by Redis Sorted Sets (ZSET) — O(log N) ranked writes/reads.
+ * Global leaderboard backed by Redis Sorted Sets (ZSET) — O(log N) ranked writes/reads.
  *
- *  - global:        leaderboard:global         member=userId  score=weighted solves
- *  - per-problem:   leaderboard:problem:<pid>  member=userId  score=best runtime (ms)
+ *  - global:  leaderboard:global  member=userId  score=weighted solves
  *
  * All calls are fail-safe (return a fallback if Redis is down).
  */
 
 const GLOBAL = "leaderboard:global";
-const problemKey = (pid) => `leaderboard:problem:${pid}`;
 const WEIGHT = { easy: 1, medium: 3, hard: 5 };
 
 const safe = async (fn, fallback) => {
@@ -36,25 +34,12 @@ const parseFlat = (flat) => {
 const addSolve = (userId, difficulty) =>
   safe(() => redisClient.zIncrBy(GLOBAL, WEIGHT[difficulty] || 1, userId.toString()));
 
-// Record best (fastest) runtime for a problem. ZADD LT keeps the minimum score.
-const recordBestRuntime = (problemId, userId, runtimeSeconds) =>
-  safe(() => {
-    const ms = Math.round((runtimeSeconds || 0) * 1000);
-    return redisClient.sendCommand(["ZADD", problemKey(problemId), "LT", String(ms), userId.toString()]);
-  });
-
 const getGlobalTop = (n = 50) =>
   safe(async () => {
     const flat = await redisClient.sendCommand(["ZREVRANGE", GLOBAL, "0", String(n - 1), "WITHSCORES"]);
     return parseFlat(flat || []);
   }, []);
 
-const getProblemTop = (problemId, n = 50) =>
-  safe(async () => {
-    // ascending = fastest first
-    const flat = await redisClient.sendCommand(["ZRANGE", problemKey(problemId), "0", String(n - 1), "WITHSCORES"]);
-    return parseFlat(flat || []);
-  }, []);
 
 // 0-based rank (null if not ranked), score, and total participants.
 const getGlobalStanding = (userId) =>
@@ -72,8 +57,6 @@ const getGlobalStanding = (userId) =>
 
 module.exports = {
   addSolve,
-  recordBestRuntime,
   getGlobalTop,
-  getProblemTop,
   getGlobalStanding,
 };
