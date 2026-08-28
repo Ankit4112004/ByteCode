@@ -1,17 +1,6 @@
 const redisClient = require("../config/redis.config");
 
-/**
- * Sliding-window rate limiter (factory pattern).
- *
- * Uses a Redis sorted set per key: each request is a member scored by timestamp.
- * We drop entries older than the window, count what's left, and reject if over
- * the limit. This is a true sliding window (no burst-at-boundary like fixed window).
- *
- *   createRateLimiter({ windowMs, max, keyPrefix, by })
- *     by: 'user' (default, needs auth middleware first) or 'ip'
- *
- * Fail-open: if Redis errors, the request is allowed (availability > strictness).
- */
+
 const createRateLimiter = ({ windowMs = 60_000, max = 10, keyPrefix = "rl", by = "user" } = {}) =>
   async (req, res, next) => {
     try {

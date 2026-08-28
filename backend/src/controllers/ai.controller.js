@@ -13,7 +13,7 @@ const solveDoubt = async (req, res) => {
   try {
     const { messages, title, description, testCases, startCode } = req.body;
 
-    // ✅ Sanitize messages (OpenAI-compatible)
+    // Sanitize messages (OpenAI-compatible)
     const normalizedMessages = messages
       .filter(
         (m) => typeof m.content === "string" && m.content.trim().length > 0
@@ -27,7 +27,7 @@ const solveDoubt = async (req, res) => {
       return res.status(400).json({ message: "Empty message" });
     }
 
-    // ✅ Serialize context safely
+    // Serialize context safely
     const testCaseStr = typeof testCases === "string"
       ? testCases
       : JSON.stringify(testCases, null, 2);

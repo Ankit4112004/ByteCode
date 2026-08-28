@@ -1,18 +1,8 @@
 const CircuitBreaker = require("opossum");
 const { getLanguageById, submitBatch, submitToken } = require("../utils/problemUtility");
 
-/**
- * Adapter pattern: a single clean interface in front of Judge0 (RapidAPI).
- * Controllers/services depend on this, not on the raw HTTP details — so swapping
- * to a self-hosted judge later only changes this file.
- *
- * Circuit breaker (opossum) wraps the external call: after repeated failures the
- * breaker OPENS and fails fast for `resetTimeout` instead of hammering a dead API,
- * then HALF-OPENs to probe recovery.
- */
+  // Adapter pattern: a single clean interface in front of Judge0 (RapidAPI).
 
-// Raw call: submit a batch, then poll for results. Throws on any failure so the
-// circuit breaker can count it.
 async function executeRaw(submissions) {
   const submitResult = await submitBatch(submissions);
   if (!submitResult || !Array.isArray(submitResult)) {

@@ -46,7 +46,7 @@ const Profile = () => {
 
   const totalProblems = (totalCounts.easy || 0) + (totalCounts.medium || 0) + (totalCounts.hard || 0) || 1;
   const totalSolved = (solvedCounts.easy || 0) + (solvedCounts.medium || 0) + (solvedCounts.hard || 0);
-  const solvedPercentage = Math.round((totalSolved / totalProblems) * 100);
+  // const solvedPercentage = Math.round((totalSolved / totalProblems) * 100);
 
 
 

@@ -1,12 +1,6 @@
 const redisClient = require("../config/redis.config");
 
-/**
- * Global leaderboard backed by Redis Sorted Sets (ZSET) — O(log N) ranked writes/reads.
- *
- *  - global:  leaderboard:global  member=userId  score=weighted solves
- *
- * All calls are fail-safe (return a fallback if Redis is down).
- */
+
 
 const GLOBAL = "leaderboard:global";
 const WEIGHT = { easy: 1, medium: 3, hard: 5 };
@@ -21,7 +15,7 @@ const safe = async (fn, fallback) => {
   }
 };
 
-// [member, score, member, score, ...] -> [{ userId, score }]
+
 const parseFlat = (flat) => {
   const out = [];
   for (let i = 0; i < flat.length; i += 2) {
@@ -30,7 +24,7 @@ const parseFlat = (flat) => {
   return out;
 };
 
-// Add weighted points for an accepted solve (idempotent solves handled by caller).
+
 const addSolve = (userId, difficulty) =>
   safe(() => redisClient.zIncrBy(GLOBAL, WEIGHT[difficulty] || 1, userId.toString()));
 
@@ -41,7 +35,7 @@ const getGlobalTop = (n = 50) =>
   }, []);
 
 
-// 0-based rank (null if not ranked), score, and total participants.
+
 const getGlobalStanding = (userId) =>
   safe(async () => {
     const id = userId.toString();

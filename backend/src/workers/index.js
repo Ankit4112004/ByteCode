@@ -1,10 +1,4 @@
-/**
- * Standalone worker process. Run alongside the web server:
- *   node src/workers/index.js   (or: npm run worker)
- *
- * On the persistent host (Railway/Render) this is a second service from the same
- * repo, scaled independently of the API.
- */
+
 require("dotenv").config();
 
 const connectDB = require("../config/db.config");

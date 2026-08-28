@@ -3,16 +3,7 @@ const connection = require("../config/bull.config");
 const { SUBMISSION_QUEUE } = require("../queues/submissionQueue");
 const { processSubmission } = require("../services/submissionService");
 
-/**
- * Consumer side of the async pipeline.
- *
- * `concurrency: 5` is the back-pressure control: at most 5 submissions hit Judge0
- * at once, no matter how many pile into the queue — so a burst of users can't
- * blow the RapidAPI quota. The rest wait their turn.
- *
- * The processor's return value is broadcast to the web tier via BullMQ QueueEvents
- * (see socket.js) and pushed to the user over Socket.io.
- */
+
 const createSubmissionWorker = () => {
   const worker = new Worker(
     SUBMISSION_QUEUE,

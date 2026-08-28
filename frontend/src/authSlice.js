@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axiosClient from './utils/axiosClient'
 
-// Pull a human-readable, serializable message out of an axios error.
-// Backend sends either plain text ("Error: ...") or JSON ({ error/message }).
+
 const extractError = (error) => {
   const data = error.response?.data;
   if (typeof data === 'string' && data.trim()) return data;

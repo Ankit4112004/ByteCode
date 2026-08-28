@@ -4,13 +4,7 @@ const User = require("../models/user.model");
 const { evaluateTestcases } = require("./evaluation");
 const leaderboard = require("../lib/leaderboard");
 
-/**
- * Runs a pending submission to completion. Called by the BullMQ worker.
- *
- * Saga-style: each step has a compensating action. If evaluation or persistence
- * fails partway, we mark the submission as a system error instead of leaving it
- * stuck on 'pending', then rethrow so BullMQ can apply its retry policy.
- */
+
 async function processSubmission(submissionId) {
   const submission = await Submission.findById(submissionId);
   if (!submission) throw new Error(`Submission ${submissionId} not found`);

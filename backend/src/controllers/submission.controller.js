@@ -4,11 +4,7 @@ const { evaluateTestcases } = require("../services/evaluation");
 const { enqueueSubmission } = require("../queues/submissionQueue");
 const { cacheDel } = require("../lib/cache");
 
-/**
- * Async submission: create a pending record, enqueue the job, return 202 right
- * away. The BullMQ worker evaluates it and the verdict is pushed back over
- * Socket.io (see socket.js). Client can also poll GET /submission/status/:id.
- */
+
 const submitCode = async (req, res) => {
   try {
     const userId = req.result._id;
@@ -50,10 +46,8 @@ const submitCode = async (req, res) => {
   }
 };
 
-/**
- * Run against visible test cases — kept synchronous (fast, no persistence).
- * Shares the same evaluate skeleton (Template Method) as the submit worker.
- */
+  // Run against visible test cases — kept synchronous (fast, no persistence).
+ 
 const runCode = async (req, res) => {
   try {
     const problemId = req.params.id;

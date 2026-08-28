@@ -2,13 +2,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 const redisClient = require("../config/redis.config");
 
-/**
- * Factory pattern: builds an auth middleware. Pass a required role to gate a
- * route (e.g. 'admin'); pass nothing for any logged-in user.
- *
- * Replaces the two near-identical userMiddleware / adminMiddleware files —
- * the only difference between them was a single role check.
- */
+//  Factory pattern: builds an auth middleware. Pass a required role to gate for admin
+
 const createAuthMiddleware = (requiredRole = null) => async (req, res, next) => {
   try {
     const { token } = req.cookies;
