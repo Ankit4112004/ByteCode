@@ -7,8 +7,8 @@ const Submission = require("../models/submission.model")
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: true,        // REQUIRED on https (Vercel)
-  sameSite: "none",    // REQUIRED for cross-site cookies
+  secure: true,        
+  sameSite: "none",    
   path: "/",   
   maxAge: 60 * 60 * 1000
 };
@@ -17,14 +17,14 @@ const COOKIE_OPTIONS = {
 const register = async (req,res)=>{
     
     try{
-        // validate the data;
+        
 
       validate(req.body); 
       const {firstName, emailId, password}  = req.body;
 
       req.body.password = await bcrypt.hash(password, 10);
       req.body.role = 'user'
-    //
+    
     
      const user =  await User.create(req.body);
      const token =  jwt.sign({_id:user._id , emailId:emailId, role:'user'},process.env.JWT_KEY,{expiresIn: 60*60});
@@ -83,7 +83,7 @@ const login = async (req, res) => {
 
 
 
-// logOut feature
+
 
 const logout = async (req, res) => {
   try {
@@ -112,15 +112,12 @@ const logout = async (req, res) => {
 
 const adminRegister = async(req,res)=>{
     try{
-        // validate the data;
-    //   if(req.result.role!='admin')
-    //     throw new Error("Invalid Credentials");  
+
       validate(req.body);
       const {firstName, emailId, password}  = req.body;
 
       req.body.password = await bcrypt.hash(password, 10);
-      // Bug 5 fix: previously role was never set, so "admin register" created a
-      // normal user. Force admin role here (route is already admin-protected).
+  
       req.body.role = 'admin';
 
      const user =  await User.create(req.body);
@@ -139,12 +136,10 @@ const deleteProfile = async(req,res)=>{
     try{
        const userId = req.result._id;
       
-    // userSchema delete
+  
     await User.findByIdAndDelete(userId);
 
-    // Submission se bhi delete karo...
-    
-    // await Submission.deleteMany({userId});
+    await Submission.deleteMany({userId});
     
     res.status(200).send("Deleted Successfully");
 
@@ -189,7 +184,7 @@ const adminDeleteUser = async (req, res) => {
   try {
     const { id } = req.params;
     
-    // Prevent an admin from deleting themselves (optional safety, though handled via UI mostly)
+
     if (id === req.result._id.toString()) {
       return res.status(400).send("You cannot delete your own admin account from here.");
     }

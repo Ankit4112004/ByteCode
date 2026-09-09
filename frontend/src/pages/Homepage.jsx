@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-import { NavLink } from 'react-router'; // Fixed import
+import { NavLink } from 'react-router'; 
 import { useDispatch, useSelector } from 'react-redux';
 import { Video, ChevronDown, Filter, Tag, Activity, Search, Crown, Zap, Trophy, User, LogOut, Shield } from 'lucide-react';
 import axiosClient from '../utils/axiosClient';
@@ -51,7 +51,7 @@ function Homepage() {
 
   const handleLogout = () => {
     dispatch(logoutUser());
-    setSolvedProblems([]); // Clear solved problems on logout
+    setSolvedProblems([]); 
   };
 
   const filteredProblemsBase = problems.filter(problem => {
@@ -72,7 +72,7 @@ function Homepage() {
   });
 
   const arrangedProblems = useMemo(() => {
-    // Deterministic shuffle to ensure order appears random but is stable across refreshes
+    
     const getHash = (str) => {
       let hash = 0;
       for (let i = 0; i < str.length; i++) {
@@ -105,14 +105,14 @@ function Homepage() {
 
     const arranged = [];
 
-    // First 5 questions: 1 video, 1 regular, 2 premium, 1 regular
+    
     if (videoPool.length > 0) arranged.push(videoPool.shift());
     if (regularPool.length > 0) arranged.push(regularPool.shift());
     if (premiumPool.length > 0) arranged.push(premiumPool.shift());
     if (premiumPool.length > 0) arranged.push(premiumPool.shift());
     if (regularPool.length > 0) arranged.push(regularPool.shift());
 
-    // The rest of the problems
+    
     const rest = [...videoPool, ...premiumPool, ...regularPool];
     arranged.push(...shuffle(rest));
 
@@ -121,11 +121,11 @@ function Homepage() {
 
   return (
     <div className="min-h-screen bg-base-300">
-      {/* Navigation Bar */}
+      {}
       <nav className="navbar bg-base-100 shadow-lg px-4">
         <div className="flex-1">
 <div className="flex flex-col gap-1">
-  {/* Brand row */}
+  {}
   <div className="flex items-center gap-3">
     <div className="bg-primary/20 text-primary px-2.5 py-1.5 rounded-lg text-base font-mono font-bold">
       &lt;/&gt;
@@ -157,26 +157,26 @@ function Homepage() {
     Leaderboard
   </NavLink>
   <div className="dropdown dropdown-end">
-    {/* Trigger */}
+    {}
     <div
       tabIndex={0}
       className="flex items-center gap-3 px-4 py-2 rounded-xl cursor-pointer
                  hover:bg-base-300 transition-all duration-200"
     >
-      {/* Avatar */}
+      {}
       <div className="w-9 h-9 rounded-full bg-primary/30 text-primary
                       flex items-center justify-center
                       font-extrabold text-base">
         {user?.firstName?.[0]?.toUpperCase()}
       </div>
 
-      {/* Username */}
+      {}
       <span className="text-base font-semibold tracking-wide text-white">
         {user?.firstName}
       </span>
     </div>
 
-    {/* Dropdown */}
+    {}
     <ul
       tabIndex={0}
       className="dropdown-content mt-3 p-2 w-44
@@ -222,12 +222,12 @@ function Homepage() {
 
       </nav>
 
-      {/* Main Content */}
+      {}
       <div className="container mx-auto p-4">
-        {/* Filters and Search Row */}
+        {}
         <div className="flex flex-wrap gap-4 mb-6 items-center justify-between">
           <div className="flex flex-wrap gap-4 items-center flex-1">
-          {/* Status Filter */}
+          {}
           <div className="dropdown dropdown-hover">
             <div tabIndex={0} role="button" className="btn btn-outline border-base-300 bg-base-100 shadow-sm flex items-center gap-2 font-medium">
               <Activity className="w-4 h-4 text-primary" />
@@ -241,7 +241,7 @@ function Homepage() {
             </ul>
           </div>
 
-          {/* Difficulty Filter */}
+          {}
           <div className="dropdown dropdown-hover">
             <div tabIndex={0} role="button" className="btn btn-outline border-base-300 bg-base-100 shadow-sm flex items-center gap-2 font-medium">
               <Filter className="w-4 h-4 text-secondary" />
@@ -256,7 +256,7 @@ function Homepage() {
             </ul>
           </div>
 
-          {/* Tags Filter */}
+          {}
           <div className="dropdown dropdown-hover">
             <div tabIndex={0} role="button" className="btn btn-outline border-base-300 bg-base-100 shadow-sm flex items-center gap-2 font-medium">
               <Tag className="w-4 h-4 text-accent" />
@@ -265,10 +265,10 @@ function Homepage() {
             </div>
             <ul tabIndex={0} className="dropdown-content z-10 p-4 shadow-xl bg-base-100 rounded-box w-96 border border-base-200 mt-1 max-h-80 overflow-y-auto overflow-x-hidden thin-scroll">
               <div className="grid grid-cols-2 gap-x-6 relative">
-                {/* Vertical Divider */}
+                {}
                 <div className="absolute inset-y-1 left-1/2 w-px bg-base-content/10 -translate-x-1/2"></div>
                 
-                {/* Left Column */}
+                {}
                 <div className="flex flex-col gap-1 menu p-0">
                   <li><button onClick={() => handleFilterChange('tag', 'all')} className={filters.tag === 'all' ? 'active' : ''}>All Tags</button></li>
                   <li><button onClick={() => handleFilterChange('tag', 'premium')} className={`bg-yellow-500/15 hover:bg-yellow-500/30 text-yellow-500 font-bold flex justify-between items-center ${filters.tag === 'premium' ? 'border border-yellow-500' : ''}`}>Premium <Crown className="w-4 h-4 inline"/></button></li>
@@ -282,7 +282,7 @@ function Homepage() {
                   ))}
                 </div>
 
-                {/* Right Column */}
+                {}
                 <div className="flex flex-col gap-1 menu p-0">
                   {['greedy', 'heap', 'linkedList', 'math', 'queue', 'stack', 'string', 'tree', 'twoPointers'].map(tag => (
                     <li key={tag}>
@@ -297,9 +297,9 @@ function Homepage() {
           </div>
           </div>
 
-          {/* Right Side Group */}
+          {}
           <div className="flex gap-4 items-center ml-auto flex-nowrap">
-            {/* Search Bar */}
+            {}
             <div className="form-control min-w-[200px] max-w-xs">
               <div className="relative flex items-center">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
@@ -318,7 +318,7 @@ function Homepage() {
               </div>
             </div>
 
-          {/* Solved Stats */}
+          {}
           <div className="flex items-center gap-3 px-4 py-2 bg-base-100 rounded-xl shadow-sm border border-base-300 whitespace-nowrap">
             <div 
               className="radial-progress text-success border-4 border-base-300" 
@@ -336,7 +336,7 @@ function Homepage() {
           </div>
         </div>
 
-        {/* Problems List */}
+        {}
         <div className="grid gap-4">
           {arrangedProblems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(problem => (
             <div key={problem._id} className="card bg-base-100 shadow-xl">
@@ -382,7 +382,7 @@ function Homepage() {
           ))}
         </div>
 
-        {/* Pagination Controls */}
+        {}
         {arrangedProblems.length > 0 && (
           <div className="flex justify-center mt-8">
             <div className="join shadow-md">

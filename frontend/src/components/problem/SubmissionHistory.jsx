@@ -130,7 +130,7 @@ const SubmissionHistory = ({ problemId }) => {
         </>
       )}
 
-      {/* Code View Modal */}
+      {}
       {selectedSubmission && (
         <div className="modal modal-open bg-base-300/80 backdrop-blur-sm" onClick={() => setSelectedSubmission(null)}>
           <div className="modal-box w-11/12 max-w-5xl p-0 overflow-hidden border border-base-content/10 shadow-2xl" onClick={(e) => e.stopPropagation()}>

@@ -35,7 +35,7 @@ const AdminUsers = () => {
     try {
       const { data } = await axiosClient.put(`/user/role/${userId}`, { role: newRole });
       
-      // Update local state
+      
       setUsers(users.map(u => u._id === userId ? { ...u, role: data.role } : u));
       
       setMessage({ 
@@ -61,7 +61,7 @@ const AdminUsers = () => {
     try {
       await axiosClient.delete(`/user/${userId}`);
       
-      // Remove from local state
+      
       setUsers(users.filter(u => u._id !== userId));
       
       setMessage({ type: 'success', text: `User ${firstName} has been deleted successfully.` });
@@ -83,7 +83,7 @@ const AdminUsers = () => {
     <div className="min-h-screen bg-[#0a0a0a] text-gray-200 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
         
-        {/* Header */}
+        {}
         <div className="mb-8 border-b border-white/10 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-4 mb-2">
@@ -119,7 +119,7 @@ const AdminUsers = () => {
           </div>
         </div>
 
-        {/* Message Banner */}
+        {}
         {message.text && (
           <div className={`mb-6 p-4 rounded-xl flex items-start gap-3 border ${
             message.type === 'success' 
@@ -137,7 +137,7 @@ const AdminUsers = () => {
           </div>
         )}
 
-        {/* Users Table Card */}
+        {}
         <div className="bg-[#151515] border border-white/5 rounded-3xl shadow-2xl overflow-hidden relative">
           
           {loading ? (

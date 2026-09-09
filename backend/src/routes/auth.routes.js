@@ -6,11 +6,11 @@ const userMiddleware = require("../middleware/user.middleware");
 const adminMiddleware = require('../middleware/admin.middleware');
 const createRateLimiter = require("../middleware/rateLimiter.middleware");
 
-// Per-IP limits on public auth routes to slow brute-force attempts.
+
 const loginLimiter = createRateLimiter({ windowMs: 60_000, max: 8, keyPrefix: "rl:login", by: "ip" });
 const registerLimiter = createRateLimiter({ windowMs: 60_000, max: 5, keyPrefix: "rl:register", by: "ip" });
 
-// Register
+
 authRouter.post('/register', registerLimiter, register);
 authRouter.post('/login', loginLimiter, login);
 authRouter.post('/logout', userMiddleware, logout);
@@ -39,7 +39,7 @@ authRouter.get('/profile', userMiddleware, getProfileStats);
 
 module.exports = authRouter;
 
-// login
-// logout
-// GetProfile
+
+
+
 

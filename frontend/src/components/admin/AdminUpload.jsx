@@ -24,7 +24,7 @@ function AdminUpload(){
     
       const selectedFile = watch('videoFile')?.[0];
     
-      // Upload video to Cloudinary
+      
       const onSubmit = async (data) => {
         const file = data.videoFile[0];
         
@@ -33,11 +33,11 @@ function AdminUpload(){
         clearErrors();
     
         try {
-          // Step 1: Get upload signature from backend
+          
           const signatureResponse = await axiosClient.get(`/video/create/${problemId}`);
           const { signature, timestamp, public_id, api_key, cloud_name, upload_url } = signatureResponse.data;
     
-          // Step 2: Create FormData for Cloudinary upload
+          
           const formData = new FormData();
           formData.append('file', file);
           formData.append('signature', signature);
@@ -45,7 +45,7 @@ function AdminUpload(){
           formData.append('public_id', public_id);
           formData.append('api_key', api_key);
     
-          // Step 3: Upload directly to Cloudinary
+          
           const uploadResponse = await axios.post(upload_url, formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
@@ -58,7 +58,7 @@ function AdminUpload(){
     
           const cloudinaryResult = uploadResponse.data;
     
-          // Step 4: Save video metadata to backend
+          
           const metadataResponse = await axiosClient.post('/video/save', {
             problemId:problemId,
             cloudinaryPublicId: cloudinaryResult.public_id,
@@ -67,7 +67,7 @@ function AdminUpload(){
           });
     
           setUploadedVideo(metadataResponse.data.videoSolution);
-          reset(); // Reset form after successful upload
+          reset(); 
           
         } catch (err) {
           console.error('Upload error:', err);
@@ -81,7 +81,7 @@ function AdminUpload(){
         }
       };
     
-      // Format file size
+      
       const formatFileSize = (bytes) => {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
@@ -90,7 +90,7 @@ function AdminUpload(){
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
       };
     
-      // Format duration
+      
       const formatDuration = (seconds) => {
         const mins = Math.floor(seconds / 60);
         const secs = Math.floor(seconds % 60);
@@ -110,7 +110,7 @@ function AdminUpload(){
           <div className="bg-[#151515] border border-white/5 shadow-2xl rounded-xl p-8">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               
-              {/* File Input */}
+              {}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text text-gray-400 font-medium">Select Video File (Max 100MB)</span>
@@ -130,7 +130,7 @@ function AdminUpload(){
                         fileSize: (files) => {
                           if (!files || !files[0]) return true;
                           const file = files[0];
-                          const maxSize = 100 * 1024 * 1024; // 100MB
+                          const maxSize = 100 * 1024 * 1024; 
                           return file.size <= maxSize || 'File size must be less than 100MB';
                         }
                       }
@@ -150,7 +150,7 @@ function AdminUpload(){
                 )}
               </div>
   
-              {/* Selected File Info */}
+              {}
               {selectedFile && !uploading && !uploadedVideo && (
                 <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-4 flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center">
@@ -163,7 +163,7 @@ function AdminUpload(){
                 </div>
               )}
   
-              {/* Upload Progress */}
+              {}
               {uploading && (
                 <div className="bg-black/40 border border-white/5 rounded-xl p-6 space-y-4">
                   <div className="flex justify-between items-end">
@@ -182,7 +182,7 @@ function AdminUpload(){
                 </div>
               )}
   
-              {/* Error Message */}
+              {}
               {errors.root && (
                 <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-start gap-3">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -193,7 +193,7 @@ function AdminUpload(){
                 </div>
               )}
   
-              {/* Success Message */}
+              {}
               {uploadedVideo && (
                 <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-5 flex items-start gap-4">
                   <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
@@ -215,7 +215,7 @@ function AdminUpload(){
                 </div>
               )}
   
-              {/* Upload Button */}
+              {}
               <div className="pt-6 border-t border-white/5 flex justify-end">
                 <button
                   type="submit"

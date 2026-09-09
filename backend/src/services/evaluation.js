@@ -1,13 +1,6 @@
 const judge0Adapter = require("../lib/judge0Adapter");
 
-/**
- * Template Method: the shared skeleton for evaluating code against a set of
- * test cases. `runCode` (visible tests) and the submission worker (hidden tests)
- * both call this — they only differ in WHICH test cases they pass and what they
- * do with the parsed result.
- *
- * Steps: build batch → execute via Judge0 (Adapter + circuit breaker) → parse.
- */
+
 async function evaluateTestcases(code, language, testcases) {
   const languageId = judge0Adapter.getLanguageId(language);
 
@@ -20,8 +13,8 @@ async function evaluateTestcases(code, language, testcases) {
 
   const results = await judge0Adapter.execute(submissions);
 
-  // Parse Judge0 results into a verdict. status_id 3 = Accepted, 4 = Wrong Answer,
-  // others = runtime/compile error.
+  
+  
   let testCasesPassed = 0;
   let runtime = 0;
   let memory = 0;
@@ -48,7 +41,7 @@ async function evaluateTestcases(code, language, testcases) {
     testCasesTotal: testcases.length,
     runtime,
     memory,
-    status,        // 'accepted' | 'wrong' | 'error'
+    status,        
     errorMessage,
   };
 }

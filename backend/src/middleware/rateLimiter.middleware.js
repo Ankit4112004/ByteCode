@@ -4,7 +4,7 @@ const redisClient = require("../config/redis.config");
 const createRateLimiter = ({ windowMs = 60_000, max = 10, keyPrefix = "rl", by = "user" } = {}) =>
   async (req, res, next) => {
     try {
-      if (!redisClient.isOpen) return next(); // no Redis → don't block
+      if (!redisClient.isOpen) return next(); 
 
       const id = by === "ip"
         ? (req.ip || req.headers["x-forwarded-for"] || "unknown")
@@ -14,7 +14,7 @@ const createRateLimiter = ({ windowMs = 60_000, max = 10, keyPrefix = "rl", by =
       const now = Date.now();
       const windowStart = now - windowMs;
 
-      // remove old entries, add this request, count, set TTL — pipelined
+      
       const multi = redisClient.multi();
       multi.zRemRangeByScore(key, 0, windowStart);
       multi.zAdd(key, { score: now, value: `${now}-${Math.random()}` });
@@ -22,7 +22,7 @@ const createRateLimiter = ({ windowMs = 60_000, max = 10, keyPrefix = "rl", by =
       multi.expire(key, Math.ceil(windowMs / 1000));
       const results = await multi.exec();
 
-      const count = results[2]; // zCard result
+      const count = results[2]; 
 
       if (count > max) {
         res.set("Retry-After", Math.ceil(windowMs / 1000));

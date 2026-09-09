@@ -13,14 +13,14 @@ async function processSubmission(submissionId) {
   if (!problem) throw new Error(`Problem ${submission.problemId} not found`);
 
   try {
-    // Step 1: evaluate against hidden test cases (Template Method)
+    
     const verdict = await evaluateTestcases(
       submission.code,
       submission.language,
       problem.hiddenTestCases
     );
 
-    // Step 2: persist the verdict
+    
     submission.status = verdict.status;
     submission.testCasesPassed = verdict.testCasesPassed;
     submission.testCasesTotal = verdict.testCasesTotal;
@@ -29,7 +29,7 @@ async function processSubmission(submissionId) {
     submission.errorMessage = verdict.errorMessage;
     await submission.save();
 
-    // Step 3: on accept, mark solved + update global leaderboard (no double-counting)
+    
     if (verdict.status === "accepted") {
       const user = await User.findById(submission.userId).select("problemSolved");
       const alreadySolved = user?.problemSolved?.some(
@@ -46,7 +46,7 @@ async function processSubmission(submissionId) {
 
     return buildResult(submission, verdict);
   } catch (err) {
-    // Compensating action: don't leave it 'pending'
+    
     submission.status = "error";
     submission.errorMessage = "Evaluation failed: " + err.message;
     await submission.save().catch(() => {});

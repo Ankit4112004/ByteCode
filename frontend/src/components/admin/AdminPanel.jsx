@@ -5,7 +5,7 @@ import { z } from 'zod';
 import axiosClient from '../../utils/axiosClient';
 import { useNavigate } from 'react-router';
 
-// Zod schema matching the problem schema
+
 const problemSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(1, 'Description is required'),
@@ -94,7 +94,7 @@ function AdminPanel() {
       <h1 className="text-3xl font-bold mb-6">Create New Problem</h1>
       
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Basic Information */}
+        {}
         <div className="bg-[#151515] border border-white/5 shadow-xl rounded-xl p-8 mb-8">
           <h2 className="text-xl font-semibold mb-6 flex items-center gap-2 text-white">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -173,14 +173,14 @@ function AdminPanel() {
           </div>
         </div>
 
-        {/* Test Cases */}
+        {}
         <div className="bg-[#151515] border border-white/5 shadow-xl rounded-xl p-8 mb-8">
           <h2 className="text-xl font-semibold mb-6 flex items-center gap-2 text-white">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             Test Cases Configuration
           </h2>
           
-          {/* Visible Test Cases */}
+          {}
           <div className="space-y-4 mb-10">
             <div className="flex justify-between items-center border-b border-white/10 pb-4">
               <div>
@@ -242,7 +242,7 @@ function AdminPanel() {
             </div>
           </div>
 
-          {/* Hidden Test Cases */}
+          {}
           <div className="space-y-4">
             <div className="flex justify-between items-center border-b border-white/10 pb-4">
               <div>
@@ -294,7 +294,7 @@ function AdminPanel() {
           </div>
         </div>
 
-        {/* Code Templates */}
+        {}
         <div className="bg-[#151515] border border-white/5 shadow-xl rounded-xl p-8 mb-8">
           <h2 className="text-xl font-semibold mb-6 flex items-center gap-2 text-white">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>

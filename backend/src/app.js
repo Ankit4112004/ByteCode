@@ -13,7 +13,7 @@ const allowedOrigins = require("./config/origins.config");
 
 const app = express();
 
-/* ================== CORS ================== */
+
 app.use(
   cors({
     origin: allowedOrigins,
@@ -21,16 +21,16 @@ app.use(
   })
 );
 
-/* ================== MIDDLEWARE ================== */
+
 app.use(express.json());
 app.use(cookieParser());
 
-/* ================== HEALTH ================== */
+
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-/* ================== ROUTES ================== */
+
 app.use("/user", authRouter);
 app.use("/problem", problemRouter);
 app.use("/submission", submitRouter);

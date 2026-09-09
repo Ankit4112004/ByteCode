@@ -46,7 +46,7 @@ const submitCode = async (req, res) => {
   }
 };
 
-  // Run against visible test cases — kept synchronous (fast, no persistence).
+  
  
 const runCode = async (req, res) => {
   try {
@@ -80,7 +80,7 @@ const runCode = async (req, res) => {
   }
 };
 
-/** Poll a single submission's status (fallback if the websocket push is missed). */
+
 const getSubmissionStatus = async (req, res) => {
   try {
     const submission = await Submission.findOne({
@@ -104,5 +104,5 @@ const getSubmissionStatus = async (req, res) => {
   }
 };
 
-/** Fetch all submissions globally for the Status page with pagination. */
+
 module.exports = { submitCode, runCode, getSubmissionStatus };

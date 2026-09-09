@@ -1,8 +1,8 @@
 const redisClient = require("../config/redis.config");
 
 
-  // Cache-aside helpers over the existing Redis client.
-  // All calls are fail-safe: if Redis is down we just behave like a cache miss
+  
+  
 
 
 const cacheGet = async (key) => {

@@ -5,7 +5,7 @@ const getProfileStats = async (req, res) => {
     try {
         const userId = req.result._id;
 
-        // 1. Total Problems by difficulty
+        
         const totalProblems = await Problem.aggregate([
             { $group: { _id: "$difficulty", count: { $sum: 1 } } }
         ]);
@@ -13,7 +13,7 @@ const getProfileStats = async (req, res) => {
         const totalCounts = { easy: 0, medium: 0, hard: 0 };
         totalProblems.forEach(p => { totalCounts[p._id] = p.count; });
 
-        // 2. User's Accepted Submissions (Unique Problems by difficulty)
+        
         const solvedProblems = await Submission.aggregate([
             { $match: { userId: userId, status: 'accepted' } },
             { $group: { _id: "$problemId" } },

@@ -65,7 +65,7 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, editorialText, timeCompl
     }
   };
 
-  // Format seconds to MM:SS
+  
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
@@ -83,7 +83,7 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, editorialText, timeCompl
     }
   };
 
-  // Update current time during playback
+  
   useEffect(() => {
     const video = videoRef.current;
     
@@ -104,7 +104,7 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, editorialText, timeCompl
       onMouseLeave={() => setIsHovering(false)}
     >
       <div className="relative group" ref={playerContainerRef}>
-        {/* Video Element */}
+        {}
         <video
           ref={videoRef}
           src={secureUrl}
@@ -114,14 +114,14 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, editorialText, timeCompl
           className="w-full aspect-video bg-black cursor-pointer"
         />
         
-        {/* Video Controls Overlay */}
+        {}
         <div 
           className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 transition-opacity ${
             isHovering || !isPlaying ? 'opacity-100' : 'opacity-0'
           }`}
         >
           <div className="flex items-center gap-4">
-            {/* Play/Pause Button */}
+            {}
             <button
               onClick={togglePlayPause}
               className="btn btn-circle btn-primary btn-sm"
@@ -134,7 +134,7 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, editorialText, timeCompl
               )}
             </button>
             
-            {/* Volume Control */}
+            {}
             <div className="flex items-center gap-2 group/volume">
               <button onClick={toggleMute} className="text-white hover:text-primary transition-colors">
                 {isMuted || volume === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}
@@ -150,7 +150,7 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, editorialText, timeCompl
               />
             </div>
             
-            {/* Progress Bar */}
+            {}
             <div className="flex items-center flex-1 gap-2">
               <span className="text-white text-xs">
                 {formatTime(currentTime)}
@@ -172,7 +172,7 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, editorialText, timeCompl
               </span>
             </div>
 
-            {/* Speed Control */}
+            {}
             <div className="relative">
               <button 
                 onClick={() => setShowSpeedMenu(!showSpeedMenu)}
@@ -196,7 +196,7 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, editorialText, timeCompl
               )}
             </div>
             
-            {/* Fullscreen Button */}
+            {}
             <button onClick={toggleFullscreen} className="text-white hover:text-primary transition-colors ml-1">
               {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
             </button>
@@ -204,7 +204,7 @@ const Editorial = ({ secureUrl, thumbnailUrl, duration, editorialText, timeCompl
         </div>
       </div>
       
-      {/* Textual Editorial Section */}
+      {}
       {(editorialText || timeComplexity || spaceComplexity) && (
         <div className="bg-[#1a1a1a] p-6 border-t border-white/10">
           {editorialText && (

@@ -136,7 +136,7 @@ export default function AnimatedBackground() {
         ref={canvasRef}
         className="fixed inset-0 w-full h-full z-0 pointer-events-none"
       />
-      {/* CSS-driven spotlight overlay */}
+      {}
       <div
         className="fixed inset-0 z-[1] pointer-events-none"
         style={{

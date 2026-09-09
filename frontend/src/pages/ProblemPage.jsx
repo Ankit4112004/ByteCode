@@ -37,11 +37,11 @@ const LEFT_TABS = [
 
 ];
 
-// default panel layouts
+
 const DEFAULT_H = [50, 50];
 const DEFAULT_V = [62, 38];
 
-// Render `backtick` terms as inline code chips within a string.
+
 const renderInline = (str) => {
   const parts = String(str).split(/(`[^`]+`)/g);
   return parts.map((p, idx) => {
@@ -685,7 +685,7 @@ const ProblemPage = () => {
                     </ul>
                   </div>
 
-                  {/* Actions */}
+                  {}
                   <div className="flex items-center gap-1.5">
                     <button onClick={handleCopyCode} title="Copy code"
                       className="p-1.5 rounded-md text-base-content/45 hover:text-base-content hover:bg-base-content/10 transition-colors">
@@ -774,7 +774,7 @@ const ProblemPage = () => {
 
             <div onMouseDown={startVDrag} className="rrp-handle-v cursor-row-resize shrink-0" />
 
-            {/* ---------- CONSOLE ---------- */}
+            {}
             <div className="flex-1 min-h-0">
               <div className="group h-full flex flex-col bg-base-200/20 min-h-0">
                 <div className="flex items-center justify-between px-4 py-2.5 border-b border-base-content/10">

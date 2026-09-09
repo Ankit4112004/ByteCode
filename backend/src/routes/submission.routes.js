@@ -6,7 +6,7 @@ const createRateLimiter = require("../middleware/rateLimiter.middleware");
 
 const {submitCode,runCode,getSubmissionStatus} = require("../controllers/submission.controller");
 
-// Per-user limits to protect the Judge0 quota. Runs after userMiddleware (needs req.result).
+
 const submitLimiter = createRateLimiter({ windowMs: 60_000, max: 10, keyPrefix: "rl:submit" });
 const runLimiter = createRateLimiter({ windowMs: 60_000, max: 20, keyPrefix: "rl:run" });
 

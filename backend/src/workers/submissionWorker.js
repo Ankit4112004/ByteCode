@@ -12,8 +12,8 @@ const createSubmissionWorker = () => {
       try {
         return await processSubmission(submissionId);
       } catch (err) {
-        // No point retrying when the judge circuit breaker is open — fail
-        // immediately so the user gets feedback in <1s instead of after backoff.
+        
+        
         if (/breaker is open/i.test(err.message || "")) {
           throw new UnrecoverableError(err.message);
         }

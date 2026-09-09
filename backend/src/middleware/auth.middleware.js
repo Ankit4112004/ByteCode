@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 const redisClient = require("../config/redis.config");
 
-//  Factory pattern: builds an auth middleware. Pass a required role to gate for admin
+
 
 const createAuthMiddleware = (requiredRole = null) => async (req, res, next) => {
   try {
@@ -14,7 +14,7 @@ const createAuthMiddleware = (requiredRole = null) => async (req, res, next) => 
     const { _id } = payload;
     if (!_id) throw new Error("Invalid token");
 
-    // Role gate (admin routes). JWT is signed server-side, so payload.role is trusted.
+    
     if (requiredRole && payload.role !== requiredRole) {
       throw new Error("Unauthorized");
     }
@@ -22,8 +22,8 @@ const createAuthMiddleware = (requiredRole = null) => async (req, res, next) => 
     const result = await User.findById(_id);
     if (!result) throw new Error("User Doesn't Exist");
 
-    // Redis blocklist check (set on logout). Fail-open: if Redis is unreachable,
-    // don't lock out valid users — the JWT signature + expiry already authenticated them.
+    
+    
     try {
       const isBlocked = await redisClient.exists(`token:${token}`);
       if (isBlocked) throw new Error("Invalid Token");

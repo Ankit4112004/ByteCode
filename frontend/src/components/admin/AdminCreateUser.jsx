@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axiosClient from '../../utils/axiosClient';
 import { UserPlus, Mail, Lock, User, Loader2, CheckCircle2, Shield } from 'lucide-react';
-import { NavLink } from 'react-router'; // Using react-router to match other components
+import { NavLink } from 'react-router'; 
 
 const AdminCreateUser = () => {
   const [formData, setFormData] = useState({
@@ -31,14 +31,14 @@ const AdminCreateUser = () => {
         text: 'New administrator created successfully!' 
       });
       
-      // Reset form
+      
       setFormData({
         firstName: '',
         emailId: '',
         password: ''
       });
       
-      // Clear success message after 5 seconds
+      
       setTimeout(() => {
         setMessage({ type: '', text: '' });
       }, 5000);
@@ -58,7 +58,7 @@ const AdminCreateUser = () => {
     <div className="min-h-screen bg-[#0a0a0a] text-gray-200 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-xl mx-auto">
         
-        {/* Header */}
+        {}
         <div className="mb-8 border-b border-white/10 pb-6">
           <div className="flex items-center gap-4 mb-2">
             <NavLink 
@@ -79,7 +79,7 @@ const AdminCreateUser = () => {
           </p>
         </div>
 
-        {/* Message Banner */}
+        {}
         {message.text && (
           <div className={`mb-6 p-4 rounded-xl flex items-start gap-3 border ${
             message.type === 'success' 
@@ -97,14 +97,14 @@ const AdminCreateUser = () => {
           </div>
         )}
 
-        {/* Form Card */}
+        {}
         <div className="bg-[#151515] border border-white/5 rounded-3xl p-8 shadow-2xl relative overflow-hidden group">
-          {/* Subtle Glow */}
+          {}
           <div className="absolute top-0 right-0 w-64 h-64 bg-fuchsia-500/10 blur-3xl opacity-50 rounded-full translate-x-32 -translate-y-32 pointer-events-none" />
 
           <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
             
-            {/* First Name */}
+            {}
             <div className="space-y-2">
               <label className="text-sm font-semibold text-gray-300 ml-1 block">Full Name</label>
               <div className="relative">
@@ -123,7 +123,7 @@ const AdminCreateUser = () => {
               </div>
             </div>
 
-            {/* Email */}
+            {}
             <div className="space-y-2">
               <label className="text-sm font-semibold text-gray-300 ml-1 block">Email Address</label>
               <div className="relative">
@@ -142,7 +142,7 @@ const AdminCreateUser = () => {
               </div>
             </div>
 
-            {/* Password */}
+            {}
             <div className="space-y-2">
               <label className="text-sm font-semibold text-gray-300 ml-1 block">Secure Password</label>
               <div className="relative">

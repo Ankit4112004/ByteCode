@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-/* ===================== CODE SNIPPETS ===================== */
+
 const snippets = [
   {
     lang: "Python",
@@ -48,12 +48,12 @@ const snippets = [
 
 
 
-/* ===================== HTML ESCAPE ===================== */
+
 function escapeHtml(str) {
   return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-/* ===================== SYNTAX HIGHLIGHTER ===================== */
+
 function highlight(line) {
   let code = escapeHtml(line);
 
@@ -77,7 +77,7 @@ function highlight(line) {
   return code;
 }
 
-/* ===================== COMPONENT ===================== */
+
 export default function CodeEditorAnimation() {
   const [snippetIndex, setSnippetIndex] = useState(0);
   const [lineIndex, setLineIndex] = useState(0);
@@ -106,7 +106,7 @@ export default function CodeEditorAnimation() {
 
   return (
     <div className="bg-black/10 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl w-[520px]">
-      {/* Header */}
+      {}
       <div className="flex justify-between items-center px-5 py-4 bg-white/5 border-b border-white/10">
         <span className="text-xs text-gray-400 bg-white/10 px-3 py-1 rounded">
           {snippets[snippetIndex].lang}
@@ -116,7 +116,7 @@ export default function CodeEditorAnimation() {
         </span>
       </div>
 
-      {/* Code */}
+      {}
       <pre className="p-5 text-sm font-mono text-gray-200 bg-transparent h-80 overflow-hidden">
         {lines.map((line, i) => {
           const isLast = i === lines.length - 1;

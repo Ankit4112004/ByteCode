@@ -10,13 +10,13 @@ import { motion } from "framer-motion";
 import AnimatedBackground from "../components/ui/AnimatedBackground";
 import CodeEditorAnimation from "../components/ui/CodeEditorAnimation";
 
-/* ===================== VALIDATION ===================== */
+
 const loginSchema = z.object({
   emailId: z.string().email("Invalid email address"),
   password: z.string().min(1, "Password is required"),
 });
 
-/* ===================== ANIMATION VARIANTS ===================== */
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
@@ -55,7 +55,7 @@ export default function Login() {
       <AnimatedBackground />
       <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 min-h-screen px-6 md:px-24">
         
-        {/* LEFT — FORM */}
+        {}
         <div className="flex items-center justify-center md:justify-start md:pl-12 lg:pl-24">
           <motion.div 
             className="w-full max-w-sm space-y-8"
@@ -63,7 +63,7 @@ export default function Login() {
             initial="hidden"
             animate="visible"
           >
-            {/* Header */}
+            {}
             <motion.div variants={fadeInUp} className="select-none">
               <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
                 Byte<span className="text-indigo-500">Code</span>
@@ -73,10 +73,10 @@ export default function Login() {
               </p>
             </motion.div>
 
-            {/* Form */}
+            {}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               
-              {/* SERVER / AUTH ERROR */}
+              {}
               {error && (
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -90,7 +90,7 @@ export default function Login() {
                 </motion.div>
               )}
 
-              {/* EMAIL */}
+              {}
               <motion.div variants={fadeInUp} className="space-y-2">
                 <label className="text-sm font-medium text-gray-300 select-none">Email Address</label>
                 <input
@@ -106,7 +106,7 @@ export default function Login() {
                 )}
               </motion.div>
 
-              {/* PASSWORD */}
+              {}
               <motion.div variants={fadeInUp} className="space-y-2">
                 <div className="flex items-center justify-between select-none">
                   <label className="text-sm font-medium text-gray-300">Password</label>
@@ -167,7 +167,7 @@ export default function Login() {
           </motion.div>
         </div>
 
-        {/* RIGHT — CODE EDITOR */}
+        {}
         <div className="hidden md:flex items-center justify-center opacity-80 perspective-1000">
           <motion.div 
             initial={{ opacity: 0, x: 50, rotateY: -10, rotateZ: 5 }}

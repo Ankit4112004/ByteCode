@@ -8,7 +8,7 @@ const extractError = (error) => {
   if (data?.error) return data.error;
   if (data?.message) return data.message;
   if (error.response) return `Request failed (${error.response.status})`;
-  // No response at all => network / server unreachable (e.g. DB down, CORS, server asleep)
+  
   return 'Cannot reach server. Please try again later.';
 };
 
@@ -44,7 +44,7 @@ export const checkAuth = createAsyncThunk(
       return data.user;
     } catch (error) {
       if (error.response?.status === 401) {
-        return rejectWithValue(null); // Special case for no session
+        return rejectWithValue(null); 
       }
       return rejectWithValue(extractError(error));
     }
@@ -75,7 +75,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Register User Cases
+      
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -92,7 +92,7 @@ const authSlice = createSlice({
         state.user = null;
       })
   
-      // Login User Cases
+      
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -109,7 +109,7 @@ const authSlice = createSlice({
         state.user = null;
       })
   
-      // Check Auth Cases
+      
       .addCase(checkAuth.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -121,13 +121,13 @@ const authSlice = createSlice({
       })
       .addCase(checkAuth.rejected, (state, action) => {
         state.loading = false;
-        // If payload is null, it's an expected 401 Unauthorized (no session).
+        
         state.error = action.payload === null ? null : (action.payload || 'Something went wrong');
         state.isAuthenticated = false;
         state.user = null;
       })
   
-      // Logout User Cases
+      
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;
         state.error = null;

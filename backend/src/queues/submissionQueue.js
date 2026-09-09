@@ -3,13 +3,7 @@ const connection = require("../config/bull.config");
 
 const SUBMISSION_QUEUE = "submissions";
 
-/**
- * Producer side of the async pipeline. The /submit controller adds a job here and
- * returns 202 immediately; the worker (workers/submissionWorker.js) consumes it.
- *
- * Jobs retry 3x with exponential backoff; failures are kept so they can be
- * inspected (a simple dead-letter equivalent).
- */
+
 const submissionQueue = new Queue(SUBMISSION_QUEUE, {
   connection,
   defaultJobOptions: {

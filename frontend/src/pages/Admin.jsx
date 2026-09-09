@@ -3,7 +3,7 @@ import { Plus, Edit, Trash2, Home, RefreshCw, Zap, Video, UserPlus, Users } from
 import { NavLink } from 'react-router';
 
 function Admin() {
-  // const [selectedOption, setSelectedOption] = useState(null);
+  
 
   const adminOptions = [
     {
@@ -71,7 +71,7 @@ function Admin() {
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
       <div className="container mx-auto px-4 py-16">
-        {/* Header */}
+        {}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight flex items-center justify-center gap-4">
             <Zap className="w-10 h-10 text-indigo-500" />
@@ -82,7 +82,7 @@ function Admin() {
           </p>
         </div>
 
-        {/* Admin Options Grid */}
+        {}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {adminOptions.map((option) => {
             const IconComponent = option.icon;
@@ -92,12 +92,12 @@ function Admin() {
                 key={option.id}
                 className="group flex flex-col bg-[#151515] border border-white/5 rounded-3xl p-8 hover:bg-[#1a1a1a] hover:border-white/10 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-2 relative overflow-hidden"
               >
-                {/* Icon */}
+                {}
                 <div className={`${option.bgColor} ${option.color} w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-inner transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
                   <IconComponent size={32} strokeWidth={1.5} />
                 </div>
                 
-                {/* Text Content */}
+                {}
                 <div className="flex-1">
                   <h2 className="text-xl font-bold text-gray-200 mb-3 group-hover:text-white transition-colors">
                     {option.title}
@@ -107,7 +107,7 @@ function Admin() {
                   </p>
                 </div>
                 
-                {/* Action Button */}
+                {}
                 <div className={`w-full py-3 rounded-xl text-sm font-bold text-center transition-all duration-300 ${option.btnClass}`}>
                   {option.title}
                 </div>

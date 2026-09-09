@@ -46,14 +46,14 @@ const Profile = () => {
 
   const totalProblems = (totalCounts.easy || 0) + (totalCounts.medium || 0) + (totalCounts.hard || 0) || 1;
   const totalSolved = (solvedCounts.easy || 0) + (solvedCounts.medium || 0) + (solvedCounts.hard || 0);
-  // const solvedPercentage = Math.round((totalSolved / totalProblems) * 100);
+  
 
 
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-gray-200 p-6 md:p-12 font-sans">
       
-      {/* HEADER */}
+      {}
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-6 mb-8">
         <div className="flex-1 bg-[#151515] rounded-xl p-8 border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
           
@@ -89,7 +89,7 @@ const Profile = () => {
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 gap-6">
         
-        {/* DSA PROGRESS DONUT */}
+        {}
         <div className="bg-[#151515] rounded-xl p-6 border border-white/5 shadow-xl flex flex-col items-center">
           <h2 className="text-lg font-semibold text-white self-start w-full mb-6">DSA Progress</h2>
           
@@ -99,18 +99,18 @@ const Profile = () => {
               <span className="text-sm text-gray-500">/ {totalProblems}</span>
             </div>
             <svg className="w-full h-full transform -rotate-90">
-              {/* Background circle */}
+              {}
               <circle cx="96" cy="96" r="80" stroke="rgba(255,255,255,0.05)" strokeWidth="12" fill="none" />
-              {/* Easy Arc */}
+              {}
               <circle cx="96" cy="96" r="80" stroke="#10b981" strokeWidth="12" fill="none" 
                 strokeDasharray={`${(solvedCounts.easy || 0) / totalProblems * 502} 502`} 
                 strokeLinecap="round" className="transition-all duration-1000 ease-out" />
-              {/* Medium Arc (offset by Easy) */}
+              {}
               <circle cx="96" cy="96" r="80" stroke="#eab308" strokeWidth="12" fill="none" 
                 strokeDasharray={`${(solvedCounts.medium || 0) / totalProblems * 502} 502`} 
                 strokeDashoffset={-((solvedCounts.easy || 0) / totalProblems * 502)}
                 strokeLinecap="round" className="transition-all duration-1000 ease-out" />
-              {/* Hard Arc (offset by Easy+Medium) */}
+              {}
               <circle cx="96" cy="96" r="80" stroke="#ef4444" strokeWidth="12" fill="none" 
                 strokeDasharray={`${(solvedCounts.hard || 0) / totalProblems * 502} 502`} 
                 strokeDashoffset={-(((solvedCounts.easy || 0) + (solvedCounts.medium || 0)) / totalProblems * 502)}

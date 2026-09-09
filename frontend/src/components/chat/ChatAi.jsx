@@ -3,11 +3,11 @@ import { useForm } from "react-hook-form";
 import axiosClient from "../../utils/axiosClient";
 import { Send, Bot, User, Sparkles, Loader2, Copy, Check } from "lucide-react";
 
-/* ─── Markdown-lite renderer ────────────────────────────────────────────── */
+
 const renderMarkdown = (text) => {
   if (!text) return null;
 
-  // Split into lines and process
+  
   const lines = text.split("\n");
   const elements = [];
   let i = 0;
@@ -15,7 +15,7 @@ const renderMarkdown = (text) => {
   while (i < lines.length) {
     const line = lines[i];
 
-    // Code blocks (```)
+    
     if (line.trim().startsWith("```")) {
       const lang = line.trim().slice(3).trim();
       const codeLines = [];
@@ -24,7 +24,7 @@ const renderMarkdown = (text) => {
         codeLines.push(lines[i]);
         i++;
       }
-      i++; // skip closing ```
+      i++; 
       elements.push(
         <div key={elements.length} className="chat-code-block">
           {lang && <div className="chat-code-lang">{lang}</div>}
@@ -34,7 +34,7 @@ const renderMarkdown = (text) => {
       continue;
     }
 
-    // Headers
+    
     if (line.startsWith("### ")) {
       elements.push(<h4 key={elements.length} className="chat-md-h4">{renderInlineMarkdown(line.slice(4))}</h4>);
       i++; continue;
@@ -48,7 +48,7 @@ const renderMarkdown = (text) => {
       i++; continue;
     }
 
-    // Bullet points
+    
     if (line.match(/^\s*[-*]\s/)) {
       const items = [];
       while (i < lines.length && lines[i].match(/^\s*[-*]\s/)) {
@@ -65,7 +65,7 @@ const renderMarkdown = (text) => {
       continue;
     }
 
-    // Numbered lists
+    
     if (line.match(/^\s*\d+\.\s/)) {
       const items = [];
       while (i < lines.length && lines[i].match(/^\s*\d+\.\s/)) {
@@ -82,13 +82,13 @@ const renderMarkdown = (text) => {
       continue;
     }
 
-    // Empty lines
+    
     if (line.trim() === "") {
       elements.push(<div key={elements.length} className="h-2" />);
       i++; continue;
     }
 
-    // Normal paragraph
+    
     elements.push(<p key={elements.length} className="chat-md-p">{renderInlineMarkdown(line)}</p>);
     i++;
   }
@@ -97,7 +97,7 @@ const renderMarkdown = (text) => {
 };
 
 const renderInlineMarkdown = (text) => {
-  // Process inline code, bold, italic
+  
   const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g);
   return parts.map((part, idx) => {
     if (part.startsWith("`") && part.endsWith("`") && part.length > 2) {
@@ -200,7 +200,7 @@ const MessageBubble = ({ msg, isStreaming, onStreamComplete }) => {
           )}
         </div>
 
-        {/* Copy button for AI messages */}
+        {}
         {isAI && !isStreaming && (
           <button
             onClick={handleCopy}
@@ -215,7 +215,7 @@ const MessageBubble = ({ msg, isStreaming, onStreamComplete }) => {
   );
 };
 
-/* ─── Main ChatAi component ─────────────────────────────────────────────── */
+
 function ChatAi({ problem }) {
   if (!problem) {
     return <div className="p-4 text-gray-500">Loading AI Chat...</div>;
@@ -248,7 +248,7 @@ function ChatAi({ problem }) {
     scrollToBottom();
   }, [messages, isLoading, scrollToBottom]);
 
-  // Auto-scroll during streaming
+  
   useEffect(() => {
     if (streamingIndex !== null) {
       const interval = setInterval(scrollToBottom, 100);
@@ -281,7 +281,7 @@ function ChatAi({ problem }) {
       };
 
       setMessages(prev => [...prev, aiMessage]);
-      setStreamingIndex(updatedMessages.length); // Index of the new AI message
+      setStreamingIndex(updatedMessages.length); 
       setIsLoading(false);
     } catch (err) {
       console.error("AI ERROR:", err);
@@ -310,7 +310,7 @@ function ChatAi({ problem }) {
 
   return (
     <div className="chatai-container">
-      {/* Messages */}
+      {}
       <div className="chatai-messages thin-scroll">
         {messages.map((msg, index) => (
           <MessageBubble
@@ -326,7 +326,7 @@ function ChatAi({ problem }) {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input — pinned at bottom */}
+      {}
       <div className="chatai-input-area">
         <form onSubmit={handleSubmit(onSubmit)} className="chatai-form">
           <div className="chatai-input-wrap">

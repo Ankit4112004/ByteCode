@@ -78,7 +78,7 @@ function Leaderboard() {
       </nav>
 
       <div className="container mx-auto px-4 py-6 max-w-7xl">
-        {/* Personal rank card */}
+        {}
         {me && (
           <div className="bg-[#1e1e1e] border border-gray-700 rounded-md shadow-lg mb-6 p-4 flex justify-between items-center">
             <div>
@@ -96,7 +96,7 @@ function Leaderboard() {
           </div>
         )}
 
-        {/* Score Rules */}
+        {}
         <div className="bg-[#1e1e1e] border border-gray-700 rounded-md shadow-sm mb-6 p-3 flex justify-center items-center gap-4 text-sm font-medium">
           <span className="text-gray-400">Score Rules:</span>
           <span className="text-emerald-400">Easy 1</span>

@@ -1,6 +1,6 @@
 const IORedis = require("ioredis");
 
-//  `maxRetriesPerRequest: null` is required by BullMQ.
+
 
 const connection = new IORedis(process.env.REDIS_URL, {
   maxRetriesPerRequest: null,
