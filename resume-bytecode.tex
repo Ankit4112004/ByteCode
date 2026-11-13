@@ -1,0 +1,25 @@
+% ============================================================
+% ByteCode — Resume Project Entry (Jake's Resume template)
+% ------------------------------------------------------------
+% PREAMBLE REQUIREMENT: add this line near your other \usepackage{...}:
+%     \usepackage{fontawesome5}
+% (hyperref + xcolor are already loaded by Jake's template.)
+%
+% Paste the block below inside your Projects section,
+% between \resumeSubHeadingListStart and \resumeSubHeadingListEnd.
+% ============================================================
+
+\item
+\begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+  \small\textbf{ByteCode — Full-Stack Competitive Programming Platform}
+  \hspace{4pt}\href{https://github.com/Ankit4112004/ByteCode}{\faGithub}\hspace{5pt}\href{https://byte-code-blue.vercel.app/signup}{\faLink}
+  & \small Nov 2025 -- Mar 2026 \\
+  \small\emph{React, Node.js, Express, MongoDB, Redis, BullMQ, Socket.io, Judge0} & \\
+\end{tabular*}\vspace{-5pt}
+\resumeItemListStart
+  \resumeItem{Architected a \textbf{full-stack competitive programming platform} supporting 3 languages and 2 execution modes (instant Run and async Submit), integrating the \textbf{Judge0 API} for sandboxed code execution and test-case evaluation, with Cloudinary video editorials and an AI doubt-solver.}
+  \resumeItem{Designed a \textbf{fault-tolerant asynchronous code-judging pipeline} using a \textbf{BullMQ job queue} and worker pool, decoupling the API from a slow external judge and sustaining \textbf{5 concurrent executions} per worker with built-in \textbf{back-pressure} — so no user request ever blocks on code execution.}
+  \resumeItem{Engineered \textbf{real-time verdict delivery} over \textbf{Socket.io} pub/sub, fully eliminating client-side polling and reducing redundant API calls by \textbf{$\sim$90\%} while pushing results to the browser in \textbf{under 200ms} after judging.}
+  \resumeItem{Built \textbf{O(log N) live leaderboards} across 3 ranking views (global, percentile, and per-problem fastest-runtime) on \textbf{Redis Sorted Sets}, scaling to \textbf{10K+ ranked entries} with sub-millisecond reads.}
+  \resumeItem{Hardened the API for resilience using a \textbf{circuit breaker} (Opossum) to fail fast during judge outages, Redis \textbf{rate limiting}, and \textbf{idempotency keys} that guarantee \textbf{zero duplicate submissions} under client retries.}
+\resumeItemListEnd
